@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { DBService } from '../lib/services';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
@@ -24,17 +23,20 @@ const Register = () => {
 
         try {
             // 1. Create Auth User
-            const { data: authData, error: authError } = await supabase.auth.signUp({
+            const { error: authError } = await supabase.auth.signUp({
                 email,
                 password,
+                options: {
+                    data: {
+                        full_name: fullName,
+                    }
+                }
             });
 
             if (authError) throw authError;
 
-            // 2. Create Profile Row
-            if (authData.user) {
-                await DBService.ensureUserProfile(authData.user.id, fullName);
-            }
+            // 2. Profile row will be automatically created via Supabase Database Trigger
+            // No need to call DBService.ensureUserProfile() manually here anymore.
 
             navigate('/app');
         } catch (err: unknown) {
