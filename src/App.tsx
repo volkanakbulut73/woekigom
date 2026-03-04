@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import Talepler from './pages/Talepler';
+import TaleplerCreate from './pages/talepler/TaleplerCreate';
 import Profile from './pages/Profile';
 import Market from './pages/Market';
 
@@ -28,7 +29,10 @@ function App() {
           <Route path="/app" element={<PrivateRoute />}>
             <Route element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="talepler" element={<Talepler />} />
+              <Route path="talepler">
+                <Route index element={<Talepler />} />
+                <Route path="create" element={<TaleplerCreate />} />
+              </Route>
               <Route path="profile" element={<Profile />} />
 
               <Route path="market">

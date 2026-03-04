@@ -14,7 +14,9 @@ const Talepler = () => {
                         </button>
                         <h2 className="text-[11px] font-bold text-[#33f20d] tracking-[0.2em] uppercase">talepler</h2>
                     </div>
-                    <div className="w-10"></div>
+                    <Link to="/app/talepler/create" className="bg-[#33f20d] text-[#0a0b1e] w-8 h-8 md:hidden flex items-center justify-center rounded-lg shadow-lg">
+                        <Plus size={18} className="font-bold" />
+                    </Link>
                 </div>
                 <div className="flex px-4">
                     <button className="flex-1 py-4 text-[11px] font-bold border-b-2 border-[#33f20d] text-[#33f20d] tracking-wider uppercase transition-colors">

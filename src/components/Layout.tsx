@@ -1,9 +1,12 @@
-import { Outlet, NavLink, Link } from 'react-router-dom';
-import { Home, Receipt, Store, User, Plus, Search, Bell } from 'lucide-react';
+import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
+import { Home, Receipt, Store, User, Plus, Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Layout = () => {
     const { profile } = useAuth();
+    const location = useLocation();
+
+    const isTaleplerActive = location.pathname.includes('/app/talepler');
 
     const navItems = [
         { to: '/app', icon: Home, label: 'Ana Sayfa', end: true },
@@ -64,16 +67,15 @@ const Layout = () => {
 
                 {/* Desktop Topbar */}
                 <header className="hidden md:flex h-24 items-center justify-between px-10 sticky top-0 bg-[#0a0b1e]/90 backdrop-blur-xl z-40 border-b border-transparent">
-                    <div className="relative w-96 group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#39ff14] transition-colors" size={18} />
-                        <input
-                            type="text"
-                            placeholder="Ürün, marka veya kategori ara..."
-                            className="w-full bg-[#16172d] border border-white/5 rounded-full py-3.5 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-[#39ff14]/40 focus:ring-1 focus:ring-[#39ff14]/40 transition-all placeholder:text-slate-500"
-                        />
-                    </div>
+                    <div className="flex-1"></div>
 
                     <div className="flex items-center gap-4">
+                        {isTaleplerActive && (
+                            <Link to="/app/talepler/create" className="bg-[#39ff14] text-[#0a0b1e] hover:bg-[#39ff14]/90 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-transform active:scale-95 shadow-[0_0_15px_rgba(57,255,20,0.3)]">
+                                <Plus size={18} />
+                                Talep Oluştur
+                            </Link>
+                        )}
                         <button className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 hover:border-[#39ff14]/30 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
                             <Bell size={20} />
                             <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-[#39ff14] rounded-full border-2 border-[#16172d]"></span>
