@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronLeft, BarChart2, Rocket, Home, Store, Plus, ArrowLeftRight, User, Trash2 } from 'lucide-react';
+import { ChevronLeft, BarChart2, Rocket, Plus, Trash2 } from 'lucide-react';
 import { DBService } from '../lib/services';
 import { useAuth } from '../context/AuthContext';
 import type { Transaction } from '../types';
@@ -178,35 +178,6 @@ const Talepler = () => {
                 )}
 
             </main>
-
-            {/* Bottom Nav */}
-            <nav className="fixed bottom-0 left-0 right-0 bg-[#0a0b1e]/90 backdrop-blur-xl border-t border-[#33f20d]/10 z-30 pb-6 pt-2">
-                <div className="flex justify-around items-center max-w-md mx-auto">
-                    <Link to="/app" className="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300 transition-colors">
-                        <Home size={24} />
-                        <span className="text-[10px] font-medium uppercase tracking-wider">Anasayfa</span>
-                    </Link>
-                    <Link to="/app/market" className="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300 transition-colors">
-                        <Store size={24} />
-                        <span className="text-[10px] font-medium uppercase tracking-wider">Pazar</span>
-                    </Link>
-
-                    <div className="relative -top-4">
-                        <Link to="/app/olustur" className="w-14 h-14 bg-[#33f20d] rounded-2xl flex items-center justify-center text-[#0a0b1e] shadow-[0_0_20px_rgba(51,242,13,0.4)] rotate-45 hover:scale-105 transition-transform">
-                            <Plus size={24} className="-rotate-45 font-bold" />
-                        </Link>
-                    </div>
-
-                    <Link to="/app/talepler" className="flex flex-col items-center gap-1 text-[#33f20d]">
-                        <ArrowLeftRight size={24} />
-                        <span className="text-[10px] font-medium uppercase tracking-wider">Talepler</span>
-                    </Link>
-                    <Link to="/app/profile" className="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300 transition-colors">
-                        <User size={24} />
-                        <span className="text-[10px] font-medium uppercase tracking-wider">Profil</span>
-                    </Link>
-                </div>
-            </nav>
         </div>
     );
 };
