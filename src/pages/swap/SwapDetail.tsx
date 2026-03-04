@@ -28,6 +28,7 @@ const SwapDetail = () => {
     const [deleting, setDeleting] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
+    const [activeImageIndex, setActiveImageIndex] = useState(0);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -163,6 +164,9 @@ const SwapDetail = () => {
     const sellerName = sellerInfo?.full_name || 'Anonim Kullanıcı';
     const sellerAvatar = sellerInfo?.avatar_url || `https://ui-avatars.com/api/?name=${sellerName.replace(' ', '+')}&background=random&color=fff`;
 
+    const photoUrls = listing.photo_url ? listing.photo_url.split(',') : [];
+    const mainPhoto = photoUrls.length > 0 ? photoUrls[activeImageIndex] : null;
+
     const formatName = (fullName?: string) => {
         if (!fullName) return 'Anonim';
         const parts = fullName.trim().split(' ');
@@ -184,8 +188,8 @@ const SwapDetail = () => {
 
                 <div className="bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-xl shrink-0">
                     <div className="relative h-64 lg:h-80 w-full bg-slate-800 flex items-center justify-center overflow-hidden">
-                        {listing.photo_url ? (
-                            <img src={listing.photo_url} alt={listing.title} className="w-full h-full object-cover opacity-80 mix-blend-overlay" />
+                        {mainPhoto ? (
+                            <img src={mainPhoto} alt={listing.title} className="w-full h-full object-contain" />
                         ) : (
                             <div className="w-full h-full bg-gradient-to-t from-[#0a0b1e] to-blue-900/40 relative flex items-center justify-center">
                                 <span className="text-6xl text-white/10 font-black">{listing.title[0]}</span>
@@ -196,6 +200,20 @@ const SwapDetail = () => {
                             <span className="text-white font-bold text-sm">{sellerInfo?.rating || '5.0'}</span>
                         </div>
                     </div>
+
+                    {photoUrls.length > 1 && (
+                        <div className="flex gap-2 p-4 overflow-x-auto no-scrollbar bg-[#0a0b1e]/50 border-b border-white/5">
+                            {photoUrls.map((url, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setActiveImageIndex(idx)}
+                                    className={`w-16 h-16 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${activeImageIndex === idx ? 'border-[#39ff14] opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                                >
+                                    <img src={url} className="w-full h-full object-cover" />
+                                </button>
+                            ))}
+                        </div>
+                    )}
 
                     <div className="p-6 lg:p-8 space-y-6">
                         <div>
