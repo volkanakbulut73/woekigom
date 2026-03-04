@@ -20,8 +20,8 @@ const Login = () => {
             const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
             if (signInError) throw signInError;
             navigate('/app');
-        } catch (err: any) {
-            setError(err.message || 'Failed to sign in');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Hata oluştu');
         } finally {
             setLoading(false);
         }
