@@ -1,160 +1,155 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check, Clock, QrCode, XCircle } from 'lucide-react';
+import { ArrowLeft, Check, ChevronRight } from 'lucide-react';
+
+// Status tracking enum based on user requirements
+type TransactionStatus = 'waiting-supporter' | 'waiting-cash-payment' | 'cash-paid' | 'qr-uploaded' | 'payment-verified' | 'completed';
 
 const Tracker = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // In a real scenario, we would subscribe to Supabase realtime events on transactions table to update 'status'
+    // Defaulting to step 2 for visualization as per mockup
+    const [status, setStatus] = useState<TransactionStatus>('waiting-cash-payment');
+
+    // Mapping db states to visual step indices (0-5)
+    const statusToIndex: Record<TransactionStatus, number> = {
+        'waiting-supporter': 0,
+        'waiting-cash-payment': 1,
+        'cash-paid': 2,
+        'qr-uploaded': 3,
+        'payment-verified': 4,
+        'completed': 5
+    };
+
+    const currentStepIndex = statusToIndex[status];
+
+    const steps = [
+        "Eşleşme",
+        "Alıcı Ödemesi",
+        "QR Hazırlama",
+        "QR Yüklendi",
+        "Ödeme Yapıldı",
+        "Tamamlandı"
+    ];
 
     return (
-        <div className="min-h-screen bg-[#060812] text-white font-sans overflow-hidden flex flex-col relative">
-            {/* Background Glow Effects */}
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[30%] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-            <div className="absolute top-[40%] right-[-10%] w-[30%] h-[40%] bg-green-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-            <div className="absolute bottom-[-10%] left-[20%] w-[50%] h-[30%] bg-pink-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="min-h-screen bg-slate-50 text-slate-800 font-sans relative overflow-x-hidden flex flex-col">
 
-            {/* Header */}
-            <header className="px-6 py-6 flex items-center justify-between relative z-10">
+            {/* Dark Green Header background area */}
+            <div className="absolute top-0 left-0 right-0 h-48 bg-[#0a471e] rounded-b-[2rem] z-0"></div>
+
+            {/* Header Content */}
+            <header className="px-6 py-6 flex flex-col relative z-10 text-white">
                 <button
-                    onClick={() => navigate('/app')}
-                    className="w-10 h-10 flex items-center justify-center -ml-2 text-slate-300 hover:text-white transition-colors"
+                    onClick={() => navigate('/app/talepler')}
+                    className="flex w-10 h-10 items-center -ml-2 text-white/80 hover:text-white transition-colors"
                 >
-                    <ArrowLeft size={24} />
+                    <ArrowLeft size={20} /> <span className="ml-1 text-sm font-bold tracking-wide">Geri</span>
                 </button>
-                <h1 className="text-lg font-bold">Order #{id?.substring(0, 4) || '4829'}</h1>
-                <button className="text-[#39ff14] text-xs font-black tracking-widest uppercase hover:text-[#33f20d]">
-                    HELP
-                </button>
+                <div className="mt-2 flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-extrabold flex items-center gap-2">
+                            {currentStepIndex === 0 ? 'Destekçi Aranıyor...' : 'Eşleşme Başarılı!'}
+                            {currentStepIndex > 0 && <span className="bg-[#3ff91a] text-[#0a471e] p-1 rounded-sm"><Check size={14} className="stroke-[4]" /></span>}
+                        </h1>
+                        <p className="text-white/80 text-xs mt-1 font-medium tracking-wide">İşlem #{id?.substring(0, 5).toUpperCase()}</p>
+                    </div>
+                    {currentStepIndex === 0 && (
+                        <div className="text-2xl animate-pulse">💛</div>
+                    )}
+                </div>
             </header>
 
-            <div className="px-6 relative z-10 flex-1 flex flex-col pt-4 pb-8">
-                {/* Title Area */}
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-black mb-2 animate-pulse-slow">P2P Match Found</h2>
-                    <p className="text-sm text-slate-400 max-w-[260px] mx-auto leading-relaxed">
-                        Follow the progress below to complete your meal share.
-                    </p>
-                </div>
+            <div className="px-4 relative z-10 flex-1 flex flex-col pb-8">
 
-                {/* Status Cards */}
-                <div className="flex gap-4 mb-10">
-                    <div className="flex-1 bg-[#121629] border border-white/5 rounded-2xl p-4 shadow-lg active-card-glow relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-[#39ff14]/5 rounded-bl-[100%]"></div>
-                        <div className="flex items-center gap-2 mb-2">
-                            <Clock size={14} className="text-[#39ff14]" />
-                            <span className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">STATUS</span>
-                        </div>
-                        <p className="text-lg font-bold text-white">In Progress</p>
-                    </div>
-                    <div className="flex-1 bg-[#121629] border border-white/5 rounded-2xl p-4 shadow-lg overflow-hidden">
-                        <div className="flex items-center gap-2 mb-2">
-                            <Clock size={14} className="text-[#39ff14]" />
-                            <span className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">EST. TIME</span>
-                        </div>
-                        <p className="text-lg font-bold text-white">~5 mins left</p>
-                    </div>
-                </div>
-
-                {/* Timeline */}
-                <div className="flex-1 relative pl-4 sm:pl-8 max-w-md mx-auto w-full">
-                    {/* Step 1 */}
-                    <div className="flex gap-6 mb-8 relative">
-                        {/* Connecting Line */}
-                        <div className="absolute left-[19px] top-[40px] bottom-[-40px] w-[2px] bg-[#39ff14] shadow-[0_0_10px_#39ff14]"></div>
-
-                        <div className="w-10 h-10 rounded-full border border-[#39ff14] bg-[#0a2012] flex items-center justify-center shrink-0 z-10 shadow-[0_0_20px_rgba(57,255,20,0.3)]">
-                            <Check size={20} className="text-[#39ff14]" />
-                        </div>
-                        <div className="pt-1">
-                            <h3 className="font-bold text-lg mb-1">Matching with Seller</h3>
-                            <p className="text-sm text-slate-400 mb-2">Found matching card holder nearby.</p>
-                            <span className="text-xs text-[#39ff14] font-mono">Completed 10:45 AM</span>
-                        </div>
+                {/* Steps Card */}
+                <div className="bg-white rounded-[24px] p-6 shadow-sm border border-slate-100 mb-4">
+                    <div className="flex items-center gap-2 text-slate-700 font-bold mb-6 text-sm">
+                        <span className="text-lg">📊</span> İşlem Takibi
                     </div>
 
-                    {/* Step 2 */}
-                    <div className="flex gap-6 mb-8 relative">
-                        {/* Connecting Line */}
-                        <div className="absolute left-[19px] top-[40px] bottom-[-40px] w-[2px] bg-[#39ff14] shadow-[0_0_10px_#39ff14]"></div>
+                    <div className="flex flex-col gap-4 relative">
+                        {/* Connecting Line background */}
+                        <div className="absolute left-[15px] top-[15px] bottom-[15px] w-[2px] bg-slate-100 -z-10"></div>
+                        {/* Active Progress Line */}
+                        <div
+                            className="absolute left-[15px] top-[15px] w-[2px] bg-[#0a471e] -z-10 transition-all duration-700 ease-in-out"
+                            style={{ height: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
+                        ></div>
 
-                        <div className="w-10 h-10 rounded-full border border-[#39ff14] bg-[#0a2012] flex items-center justify-center shrink-0 z-10 shadow-[0_0_20px_rgba(57,255,20,0.3)] relative">
-                            <div className="absolute inset-0 bg-[#39ff14] rounded-full blur-md opacity-20"></div>
-                            <Check size={20} className="text-[#39ff14]" />
-                        </div>
-                        <div className="pt-1">
-                            <h3 className="font-bold text-lg mb-1">Payment Processing</h3>
-                            <p className="text-sm text-slate-400 mb-2">Funds held in secure escrow.</p>
-                            <span className="text-xs text-[#39ff14] font-mono">Completed 10:46 AM</span>
-                        </div>
-                    </div>
+                        {steps.map((step, index) => {
+                            const isCompleted = index < currentStepIndex;
+                            const isActive = index === currentStepIndex;
 
-                    {/* Step 3 (Active) */}
-                    <div className="flex gap-6 relative">
-                        {/* Faded bottom line to represent end or next step */}
-                        <div className="absolute left-[19px] top-[40px] h-[100px] w-[2px] bg-gradient-to-b from-[#39ff14] to-transparent"></div>
+                            return (
+                                <div key={index} className="flex items-center gap-4 relative">
+                                    {isActive && (
+                                        <div className="absolute -left-1 w-10 h-10 bg-[#0a471e]/10 rounded-full animate-ping"></div>
+                                    )}
 
-                        <div className="w-10 h-10 rounded-full border-2 border-[#39ff14] bg-[#0a2012] flex items-center justify-center shrink-0 z-10 relative">
-                            {/* Pulse effect */}
-                            <div className="absolute inset-0 bg-[#39ff14] rounded-full animate-ping opacity-20"></div>
-                            <div className="absolute inset-[-10px] bg-[#39ff14] rounded-full blur-xl opacity-20"></div>
-
-                            <QrCode size={18} className="text-[#39ff14]" />
-                        </div>
-                        <div className="pt-1 w-full">
-                            <div className="flex items-start justify-between mb-1 gap-2">
-                                <h3 className="font-bold text-lg leading-tight">QR Code <br />Exchange</h3>
-                                <div className="bg-[#39ff14] text-[#060812] text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-[0_0_15px_#39ff14] whitespace-nowrap animate-pulse">
-                                    You Are Here
-                                </div>
-                            </div>
-                            <p className="text-sm text-slate-400 mb-6">Waiting for seller to scan your code.</p>
-
-                            {/* Scan Code Box */}
-                            <div className="bg-[#0c101d] border border-white/10 rounded-3xl p-5 flex items-center justify-between shadow-[0_0_30px_rgba(57,255,20,0.05)] border-b-[#39ff14]/30">
-                                <div>
-                                    <h4 className="font-bold mb-1">Scan Code</h4>
-                                    <p className="text-xs text-slate-500">Show this to cashier</p>
-                                </div>
-                                <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center p-1.5 shadow-inner">
-                                    {/* Mock QR graphic */}
-                                    <div className="w-full h-full border-2 border-black border-dashed flex items-center justify-center">
-                                        <QrCode className="text-black/80" size={24} />
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors duration-300 z-10 ${isCompleted ? 'bg-[#0a471e] border-[#0a471e] text-white' :
+                                        isActive ? 'bg-[#002f5e] border-[#002f5e] text-white shadow-[0_0_15px_rgba(0,47,94,0.3)]' :
+                                            'bg-slate-100 border-slate-100 text-slate-400'
+                                        }`}>
+                                        {isCompleted ? <Check size={14} className="stroke-[3]" /> : index + 1}
                                     </div>
+                                    <div className={`font-bold text-[15px] transition-colors duration-300 ${isActive ? 'text-[#002f5e]' :
+                                        isCompleted ? 'text-[#0a471e]' :
+                                            'text-slate-400'
+                                        }`}>
+                                        {step}
+                                    </div>
+
+                                    {/* Bouncing "You Are Here" indicator */}
+                                    {isActive && (
+                                        <div className="ml-auto flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-[#002f5e] animate-bounce bg-[#002f5e]/10 px-2 py-1 rounded-full">
+                                            Buradasınız <ChevronRight size={12} className="-ml-1" />
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Details Card */}
+                <div className="bg-white rounded-[24px] p-6 shadow-sm border border-slate-100 flex-1 flex flex-col items-center justify-center text-center">
+
+                    <div className="w-16 h-16 bg-[#4c845b] text-white rounded-full flex items-center justify-center mb-6 shadow-lg">
+                        <Check size={32} className="stroke-[2.5]" />
+                    </div>
+
+                    <div className="bg-emerald-50 text-[#0a471e] font-bold px-3 py-1 rounded-md flex items-center gap-1.5 text-sm mb-6 border border-emerald-100">
+                        <Check size={14} /> Eşleşme Tamamlandı
+                    </div>
+
+                    <h2 className="text-[#002f5e] font-extrabold text-lg leading-snug max-w-[220px] mb-4">
+                        Ayşe K. ile eşleşme başarılı! Tracking başlatıldı...
+                    </h2>
+
+                    <p className="text-[#002f5e] text-sm font-semibold max-w-[250px] leading-relaxed mb-6 opacity-80">
+                        Şimdi ödeme ekranına yönlendiriliyorsunuz, 5 dk içinde QR ekranınızda olacak.
+                    </p>
+
+                    {/* Developer Buttons to advance state manually for testing */}
+                    <div className="mt-10 w-full pt-6 border-t border-slate-100">
+                        <p className="text-[10px] text-slate-400 font-bold uppercase mb-3">(Test) Durumu İlerlet</p>
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {Object.keys(statusToIndex).map((s) => (
+                                <button
+                                    key={s}
+                                    onClick={() => setStatus(s as TransactionStatus)}
+                                    className={`px-3 py-1.5 rounded-full text-[10px] font-bold ${status === s ? 'bg-[#002f5e] text-white' : 'bg-slate-100 text-slate-500'}`}
+                                >
+                                    Adım {statusToIndex[s as TransactionStatus] + 1}
+                                </button>
+                            ))}
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-auto pt-10">
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => navigate('/app')}
-                            className="flex-1 bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 text-white py-4 rounded-3xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg">
-                            <ArrowLeft size={18} />
-                            <span>Çıkış</span>
-                        </button>
-                        <button className="flex-[2] bg-transparent border border-[#ff0055]/30 hover:border-[#ff0055]/80 hover:bg-[#ff0055]/10 text-[#ff0055] py-4 rounded-3xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(255,0,85,0.05)]">
-                            <XCircle size={18} className="stroke-[2.5px]" />
-                            <span>İptal Et</span>
-                        </button>
-                    </div>
-                    <p className="text-center text-xs text-slate-500 mt-6">
-                        Yardıma mı ihtiyacınız var? <a href="#" className="text-white underline decoration-[#39ff14] underline-offset-4 font-semibold">Destek Ekibi</a>
-                    </p>
-                </div>
             </div>
-
-            <style>{`
-                .active-card-glow {
-                    box-shadow: 0 0 40px -10px rgba(57, 255, 20, 0.15);
-                    border-bottom: 1px solid rgba(57, 255, 20, 0.3);
-                }
-                .animate-pulse-slow {
-                    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-                }
-            `}</style>
         </div>
     );
 };
