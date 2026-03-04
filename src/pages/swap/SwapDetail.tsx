@@ -61,6 +61,20 @@ const SwapDetail = () => {
 
         fetchDetails();
 
+        // Fallback or main polling to fetch messages every 3 seconds
+        const pollInterval = setInterval(async () => {
+            if (!id) return;
+            const { data } = await supabase
+                .from('messages')
+                .select('*')
+                .eq('swap_id', id)
+                .order('created_at', { ascending: true });
+
+            if (data) {
+                setMessages(data as Message[]);
+            }
+        }, 3000);
+
         const subscription = supabase
             .channel(`messages-${id}`)
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `swap_id=eq.${id}` }, (payload) => {
@@ -70,6 +84,7 @@ const SwapDetail = () => {
 
         return () => {
             supabase.removeChannel(subscription);
+            clearInterval(pollInterval);
         };
     }, [id]);
 
@@ -235,8 +250,8 @@ const SwapDetail = () => {
                             return (
                                 <div key={msg.id || idx} className={`flex w-full ${isMe ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-md ${isMe
-                                            ? 'bg-[#39ff14] text-[#0a0b1e] rounded-tr-sm font-medium'
-                                            : 'bg-slate-800 border border-white/5 text-slate-200 rounded-tl-sm'
+                                        ? 'bg-[#39ff14] text-[#0a0b1e] rounded-tr-sm font-medium'
+                                        : 'bg-slate-800 border border-white/5 text-slate-200 rounded-tl-sm'
                                         }`}>
                                         {msg.content}
                                         <div className={`text-[9px] mt-1 text-right ${isMe ? 'text-[#0a0b1e]/60' : 'text-slate-400'}`}>
