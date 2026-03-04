@@ -1,8 +1,60 @@
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronLeft, BarChart2, MapPin, Rocket, Home, Store, Plus, ArrowLeftRight, User } from 'lucide-react';
+import { ChevronLeft, BarChart2, Rocket, Home, Store, Plus, ArrowLeftRight, User, Trash2 } from 'lucide-react';
+import { DBService } from '../lib/services';
+import { useAuth } from '../context/AuthContext';
+import type { Transaction } from '../types';
 
 const Talepler = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchTxs = async () => {
+        try {
+            setLoading(true);
+            const data = await DBService.getPendingTransactions();
+            setTransactions(data as Transaction[]);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (user) {
+            fetchTxs();
+        }
+    }, [user]);
+
+    const handleAccept = async (txId: string) => {
+        if (!user) return;
+        try {
+            await DBService.acceptTransaction(txId, user.id);
+            // After accepting, we should navigate to the active tracker.
+            // But since tracker UI isn't ready in this prompt, we just alert and reload.
+            alert('Talep başarıyla kabul edildi! (Tracker sayfasına yönlendirileceksiniz)');
+            fetchTxs();
+        } catch (err) {
+            console.error('Kabul etme hatası:', err);
+            alert('Talep kabul edilirken bir hata oluştu');
+        }
+    };
+
+    const handleCancel = async (txId: string) => {
+        try {
+            await DBService.updateTransactionStatus(txId, 'cancelled');
+            fetchTxs();
+        } catch (err) {
+            console.error('Iptal hatası:', err);
+            alert('İptal edilirken bir hata oluştu');
+        }
+    };
+
+    const myRequests = transactions.filter(t => t.seeker_id === user?.id);
+    const otherRequests = transactions.filter(t => t.seeker_id !== user?.id);
 
     return (
         <div className="bg-[#0a0b1e] font-sans text-slate-100 min-h-screen flex flex-col">
@@ -36,7 +88,7 @@ const Talepler = () => {
 
                         <div className="relative z-10">
                             <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] mb-1">Aktif Talepler</p>
-                            <p className="text-3xl font-bold text-white tracking-tight">12</p>
+                            <p className="text-3xl font-bold text-white tracking-tight">{transactions.length}</p>
                         </div>
                         <div className="w-12 h-12 rounded-full bg-[#33f20d]/10 flex items-center justify-center border border-[#33f20d]/20 relative z-10">
                             <BarChart2 className="text-[#33f20d]" size={20} />
@@ -44,97 +96,89 @@ const Talepler = () => {
                     </div>
                 </div>
 
-                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest px-1 mt-6 mb-2">Bekleyen talepler</h2>
+                {loading ? (
+                    <div className="py-20 text-center text-slate-500 font-bold">Talepler yükleniyor...</div>
+                ) : (
+                    <>
+                        <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest px-1 mt-6 mb-2">Bekleyen talepler</h2>
 
-                {/* Request Card 1 */}
-                <div className="bg-white/5 backdrop-blur-xl border border-[#33f20d]/10 rounded-xl overflow-hidden relative group transition-transform active:scale-[0.98]">
-                    <div className="absolute top-2.5 right-3 z-10">
-                        <span className="bg-[#33f20d]/10 text-[#33f20d] text-[10px] font-bold px-2 py-1 rounded-full border border-[#33f20d]/20">5 dk önce</span>
-                    </div>
-                    <div className="p-5 flex flex-col gap-4">
-                        <div className="flex gap-4 items-start">
-                            <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
-                                <img alt="Avatar" className="w-full h-full object-cover" src="https://ui-avatars.com/api/?name=Ahmet+M&background=33f20d&color=0a0b1e&rounded=true" />
-                            </div>
-                            <div className="flex-1 pt-1">
-                                <h3 className="text-white font-bold text-lg leading-tight">Ahmet M</h3>
-                                <div className="flex items-center gap-1 text-slate-400 text-sm mt-1">
-                                    <MapPin size={14} className="text-[#33f20d]" />
-                                    <span>Konum: Kadıköy, İstanbul</span>
-                                </div>
-                            </div>
-                            <div className="text-right mt-7">
-                                <p className="text-[#33f20d] font-bold text-xl leading-none">₺145</p>
-                                <p className="text-[10px] text-slate-500 uppercase mt-1">Tutar</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-end pt-2 border-t border-white/5 mt-2">
-                            <button className="bg-[#33f20d] hover:bg-[#33f20d]/90 text-[#0a0b1e] px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(51,242,13,0.3)] hover:shadow-[0_0_20px_rgba(51,242,13,0.5)]">
-                                Kabul Et <Rocket size={16} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                        {otherRequests.length === 0 && (
+                            <div className="py-10 text-center text-slate-500 text-sm">Bekleyen başkasına ait talep yok.</div>
+                        )}
 
-                {/* Request Card 2 */}
-                <div className="bg-white/5 backdrop-blur-xl border border-[#33f20d]/10 rounded-xl overflow-hidden relative group transition-transform active:scale-[0.98]">
-                    <div className="absolute top-2.5 right-3 z-10">
-                        <span className="bg-[#33f20d]/10 text-[#33f20d] text-[10px] font-bold px-2 py-1 rounded-full border border-[#33f20d]/20">12 dk önce</span>
-                    </div>
-                    <div className="p-5 flex flex-col gap-4">
-                        <div className="flex gap-4 items-start">
-                            <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
-                                <img alt="Avatar" className="w-full h-full object-cover" src="https://ui-avatars.com/api/?name=Mehmet+A&background=random&color=fff&rounded=true" />
-                            </div>
-                            <div className="flex-1 pt-1">
-                                <h3 className="text-white font-bold text-lg leading-tight">Mehmet A</h3>
-                                <div className="flex items-center gap-1 text-slate-400 text-sm mt-1">
-                                    <MapPin size={14} className="text-slate-400" />
-                                    <span>Konum: Beşiktaş, İstanbul</span>
-                                </div>
-                            </div>
-                            <div className="text-right mt-7">
-                                <p className="text-[#33f20d] font-bold text-xl leading-none">₺320</p>
-                                <p className="text-[10px] text-slate-500 uppercase mt-1">Tutar</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-end pt-2 border-t border-white/5 mt-2">
-                            <button className="bg-[#33f20d] hover:bg-[#33f20d]/90 text-[#0a0b1e] px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(51,242,13,0.3)]">
-                                Kabul Et <Rocket size={16} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                        {otherRequests.map((tx) => {
+                            const fullName = tx.profiles?.full_name || 'Anonim';
+                            const avatar = tx.profiles?.avatar_url || `https://ui-avatars.com/api/?name=${fullName.replace(' ', '+')}&background=33f20d&color=0a0b1e&rounded=true`;
 
-                {/* Users Request */}
-                <div className="bg-white/5 backdrop-blur-xl border border-[#33f20d]/10 rounded-xl overflow-hidden relative opacity-80">
-                    <div className="absolute top-2.5 right-3 z-10">
-                        <span className="bg-slate-500/10 text-slate-400 text-[10px] font-bold px-2 py-1 rounded-full border border-white/10">Senin Paylaşımın</span>
-                    </div>
-                    <div className="p-5 flex flex-col gap-4">
-                        <div className="flex gap-4 items-start">
-                            <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
-                                <img alt="Avatar" className="w-full h-full object-cover" src="https://ui-avatars.com/api/?name=Meltem+Y&background=random&color=fff&rounded=true" />
-                            </div>
-                            <div className="flex-1 pt-1">
-                                <h3 className="text-white font-bold text-lg leading-tight">Meltem Y</h3>
-                                <div className="flex items-center gap-1 text-slate-400 text-sm mt-1">
-                                    <MapPin size={14} className="text-slate-400" />
-                                    <span>Konum: Sarıyer, İstanbul</span>
+                            return (
+                                <div key={tx.id} className="bg-white/5 backdrop-blur-xl border border-[#33f20d]/10 rounded-xl overflow-hidden relative group transition-transform active:scale-[0.98] mb-4">
+                                    <div className="p-5 flex flex-col gap-4">
+                                        <div className="flex gap-4 items-start">
+                                            <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
+                                                <img alt="Avatar" className="w-full h-full object-cover" src={avatar} />
+                                            </div>
+                                            <div className="flex-1 pt-1">
+                                                <h3 className="text-white font-bold text-lg leading-tight">{fullName}</h3>
+                                                <div className="text-slate-400 text-sm mt-1">
+                                                    <span className="font-semibold text-slate-300 block line-clamp-1">{tx.listing_title}</span>
+                                                </div>
+                                            </div>
+                                            <div className="text-right mt-7 shrink-0">
+                                                <p className="text-[#33f20d] font-bold text-xl leading-none">₺{Number(tx.amount).toLocaleString('tr-TR')}</p>
+                                                <p className="text-[10px] text-slate-500 uppercase mt-1">Tutar</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-end pt-2 border-t border-white/5 mt-2">
+                                            <button onClick={() => handleAccept(tx.id)} className="bg-[#33f20d] hover:bg-[#33f20d]/90 text-[#0a0b1e] px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(51,242,13,0.3)] hover:shadow-[0_0_20px_rgba(51,242,13,0.5)]">
+                                                Kabul Et <Rocket size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="text-right mt-7">
-                                <p className="text-[#33f20d] font-bold text-xl leading-none">₺850</p>
-                                <p className="text-[10px] text-slate-500 uppercase mt-1">Tutar</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-end pt-2 border-t border-white/5 mt-2">
-                            <button className="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-6 py-2 rounded-lg font-bold text-sm transition-all border border-red-500/30">
-                                İptal Et
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                            );
+                        })}
+
+                        {myRequests.length > 0 && (
+                            <>
+                                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest px-1 mt-6 mb-2">Senin Paylaşımların</h2>
+                                {myRequests.map((tx) => {
+                                    const fullName = tx.profiles?.full_name || 'Ben';
+                                    const avatar = tx.profiles?.avatar_url || `https://ui-avatars.com/api/?name=${fullName.replace(' ', '+')}&background=random&color=fff&rounded=true`;
+
+                                    return (
+                                        <div key={tx.id} className="bg-white/5 backdrop-blur-xl border border-[#33f20d]/10 rounded-xl overflow-hidden relative opacity-80 mb-4">
+                                            <div className="absolute top-2.5 right-3 z-10">
+                                                <span className="bg-slate-500/10 text-slate-400 text-[10px] font-bold px-2 py-1 rounded-full border border-white/10">Senin Paylaşımın</span>
+                                            </div>
+                                            <div className="p-5 flex flex-col gap-4">
+                                                <div className="flex gap-4 items-start">
+                                                    <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
+                                                        <img alt="Avatar" className="w-full h-full object-cover" src={avatar} />
+                                                    </div>
+                                                    <div className="flex-1 pt-1">
+                                                        <h3 className="text-white font-bold text-lg leading-tight">{fullName}</h3>
+                                                        <div className="text-slate-400 text-sm mt-1">
+                                                            <span className="font-semibold text-slate-300 block line-clamp-1">{tx.listing_title}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right mt-7 shrink-0">
+                                                        <p className="text-[#33f20d] font-bold text-xl leading-none">₺{Number(tx.amount).toLocaleString('tr-TR')}</p>
+                                                        <p className="text-[10px] text-slate-500 uppercase mt-1">Tutar</p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-end pt-2 border-t border-white/5 mt-2">
+                                                    <button onClick={() => handleCancel(tx.id)} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-6 py-2 rounded-lg font-bold text-sm transition-all border border-red-500/30 flex items-center gap-1.5">
+                                                        <Trash2 size={16} /> İptal Et
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </>
+                )}
 
             </main>
 

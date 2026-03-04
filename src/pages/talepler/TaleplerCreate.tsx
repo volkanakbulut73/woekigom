@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { ChevronLeft, Info } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
+import { DBService } from '../../lib/services';
 
 const TaleplerCreate = () => {
     const navigate = useNavigate();
@@ -24,21 +24,11 @@ const TaleplerCreate = () => {
             setLoading(true);
             setError('');
 
-            const { error: insertError } = await supabase
-                .from('requests') // Assuming requests table exists.
-                .insert([
-                    {
-                        user_id: user?.id,
-                        amount: Number(amount),
-                        description: description,
-                        status: 'active'
-                    }
-                ]);
-
-            if (insertError) {
-                // Ignore missing table error for demo purposes
-                console.warn(insertError);
-            }
+            await DBService.createTransactionRequest(
+                user!.id,
+                Number(amount),
+                description || 'Paylaşım Talebi'
+            );
 
             navigate('/app/talepler');
         } catch (err) {
