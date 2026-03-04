@@ -160,7 +160,7 @@ const Market = () => {
                                     </div>
                                     <div className="text-right">
                                         <p className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold mb-0.5">Fiyat</p>
-                                        <p className="text-cyan-400 font-extrabold text-lg">₺{Number(item.required_balance).toFixed(2)}</p>
+                                        <p className="text-cyan-400 font-extrabold text-lg">₺{Number(item.required_balance).toLocaleString('tr-TR')}</p>
                                     </div>
                                 </div>
                             </div>

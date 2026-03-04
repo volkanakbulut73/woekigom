@@ -219,7 +219,7 @@ const SwapDetail = () => {
                         <div>
                             <div className="flex justify-between items-start mb-2">
                                 <h1 className="text-2xl lg:text-3xl font-black text-white">{listing.title}</h1>
-                                <p className="text-[#39ff14] font-black text-2xl lg:text-3xl">₺{Number(listing.required_balance).toFixed(2)}</p>
+                                <p className="text-[#39ff14] font-black text-2xl lg:text-3xl">₺{Number(listing.required_balance).toLocaleString('tr-TR')}</p>
                             </div>
                             <div className="flex items-center gap-1 text-cyan-400 text-sm font-semibold">
                                 <MapPin size={16} />
