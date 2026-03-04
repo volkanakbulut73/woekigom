@@ -13,12 +13,16 @@ interface Message {
     receiver_id: string;
     content: string;
     created_at: string;
+    sender?: {
+        full_name: string;
+        avatar_url: string;
+    };
 }
 
 const SwapDetail = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, profile } = useAuth();
     const [listing, setListing] = useState<SwapListing | null>(null);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
@@ -43,7 +47,7 @@ const SwapDetail = () => {
                 // Fetch Messages related to this swap and current user
                 const { data: messagesData, error: messagesError } = await supabase
                     .from('messages')
-                    .select('*')
+                    .select('*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url)')
                     .eq('swap_id', id)
                     .order('created_at', { ascending: true });
 
@@ -61,12 +65,11 @@ const SwapDetail = () => {
 
         fetchDetails();
 
-        // Fallback or main polling to fetch messages every 3 seconds
         const pollInterval = setInterval(async () => {
             if (!id) return;
             const { data } = await supabase
                 .from('messages')
-                .select('*')
+                .select('*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url)')
                 .eq('swap_id', id)
                 .order('created_at', { ascending: true });
 
@@ -122,7 +125,15 @@ const SwapDetail = () => {
         };
 
         try {
-            const tempMessage = { ...messageObj, id: Date.now().toString(), created_at: new Date().toISOString() };
+            const tempMessage = {
+                ...messageObj,
+                id: Date.now().toString(),
+                created_at: new Date().toISOString(),
+                sender: {
+                    full_name: profile?.full_name || 'Ben',
+                    avatar_url: profile?.avatar_url || ''
+                }
+            };
             setMessages(prev => [...prev, tempMessage as Message]);
             setNewMessage('');
 
@@ -151,6 +162,14 @@ const SwapDetail = () => {
     const sellerInfo = listing.profiles as { full_name?: string; avatar_url?: string; rating?: number } | undefined;
     const sellerName = sellerInfo?.full_name || 'Anonim Kullanıcı';
     const sellerAvatar = sellerInfo?.avatar_url || `https://ui-avatars.com/api/?name=${sellerName.replace(' ', '+')}&background=random&color=fff`;
+
+    const formatName = (fullName?: string) => {
+        if (!fullName) return 'Anonim';
+        const parts = fullName.trim().split(' ');
+        if (parts.length === 1) return parts[0];
+        const last = parts.pop();
+        return `${parts.join(' ')} ${last?.charAt(0)}.`;
+    };
 
     return (
         <div className="w-full flex flex-col lg:flex-row gap-6 animate-in fade-in duration-500 pb-20 lg:pb-10 lg:h-[calc(100vh-100px)]">
@@ -247,17 +266,34 @@ const SwapDetail = () => {
                     ) : (
                         messages.map((msg, idx) => {
                             const isMe = msg.sender_id === user?.id;
+                            const dName = isMe ? 'Ben' : formatName(msg.sender?.full_name);
+                            const dAvatar = isMe ? profile?.avatar_url : msg.sender?.avatar_url;
+                            const avatarUrl = dAvatar || `https://ui-avatars.com/api/?name=${dName.replace(' ', '+')}&background=random&color=fff`;
+
                             return (
-                                <div key={msg.id || idx} className={`flex w-full ${isMe ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-md ${isMe
-                                        ? 'bg-[#39ff14] text-[#0a0b1e] rounded-tr-sm font-medium'
-                                        : 'bg-slate-800 border border-white/5 text-slate-200 rounded-tl-sm'
-                                        }`}>
-                                        {msg.content}
-                                        <div className={`text-[9px] mt-1 text-right ${isMe ? 'text-[#0a0b1e]/60' : 'text-slate-400'}`}>
-                                            {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                <div key={msg.id || idx} className={`flex w-full gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                                    {!isMe && (
+                                        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-auto opacity-80">
+                                            <img src={avatarUrl} alt={dName} className="w-full h-full object-cover" />
+                                        </div>
+                                    )}
+                                    <div className="flex flex-col max-w-[75%]">
+                                        {!isMe && <span className="text-[10px] text-slate-400 ml-1 mb-1">{dName}</span>}
+                                        <div className={`rounded-2xl px-4 py-3 text-sm shadow-md ${isMe
+                                            ? 'bg-[#39ff14] text-[#0a0b1e] rounded-br-sm font-medium'
+                                            : 'bg-slate-800 border border-white/5 text-slate-200 rounded-bl-sm'
+                                            }`}>
+                                            {msg.content}
+                                            <div className={`text-[9px] mt-1 text-right ${isMe ? 'text-[#0a0b1e]/60' : 'text-slate-400'}`}>
+                                                {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </div>
                                         </div>
                                     </div>
+                                    {isMe && (
+                                        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-auto opacity-80">
+                                            <img src={profile?.avatar_url || `https://ui-avatars.com/api/?name=Ben&background=39ff14&color=000`} alt="Ben" className="w-full h-full object-cover" />
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })
