@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { ChevronLeft, Camera, Wallet, Sparkles, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { SwapService } from '../../lib/services';
 
 const SwapCreate = () => {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ const SwapCreate = () => {
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
     const [images, setImages] = useState<string[]>([]);
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -22,11 +24,13 @@ const SwapCreate = () => {
 
             const newImageUrls = filesToAdd.map(file => URL.createObjectURL(file));
             setImages(prev => [...prev, ...newImageUrls]);
+            setImageFiles(prev => [...prev, ...filesToAdd]);
         }
     };
 
     const removeImage = (indexToRemove: number) => {
         setImages(images.filter((_, index) => index !== indexToRemove));
+        setImageFiles(imageFiles.filter((_, index) => index !== indexToRemove));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -46,6 +50,13 @@ const SwapCreate = () => {
             setLoading(true);
             setError('');
 
+            let mainPhotoUrl: string | null = null;
+            if (imageFiles.length > 0) {
+                // Sadece ilk resmi(vitrin resmi) yüklüyoruz şimdilik. 
+                // DB'de photo_url tek bir string tuttuğu için.
+                mainPhotoUrl = await SwapService.uploadImage(imageFiles[0], 'images');
+            }
+
             const { error: insertError } = await supabase
                 .from('swap_listings')
                 .insert([
@@ -53,7 +64,8 @@ const SwapCreate = () => {
                         owner_id: user?.id,
                         title: title,
                         description: description,
-                        required_balance: Number(amount)
+                        required_balance: Number(amount),
+                        photo_url: mainPhotoUrl
                     }
                 ]);
 
