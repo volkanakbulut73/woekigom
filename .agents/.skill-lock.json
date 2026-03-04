@@ -1,0 +1,37 @@
+{
+  "version": 3,
+  "skills": {
+    "react:components": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/google-labs-code/stitch-skills.git",
+      "skillPath": "skills/react-components/SKILL.md",
+      "skillFolderHash": "6bc31b18750870f79ea6152851175c9bd303e26b",
+      "installedAt": "2026-03-03T21:20:48.443Z",
+      "updatedAt": "2026-03-03T21:20:48.443Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "c2f31172b6f256272305a5e6e7228b258446899f",
+      "installedAt": "2026-03-03T21:20:54.990Z",
+      "updatedAt": "2026-03-03T21:20:54.990Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "cline",
+    "codex",
+    "cursor",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-cli",
+    "opencode",
+    "antigravity"
+  ]
+}

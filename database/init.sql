@@ -78,7 +78,11 @@ CREATE POLICY "Users can view transactions they are part of, or waiting ones"
 
 CREATE POLICY "Users can update transactions they are part of"
   ON public.transactions FOR UPDATE
-  USING (auth.uid() = seeker_id OR auth.uid() = supporter_id);
+  USING (
+    auth.uid() = seeker_id OR 
+    auth.uid() = supporter_id OR 
+    status = 'waiting-supporter'
+  );
 
 -- Swap Listings Policies
 CREATE POLICY "Swap listings are viewable by everyone"

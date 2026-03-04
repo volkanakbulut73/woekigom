@@ -1,18 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
+  --color-primary-50: #e0ffd4;
+  --color-primary-100: #bbf7d0;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #39ff14;
+  --color-primary-600: #16a34a;
+  --color-primary-700: #15803d;
   --color-success-500: #10b981;
   --color-warning-500: #f59e0b;
   --color-danger-500: #ef4444;
+
+  /* Gamified Financial Future Custom Variables */
+  --color-dark-navy: #0a0b1e;
+  --color-neon-green: #39ff14;
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  @apply bg-[#0a0b1e] text-gray-100 antialiased;
 }
 
 /* Custom scrollbar for webkit */
@@ -26,9 +31,66 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  @apply bg-gray-700 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  @apply bg-gray-600;
+}
+
+/* Glassmorphism & Neomorphic Effects */
+.glass-card {
+  @apply bg-white/[0.03] backdrop-blur-xl border border-white/10;
+}
+
+.hover-glow {
+  @apply transition-all duration-300;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+  @apply border-[#39ff14]/50;
+}
+
+/* Tracker Animations */
+.neon-pulse-stream {
+  background: linear-gradient(to bottom, #39ff14 0%, transparent 100%);
+  animation: stream-flow 2s linear infinite;
+  background-size: 100% 200%;
+}
+
+@keyframes stream-flow {
+  0% {
+    background-position: 0% -100%;
+  }
+
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+.breathing-halo {
+  box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.4);
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(57, 255, 20, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(57, 255, 20, 0);
+  }
+}
+
+.light-burst {
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.8);
 }
