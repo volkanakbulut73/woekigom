@@ -1,0 +1,200 @@
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33f20d",
+                        "background-light": "#f6f8f5",
+                        "background-dark": "#0a0b1e",
+                        "card-glass": "rgba(255, 255, 255, 0.03)",
+                        "card-border": "rgba(51, 242, 13, 0.15)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #33f20d;
+            --background-dark: #0a0b1e;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0a0b1e;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 242, 13, 0.1);
+        }
+        .cyber-gradient {
+            background: linear-gradient(135deg, rgba(51, 242, 13, 0.1) 0%, rgba(10, 11, 30, 0) 100%);
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-slate-100 min-h-screen flex flex-col font-display">
+<header class="sticky top-0 z-20 bg-background-dark/90 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center justify-between px-4 py-3">
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+</button>
+<h2 class="text-[11px] font-bold text-primary tracking-[0.2em] uppercase">talepler</h2>
+</div>
+<div class="w-10"></div>
+</div>
+<div class="flex px-4">
+<button class="flex-1 py-4 text-[11px] font-bold border-b-2 border-primary text-primary tracking-wider uppercase">
+            Paylaşım Bekleyenler
+        </button>
+<button class="flex-1 py-4 text-[11px] font-bold border-b-2 border-transparent text-slate-500 tracking-wider uppercase">
+            Paylaşımlarım
+        </button>
+</div>
+</header>
+<main class="flex-1 p-4 space-y-4 pb-24">
+<div class="mb-2">
+<div class="glass-card p-4 rounded-xl cyber-gradient border-l-2 border-l-primary flex items-center justify-between">
+<div>
+<p class="text-[10px] text-slate-400 uppercase tracking-[0.2em] mb-1">Aktif Talepler</p>
+<p class="text-3xl font-bold text-white tracking-tight">12</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+</div>
+</div>
+<h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">Bekleyen talepler</h2>
+<div class="glass-card rounded-xl overflow-hidden relative group">
+<div class="absolute top-2.5 right-3 z-10">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded-full border border-primary/20">5 dk önce</span>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div class="flex gap-4 items-start">
+<div class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
+<img alt="Mağaza" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBpGz9Vs7yhVMIr7SAl2oS5cZbQ2Oxshed8jQZ_6tJrSkq7hszuPHDd9JwbfJmv_UeFdBSHmw7r-mFTHYUTbaysKWShOC22nli9y_31iYaFMfnDamvTYW2tG6rZazPw8YKF1oDGNVeUKbYE0WjG3HhyMRtG3OVEOgN3Iw_SsB2sw1qSQuwdvRJqYaXP78e5lLbRx2gDZthwcXLCNrUtJWDyLyIbU2aBLH15QBvwG6LQTTo8hv42DHTEmCX8iwpBe-eFmWEzOHcHuYH"/>
+</div>
+<div class="flex-1 pt-1">
+<h3 class="text-white font-bold text-lg leading-tight">Ahmet M</h3>
+<div class="flex items-center gap-1 text-slate-400 text-sm mt-1">
+<span class="material-symbols-outlined text-xs">location_on</span>
+<span>Konum: Kadıköy, İstanbul</span>
+</div>
+</div>
+<div class="text-right mt-7">
+<p class="text-primary font-bold text-xl leading-none">₺145</p>
+<p class="text-[10px] text-slate-500 uppercase mt-1">Tutar</p>
+</div>
+</div>
+<div class="flex items-center justify-end pt-2 border-t border-white/5">
+<button class="bg-primary hover:bg-primary/90 text-background-dark px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(51,242,13,0.3)]">
+                    Kabul Et <span class="material-symbols-outlined text-sm">rocket_launch</span>
+</button>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl overflow-hidden relative">
+<div class="absolute top-2.5 right-3 z-10">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded-full border border-primary/20">12 dk önce</span>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div class="flex gap-4 items-start">
+<div class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
+<img alt="Mağaza" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfs48PtGxFY9Nl0u2izrUxtWwKATkeKpWe1EWJkVuOorrPYYo67_rOZkhaEC7Fg3wEu-K2Q1GuUrX77kdz5QIF3k6bZGyZMiUqaZeAoFqjZbMKYyIZ6OFscNRctoEVP1sf4eLozTLxLcwLw4jqHtzCttgCvhIj2R-kYQPgCDvGeTbJw1ymc2BKzUbclSLcg1Him0bnuVeCyQqpfbbcjcFiR9NS9G-Yb2B1Cn6Yr4TmP-7-9XJGOqiETWqcC5mqoJfqmBv_RsWTGx6Q"/>
+</div>
+<div class="flex-1 pt-1">
+<h3 class="text-white font-bold text-lg leading-tight">Mehmet A</h3>
+<div class="flex items-center gap-1 text-slate-400 text-sm mt-1">
+<span class="material-symbols-outlined text-xs">location_on</span>
+<span>Konum: Beşiktaş, İstanbul</span>
+</div>
+</div>
+<div class="text-right mt-7">
+<p class="text-primary font-bold text-xl leading-none">₺320</p>
+<p class="text-[10px] text-slate-500 uppercase mt-1">Tutar</p>
+</div>
+</div>
+<div class="flex items-center justify-end pt-2 border-t border-white/5">
+<button class="bg-primary hover:bg-primary/90 text-background-dark px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(51,242,13,0.3)]">
+                    Kabul Et <span class="material-symbols-outlined text-sm">rocket_launch</span>
+</button>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl overflow-hidden relative opacity-80">
+<div class="absolute top-2.5 right-3 z-10">
+<span class="bg-slate-500/10 text-slate-400 text-[10px] font-bold px-2 py-1 rounded-full border border-white/10">Senin Paylaşımın</span>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div class="flex gap-4 items-start">
+<div class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
+<img alt="Mağaza" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeC6JeyoQPoGSvzmUCe48T8ewG0N-DqSzn7yX_aJhJnqiBDV7H8h0vQbTaToxNrTvloHfV2BnS5L55IUe5-IV4qsp_R-BFYJIPdNnsqy_ozIH4stnuVr8GzyCR79_JtCH0rlLHssjW7C4_l8yREIYDhyW9qwQf5C4r0SwTDJDVyXN-c77-A1ZQP1CqT06VT7BbyyoHfHEjGO-AyESysB_KzcVIGSXLulQay87SHfjThtSnolakMN8c5CiKe94ZMQ09eboWo2Fy-kID"/>
+</div>
+<div class="flex-1 pt-1">
+<h3 class="text-white font-bold text-lg leading-tight">Meltem Y</h3>
+<div class="flex items-center gap-1 text-slate-400 text-sm mt-1">
+<span class="material-symbols-outlined text-xs">location_on</span>
+<span>Konum: Sarıyer, İstanbul</span>
+</div>
+</div>
+<div class="text-right mt-7">
+<p class="text-primary font-bold text-xl leading-none">₺850</p>
+<p class="text-[10px] text-slate-500 uppercase mt-1">Tutar</p>
+</div>
+</div>
+<div class="flex items-center justify-end pt-2 border-t border-white/5">
+<button class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-6 py-2 rounded-lg font-bold text-sm transition-all border border-red-500/30">
+                    İptal Et
+                </button>
+</div>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-background-dark/90 backdrop-blur-xl border-t border-primary/10 z-30 pb-6 pt-2">
+<div class="flex justify-around items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Anasayfa</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Pazar</span>
+</a>
+<div class="relative -top-4">
+<button class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-background-dark shadow-[0_0_20px_rgba(51,242,13,0.4)] rotate-45">
+<span class="material-symbols-outlined -rotate-45 text-2xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-fill">swap_horiz</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Talepler</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Profil</span>
+</a>
+</div>
+</nav>
+
+</body></html>

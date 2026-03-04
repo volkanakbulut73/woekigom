@@ -1,0 +1,133 @@
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#39ff14",
+                        "background-light": "#f6f8f5",
+                        "background-dark": "#0a0b1e",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(57, 255, 20, 0.1);
+        }
+        .cyber-grid {
+            background-image: linear-gradient(rgba(57, 255, 20, 0.05) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(57, 255, 20, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display text-slate-100 min-h-screen flex flex-col items-center">
+<div class="relative flex min-h-screen w-full max-w-[430px] flex-col bg-background-dark overflow-hidden shadow-2xl border-x border-primary/10">
+<div class="absolute inset-0 cyber-grid pointer-events-none opacity-40"></div>
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="relative z-10 flex items-center p-4 pt-8 justify-between">
+<div class="text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 border border-primary/20">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+</div>
+<h2 class="text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center uppercase">TALEP OLUŞTUR</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">info</span>
+</button>
+</div>
+</div>
+<div class="relative z-10 flex-1 px-6 pt-10 pb-6 overflow-y-auto flex flex-col">
+<div class="flex justify-center mb-8">
+<div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent flex items-center justify-center border border-primary/30 shadow-[0_0_20px_rgba(57,255,20,0.2)]">
+<span class="material-symbols-outlined text-primary text-4xl">restaurant</span>
+</div>
+</div>
+<div class="space-y-2 mb-10 text-center">
+<p class="text-primary/60 text-xs font-bold uppercase tracking-widest">İşlem Değeri</p>
+<h1 class="text-slate-100 tracking-tight text-[40px] font-bold leading-tight mb-2">Menü Tutarı</h1>
+<div class="relative flex items-center justify-center">
+<input class="form-input w-full bg-transparent border-none text-center text-5xl font-bold text-primary focus:ring-0 placeholder:text-primary/20" placeholder="0.00" step="0.01" type="number"/>
+<div class="absolute right-0 text-primary/40 font-medium">TL</div>
+</div>
+<div class="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent mt-2"></div>
+</div>
+<div class="mt-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark py-5 rounded-xl text-lg font-bold tracking-tight shadow-[0_10px_30px_rgba(57,255,20,0.3)] flex items-center justify-center gap-3 transition-all active:scale-[0.98] uppercase">
+                    PAYLAŞIM TALEBİ OLUŞTUR
+                    <span class="material-symbols-outlined font-bold">bolt</span>
+</button>
+<p class="text-center text-primary/40 text-[10px] mt-4 font-medium uppercase tracking-[0.2em]">P2P Protokolü: Yemeğiniz Güvende</p>
+</div>
+<div class="relative z-10 glass-panel border-t-primary/20 p-4 rounded-xl mt-12 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-primary uppercase">Ağ Durumu</span>
+<span class="text-slate-300 text-xs">Yakınlarda 42 paylaşımcı aktif</span>
+</div>
+</div>
+<div class="flex -space-x-2">
+<img alt="" class="w-6 h-6 rounded-full border border-background-dark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWc4vYpJEJv7jzRgGMswvaVj8FsDc7lLYWsGePQskbU_FjPV2yP0YfYxhlNkPeJkhvgaZCfbn7JZsY9DKHvebbUm-wIEL26hTVNTrRHUcRXQFrPk03c5Aur2HCAorbqz-unZy43BT1xMi9S65WZRx0wixiGEw4Rn-9itMKv2dAvqomY3GJf2j0dn6Gk6AIJqNEZcBqMMwR8UdvkDA_nHL1ao_cUUhzOzh6ZyX80-7_CwYJIJJUTQtiuodpmcDrTLlAwFDCRNKmqUtJ"/>
+<img alt="" class="w-6 h-6 rounded-full border border-background-dark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzY1FHWJPd_Ow67OP0MwPCXX0TI-g7TnUYrQV_oGpIDvwNtJNQA0k8L0FvwPjDrTChwRHy4U3YpZFEIdFd7FYs54tMU-uIPd5ZO0cgUfLRN2gnlw6eHRbpsNLljhZ5GsG-2jIEvg-zx6yMEnxmirZ7w-EcKBVzZX9k5ukp9BnnDc4S3G-Mffm2IyyehbozPnCYd1Hbl6Wy6m-0LxNpJMN0pU2vmp3g5tUfaC0tH_krPXVUBhZqhKsTEElbSh3O041A8QKtNWY6znlK"/>
+<img alt="" class="w-6 h-6 rounded-full border border-background-dark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKXCWAXXtJEiIlnGtf7Y-wSsk9q5k3Y77nRyGGvdfPSdHeXDoqGwqX1cJwI-dfv7x2PyVXE4P6rqRNXi3JA_BBwPkCCicYJxy65V61KDxM6G2E30cL-Qbrv6Ki4hj05s5FurQmwykYsGYMSDJgke7j1TiL1f_Dujd-jLgc3sDpHviHuPDaY7ZLG82_dnkFAScJ-JWTx-x5PrN-DxbtmWusH-lMn3ZrX941gfIxqnAz6KjkMA8g9RsdnW6OX22Eg5ZRstoiXJFL2Ffl"/>
+</div>
+</div>
+</div>
+<div class="relative z-10 flex h-auto w-full flex-col bg-background-dark overflow-x-hidden">
+<div class="flex gap-2 border-t border-primary/20 bg-primary/5 px-4 pb-8 pt-4">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary/60" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">home</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-tight">Ana Sayfa</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_box</span>
+</div>
+<p class="text-xs font-bold leading-normal tracking-tight">Talepler</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary/60" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-tight">Cüzdan</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary/60" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-tight">Profil</p>
+</a>
+</div>
+</div>
+</div>
+
+</body></html>

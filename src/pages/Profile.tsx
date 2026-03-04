@@ -1,163 +1,188 @@
-import React, { useState } from 'react';
-import { User, MapPin, CreditCard, ChevronRight, ShieldCheck } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { DBService } from '../lib/services';
+import { ChevronLeft, Settings, CheckCircle, CircleDollarSign, Wallet, PlusCircle, ArrowUpRight, Utensils, Banknote, Edit2, Shield, Bell, LogOut, Grid, Store, Receipt, User as UserIcon, ChevronRight } from 'lucide-react';
 
 const Profile = () => {
-    const { profile, refreshProfile } = useAuth();
-    const [loading, setLoading] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
+    const { profile, signOut } = useAuth();
+    const navigate = useNavigate();
 
-    // Form State
-    const [fullName, setFullName] = useState(profile?.full_name || '');
-    const [location, setLocation] = useState(profile?.location || '');
-    const [iban, setIban] = useState(profile?.iban || '');
-
-    const handleUpdate = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!profile) return;
-
-        setLoading(true);
-        try {
-            await DBService.updateProfile(profile.id, {
-                full_name: fullName,
-                location,
-                iban
-            });
-            await refreshProfile();
-            setIsEditing(false);
-        } catch (err) {
-            console.error(err);
-            alert('Profil güncellenirken bir hata oluştu');
-        } finally {
-            setLoading(false);
-        }
+    const handleLogout = async () => {
+        await signOut();
+        navigate('/');
     };
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Profilim</h2>
+        <div className="bg-[#0a0b1e] font-sans text-slate-100 min-h-screen">
+            <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden pb-24">
 
-            {/* Avatar Header */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center space-x-6">
-                <div className="relative">
-                    <img
-                        src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name}&background=random`}
-                        alt="Profile Avatar"
-                        className="w-24 h-24 rounded-full border-4 border-primary-50 shadow-sm"
-                    />
+                {/* Header */}
+                <div className="flex items-center p-6 justify-between sticky top-0 z-10 bg-[#0a0b1e]/80 backdrop-blur-md">
+                    <button onClick={() => navigate(-1)} className="flex w-10 h-10 items-center justify-center rounded-full bg-[#3ff91a]/5 border border-[#3ff91a]/10 backdrop-blur-md">
+                        <ChevronLeft className="text-[#3ff91a]" size={20} />
+                    </button>
+                    <h2 className="text-xl font-bold tracking-tight">Profil</h2>
+                    <button className="flex w-10 h-10 items-center justify-center rounded-full bg-[#3ff91a]/5 border border-[#3ff91a]/10 backdrop-blur-md">
+                        <Settings className="text-[#3ff91a]" size={20} />
+                    </button>
                 </div>
-                <div>
-                    <h3 className="text-xl font-bold text-gray-900">{profile?.full_name}</h3>
-                    <div className="flex items-center text-gray-500 mt-1">
-                        <MapPin className="w-4 h-4 mr-1" />
-                        {profile?.location || 'Konum eklenmemiş'}
+
+                {/* Profile Header */}
+                <div className="flex flex-col items-center px-6 py-4">
+                    <div className="relative">
+                        <div className="w-32 h-32 rounded-full border-2 border-[#3ff91a] p-1">
+                            <div className="w-full h-full rounded-full bg-cover bg-center" style={{ backgroundImage: "url('https://ui-avatars.com/api/?name=Alex+Rivera&background=0a0b1e&color=fff&rounded=true')" }}></div>
+                        </div>
+                        <div className="absolute bottom-1 right-1 bg-[#3ff91a] text-[#0a0b1e] w-8 h-8 rounded-full flex items-center justify-center border-4 border-[#0a0b1e]">
+                            <CheckCircle size={16} className="font-bold" />
+                        </div>
                     </div>
-                    <div className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
-                        <ShieldCheck className="w-4 h-4 mr-1" />
-                        Onaylı Kullanıcı
+                    <div className="mt-4 text-center">
+                        <h1 className="text-2xl font-bold tracking-tight">Alex Rivera</h1>
+                        <p className="text-[#3ff91a]/80 text-sm font-medium uppercase tracking-widest mt-1">Elit Paylaşımcı</p>
+                        <div className="mt-3 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3ff91a]/5 border border-[#3ff91a]/20 backdrop-blur-md">
+                            <CircleDollarSign className="text-[#3ff91a]" size={18} />
+                            <span className="text-[#3ff91a] font-bold">2,450 Puan</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Editing Form */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="p-4 border-b border-gray-100 flex justify-between items-center px-6 bg-gray-50/50">
-                    <h3 className="font-semibold text-gray-800">Hesap Bilgileri</h3>
-                    <button
-                        onClick={() => setIsEditing(!isEditing)}
-                        className="text-primary-600 text-sm font-medium hover:underline"
-                    >
-                        {isEditing ? 'İptal' : 'Düzenle'}
-                    </button>
-                </div>
-
-                <div className="p-6">
-                    <form onSubmit={handleUpdate} className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Ad Soyad</label>
-                            <div className="relative">
-                                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                                    <User className="w-4 h-4" />
-                                </span>
-                                <input
-                                    type="text"
-                                    disabled={!isEditing}
-                                    value={fullName}
-                                    onChange={(e) => setFullName(e.target.value)}
-                                    className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 disabled:opacity-70 transition-colors"
-                                />
+                {/* Wallet Balance */}
+                <div className="px-6 py-4">
+                    <div className="relative overflow-hidden rounded-xl p-6 bg-gradient-to-br from-[#3ff91a]/20 to-transparent border border-[#3ff91a]/30">
+                        <div className="flex justify-between items-start mb-8">
+                            <div>
+                                <p className="text-xs uppercase tracking-[0.2em] text-[#3ff91a]/60 font-semibold">Toplam Bakiye</p>
+                                <p className="text-4xl font-bold mt-1">₺{profile?.wallet_balance?.toFixed(2) || '1,240.50'}</p>
+                            </div>
+                            <div className="w-10 h-10 bg-[#3ff91a]/10 rounded-lg flex items-center justify-center border border-[#3ff91a]/20">
+                                <Wallet className="text-[#3ff91a]" size={20} />
                             </div>
                         </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Konum</label>
-                            <div className="relative">
-                                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                                    <MapPin className="w-4 h-4" />
-                                </span>
-                                <input
-                                    type="text"
-                                    disabled={!isEditing}
-                                    value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
-                                    className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 disabled:opacity-70 transition-colors"
-                                    placeholder="Örn: İstanbul"
-                                />
-                            </div>
+                        <div className="flex gap-3 relative z-10">
+                            <button className="flex-1 bg-[#3ff91a] text-[#0a0b1e] py-3 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95">
+                                <PlusCircle size={16} />
+                                Bakiye Yükle
+                            </button>
+                            <button className="flex-1 bg-white/5 border border-white/10 text-[#3ff91a] py-3 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95">
+                                <ArrowUpRight size={16} />
+                                Para Çek
+                            </button>
                         </div>
+                        {/* Decorative circles */}
+                        <div className="absolute -right-4 -bottom-4 w-24 h-24 border border-[#3ff91a]/10 rounded-full"></div>
+                        <div className="absolute -right-8 -bottom-8 w-24 h-24 border border-[#3ff91a]/5 rounded-full"></div>
+                    </div>
+                </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">IBAN (Nakit Ödeme Almak İçin)</label>
-                            <div className="relative">
-                                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                                    <CreditCard className="w-4 h-4" />
-                                </span>
-                                <input
-                                    type="text"
-                                    disabled={!isEditing}
-                                    value={iban}
-                                    onChange={(e) => setIban(e.target.value)}
-                                    className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 disabled:opacity-70 transition-colors"
-                                    placeholder="TR00 0000 0000 0000 0000 0000 00"
-                                />
+                {/* Transaction History */}
+                <div className="px-6 py-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-bold">İşlem Geçmişi</h3>
+                        <button className="text-[#3ff91a] text-xs font-bold uppercase tracking-wider hover:underline">Tümünü Gör</button>
+                    </div>
+                    <div className="space-y-3">
+                        <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl flex items-center justify-between border border-white/5">
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-full bg-[#3ff91a]/10 flex items-center justify-center">
+                                    <Utensils className="text-[#3ff91a]" size={18} />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-sm">Sushi Master P2P</p>
+                                    <p className="text-xs text-slate-400">Bugün, 12:45</p>
+                                </div>
                             </div>
-                            <p className="text-xs text-gray-500 mt-1">İşlem tutarları bu hesaba gönderilecektir.</p>
+                            <p className="text-[#3ff91a] font-bold">+₺24.00</p>
                         </div>
-
-                        {isEditing && (
-                            <div className="pt-4 flex justify-end">
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-                                >
-                                    {loading ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
-                                </button>
+                        <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl flex items-center justify-between border border-white/5">
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-full bg-slate-500/10 flex items-center justify-center">
+                                    <Banknote className="text-slate-400" size={18} />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-sm">Cüzdan Yüklemesi</p>
+                                    <p className="text-xs text-slate-400">Dün, 20:20</p>
+                                </div>
                             </div>
-                        )}
-                    </form>
+                            <p className="font-bold text-white">+₺100.00</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            {/* Settings Menu List */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="divide-y divide-gray-100">
-                    <button className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
-                        <span className="font-medium text-gray-700">Güvenlik ve Şifre</span>
-                        <ChevronRight className="w-5 h-5 text-gray-400" />
-                    </button>
-                    <button className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
-                        <span className="font-medium text-gray-700">Bildirim Ayarları</span>
-                        <ChevronRight className="w-5 h-5 text-gray-400" />
-                    </button>
-                    <button className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
-                        <span className="font-medium justify-between text-danger-500">Hesabımı Sil</span>
-                        <ChevronRight className="w-5 h-5 text-gray-400" />
-                    </button>
+                {/* Settings & Links */}
+                <div className="px-6 py-4">
+                    <h3 className="text-lg font-bold mb-4">Ayarlar</h3>
+
+                    <div className="bg-white/5 backdrop-blur-xl p-5 rounded-xl border border-white/5 mb-8">
+                        <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2 block">Ödeme Alınacak IBAN</label>
+                        <div className="flex items-center gap-3">
+                            <div className="flex-1 bg-[#0a0b1e] border border-white/10 rounded-lg px-4 py-3 flex items-center overflow-hidden">
+                                <span className="text-sm font-mono text-slate-300 truncate">TR76 3000 1234 5678 9012 345</span>
+                            </div>
+                            <button className="w-11 h-11 flex-shrink-0 flex items-center justify-center bg-[#3ff91a]/10 text-[#3ff91a] border border-[#3ff91a]/20 rounded-lg transition-colors hover:bg-[#3ff91a]/20">
+                                <Edit2 size={18} />
+                            </button>
+                        </div>
+                        <button className="w-full mt-3 text-[#3ff91a] text-xs font-bold uppercase tracking-wider text-left hover:underline">IBAN Güncelle</button>
+                    </div>
+
+                    <div className="space-y-2">
+                        <button className="w-full bg-white/5 backdrop-blur-xl p-4 rounded-xl flex items-center justify-between group border border-white/5 hover:bg-white/10 transition-colors">
+                            <div className="flex items-center gap-3">
+                                <Shield className="text-slate-400" size={20} />
+                                <span className="text-sm font-medium">Güvenlik ve Gizlilik</span>
+                            </div>
+                            <ChevronRight className="text-slate-500 group-hover:text-[#3ff91a] transition-colors" size={20} />
+                        </button>
+
+                        <button className="w-full bg-white/5 backdrop-blur-xl p-4 rounded-xl flex items-center justify-between group border border-white/5 hover:bg-white/10 transition-colors">
+                            <div className="flex items-center gap-3">
+                                <Bell className="text-slate-400" size={20} />
+                                <span className="text-sm font-medium">Bildirim Ayarları</span>
+                            </div>
+                            <ChevronRight className="text-slate-500 group-hover:text-[#3ff91a] transition-colors" size={20} />
+                        </button>
+
+                        <button
+                            onClick={handleLogout}
+                            className="w-full mt-6 py-4 rounded-xl flex items-center justify-center gap-2 text-rose-500 bg-rose-500/5 border border-rose-500/10 font-bold hover:bg-rose-500/10 transition-colors"
+                        >
+                            <LogOut size={20} />
+                            Çıkış Yap
+                        </button>
+                    </div>
                 </div>
-            </div>
 
+                {/* Bottom Nav */}
+                <nav className="fixed bottom-0 left-0 right-0 h-20 bg-[#0a0b1e]/90 backdrop-blur-xl border-t border-white/5 px-4 pb-6 pt-2 z-50">
+                    <div className="flex gap-2 max-w-md mx-auto">
+                        <Link to="/app" className="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-300 transition-colors">
+                            <div className="flex h-8 items-center justify-center">
+                                <Grid size={24} />
+                            </div>
+                            <p className="text-[10px] font-bold uppercase tracking-wider">Anasayfa</p>
+                        </Link>
+                        <Link to="/app/market" className="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-300 transition-colors">
+                            <div className="flex h-8 items-center justify-center">
+                                <Store size={24} />
+                            </div>
+                            <p className="text-[10px] font-bold uppercase tracking-wider">Pazar</p>
+                        </Link>
+                        <Link to="/app/talepler" className="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-300 transition-colors">
+                            <div className="flex h-8 items-center justify-center">
+                                <Receipt size={24} />
+                            </div>
+                            <p className="text-[10px] font-bold uppercase tracking-wider">Talepler</p>
+                        </Link>
+                        <Link to="/app/profile" className="flex flex-1 flex-col items-center justify-end gap-1 text-[#3ff91a]">
+                            <div className="flex h-8 items-center justify-center">
+                                <UserIcon size={24} />
+                            </div>
+                            <p className="text-[10px] font-bold uppercase tracking-wider">Profil</p>
+                        </Link>
+                    </div>
+                </nav>
+
+            </div>
         </div>
     );
 };

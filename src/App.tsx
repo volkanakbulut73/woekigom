@@ -9,11 +9,10 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
-import FindShare from './pages/FindShare';
-import Supporters from './pages/Supporters';
+import Talepler from './pages/Talepler';
 import Profile from './pages/Profile';
+import Market from './pages/Market';
 
-import SwapList from './pages/swap/SwapList';
 import SwapDetail from './pages/swap/SwapDetail';
 import SwapCreate from './pages/swap/SwapCreate';
 
@@ -29,12 +28,11 @@ function App() {
           <Route path="/app" element={<PrivateRoute />}>
             <Route element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="find-share" element={<FindShare />} />
-              <Route path="supporters" element={<Supporters />} />
+              <Route path="talepler" element={<Talepler />} />
               <Route path="profile" element={<Profile />} />
 
-              <Route path="swap">
-                <Route index element={<SwapList />} />
+              <Route path="market">
+                <Route index element={<Market />} />
                 <Route path="create" element={<SwapCreate />} />
                 <Route path=":id" element={<SwapDetail />} />
               </Route>
