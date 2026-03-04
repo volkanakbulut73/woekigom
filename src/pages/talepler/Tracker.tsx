@@ -128,12 +128,20 @@ const Tracker = () => {
                 </div>
 
                 <div className="mt-auto pt-10">
-                    <button className="w-full bg-transparent border border-[#ff0055]/30 hover:border-[#ff0055]/80 hover:bg-[#ff0055]/10 text-[#ff0055] py-5 rounded-3xl font-bold flex items-center justify-center gap-3 transition-all active:scale-95 shadow-[0_0_20px_rgba(255,0,85,0.05)]">
-                        <XCircle size={20} className="stroke-[2.5px]" />
-                        <span>Cancel Transaction</span>
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => navigate('/app')}
+                            className="flex-1 bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 text-white py-4 rounded-3xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg">
+                            <ArrowLeft size={18} />
+                            <span>Çıkış</span>
+                        </button>
+                        <button className="flex-[2] bg-transparent border border-[#ff0055]/30 hover:border-[#ff0055]/80 hover:bg-[#ff0055]/10 text-[#ff0055] py-4 rounded-3xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_20px_rgba(255,0,85,0.05)]">
+                            <XCircle size={18} className="stroke-[2.5px]" />
+                            <span>İptal Et</span>
+                        </button>
+                    </div>
                     <p className="text-center text-xs text-slate-500 mt-6">
-                        Need help? Contact <a href="#" className="text-white underline decoration-[#39ff14] underline-offset-4 font-semibold">Workigom Support</a>
+                        Yardıma mı ihtiyacınız var? <a href="#" className="text-white underline decoration-[#39ff14] underline-offset-4 font-semibold">Destek Ekibi</a>
                     </p>
                 </div>
             </div>
