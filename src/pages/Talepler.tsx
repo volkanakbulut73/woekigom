@@ -33,10 +33,7 @@ const Talepler = () => {
         if (!user) return;
         try {
             await DBService.acceptTransaction(txId, user.id);
-            // After accepting, we should navigate to the active tracker.
-            // But since tracker UI isn't ready in this prompt, we just alert and reload.
-            alert('Talep başarıyla kabul edildi! (Tracker sayfasına yönlendirileceksiniz)');
-            fetchTxs();
+            navigate(`/app/tracker/${txId}`);
         } catch (err) {
             console.error('Kabul etme hatası:', err);
             alert('Talep kabul edilirken bir hata oluştu');

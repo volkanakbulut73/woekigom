@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Talepler from './pages/Talepler';
 import TaleplerCreate from './pages/talepler/TaleplerCreate';
+import Tracker from './pages/talepler/Tracker';
 import Profile from './pages/Profile';
 import Market from './pages/Market';
 
@@ -41,6 +42,9 @@ function App() {
                 <Route path=":id" element={<SwapDetail />} />
               </Route>
             </Route>
+
+            {/* Fullscreen pages outside layout */}
+            <Route path="tracker/:id" element={<Tracker />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
