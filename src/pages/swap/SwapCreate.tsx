@@ -52,9 +52,21 @@ const SwapCreate = () => {
 
             let mainPhotoUrl: string | null = null;
             if (imageFiles.length > 0) {
-                // Sadece ilk resmi(vitrin resmi) yüklüyoruz şimdilik. 
-                // DB'de photo_url tek bir string tuttuğu için.
-                mainPhotoUrl = await SwapService.uploadImage(imageFiles[0], 'images');
+                try {
+                    // Sadece ilk resmi(vitrin resmi) yüklüyoruz şimdilik. 
+                    mainPhotoUrl = await SwapService.uploadImage(imageFiles[0], 'images');
+                    console.log('Image successfully uploaded:', mainPhotoUrl);
+                } catch (err) {
+                    const uploadErr = err as { message?: string, error?: string };
+                    console.error('Upload Error Details:', uploadErr);
+                    const errMsg = uploadErr?.message || uploadErr?.error || 'Bilinmeyen Yükleme Hatası (RLS Policy Olabilir)';
+                    setError(`Fotoğraf yüklenemedi: ${errMsg}`);
+                    alert(`HATA: Lütfen Supabase Storage'da 'images' kovası için INSERT (Yükleme) izinlerinin açık olduğundan emin olun.\n\nDetay: ${errMsg}`);
+                    setLoading(false);
+                    return;
+                }
+            } else {
+                console.log('No images selected for upload.');
             }
 
             const { error: insertError } = await supabase
