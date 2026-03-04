@@ -1,63 +1,38 @@
 import { Search, MapPin, SlidersHorizontal, Star, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-const MARKET_ITEMS = [
-    {
-        id: 1,
-        title: "500 TL Bakiye",
-        desc: "Açıklama: Nakit / Kripto Takas",
-        brand: "MULTINET",
-        seller: "@Cyber_Tr",
-        price: 450.00,
-        rating: 4.9,
-        imgColor: "bg-slate-200"
-    },
-    {
-        id: 2,
-        title: "Yemek Paketi x5",
-        desc: "Açıklama: Anında Onaylı",
-        brand: "SODEXO",
-        seller: "@Neo_Alice",
-        price: 245.00,
-        rating: 5.0,
-        imgColor: "bg-blue-900"
-    },
-    {
-        id: 3,
-        title: "1000 TL Limitli",
-        desc: "Açıklama: Hızlı Transfer",
-        brand: "SETCARD",
-        seller: "@Dev_Lord",
-        price: 910.00,
-        rating: 4.7,
-        imgColor: "bg-stone-900"
-    },
-    {
-        id: 4,
-        title: "200 TL Kredi",
-        desc: "Açıklama: Doğrulanmış Hesap",
-        brand: "TICKET",
-        seller: "@Market_Pro",
-        price: 184.00,
-        rating: 4.8,
-        imgColor: "bg-teal-900"
-    },
-    {
-        id: 5,
-        title: "350 TL Bakiye",
-        desc: "Açıklama: Güvenli Ödeme",
-        brand: "METROPOL",
-        seller: "@Trade_Master",
-        price: 310.00,
-        rating: 4.9,
-        imgColor: "bg-slate-800"
-    }
-];
+import { SwapService } from '../lib/services';
+import { useAuth } from '../context/AuthContext';
+import type { SwapListing } from '../types';
 
 const Market = () => {
+    const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('Pazar');
     const [activeFilter, setActiveFilter] = useState('Tüm İlanlar');
+    const [listings, setListings] = useState<SwapListing[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchListings = async () => {
+            try {
+                const data = await SwapService.getListings();
+                setListings(data as SwapListing[]);
+            } catch (err) {
+                console.error("Error fetching listings", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchListings();
+    }, []);
+
+    // Filter listings based on tab. 
+    // "Pazar" -> All listings
+    // "İlanlarım" -> Only current user's listings
+    const displayListings = activeTab === 'İlanlarım'
+        ? listings.filter(item => item.owner_id === user?.id)
+        : listings;
 
     return (
         <div className="w-full flex flex-col gap-6 animate-in fade-in duration-500 pb-10">
@@ -129,44 +104,57 @@ const Market = () => {
 
             {/* Grid Layout for Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-6 gap-4 mt-2">
-                {MARKET_ITEMS.map((item) => (
-                    <div key={item.id} className="bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-lg group hover:border-[#39ff14]/30 transition-colors flex flex-col">
+                {loading ? (
+                    <div className="col-span-full py-20 text-center text-slate-500 font-bold">İlanlar yükleniyor...</div>
+                ) : displayListings.length === 0 ? (
+                    <div className="col-span-full py-20 text-center text-slate-500 font-bold">Burada henüz hiç ilan yok.</div>
+                ) : displayListings.map((item) => (
+                    <div key={item.id} className="bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-lg group hover:border-[#39ff14]/30 transition-colors flex flex-col relative">
                         {/* Image Section */}
-                        <div className={`relative h-48 w-full p-4 flex flex-col justify-end overflow-hidden ${item.imgColor}`}>
-                            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-[#16172d] via-transparent to-transparent z-0 opacity-80"></div>
+                        <div className={`relative h-48 w-full p-4 flex flex-col justify-end overflow-hidden ${item.photo_url ? 'bg-slate-800' : 'bg-blue-900'}`}>
+                            {item.photo_url ? (
+                                <img src={item.photo_url} alt={item.title} className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay" />
+                            ) : (
+                                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-[#16172d] via-transparent to-transparent z-0 opacity-80"></div>
+                            )}
 
-                            {/* Dummy Image Placeholder */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-black/20 rounded-xl backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-2xl">
-                                <span className="font-black text-white/20 text-4xl">{item.brand[0]}</span>
-                            </div>
+                            {!item.photo_url && (
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-black/20 rounded-xl backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-2xl">
+                                    <span className="font-black text-white/20 text-4xl">{item.title[0]}</span>
+                                </div>
+                            )}
 
                             {/* Rating */}
                             <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10 flex items-center gap-1 z-10">
                                 <Star size={12} className="text-yellow-400 fill-yellow-400" />
-                                <span className="text-white font-bold text-xs">{item.rating}</span>
+                                <span className="text-white font-bold text-xs">{item.profiles?.rating || '5.0'}</span>
                             </div>
 
-                            <span className="font-extrabold text-cyan-400 text-sm tracking-wider uppercase z-10">{item.brand}</span>
+                            <span className="font-extrabold text-cyan-400 text-sm tracking-wider uppercase z-10">İLAN</span>
                         </div>
 
                         {/* Content Section */}
                         <div className="p-5 flex-1 flex flex-col">
                             <h3 className="text-white font-bold text-lg mb-1">{item.title}</h3>
-                            <p className="text-slate-400 text-xs mb-4">{item.desc}</p>
+                            <p className="text-slate-400 text-xs mb-4 line-clamp-2">{item.description || 'Açıklama bulunmuyor'}</p>
 
                             <div className="mt-auto flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <div className="w-8 h-8 rounded-full border border-white/10 overflow-hidden shrink-0">
-                                        <img src={`https://ui-avatars.com/api/?name=${item.seller.replace('@', '')}&background=random&color=fff`} alt={item.seller} className="w-full h-full object-cover" />
+                                        {item.profiles?.avatar_url ? (
+                                            <img src={item.profiles.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <img src={`https://ui-avatars.com/api/?name=${(item.profiles?.full_name || 'X').replace(' ', '+')}&background=random&color=fff`} alt={item.profiles?.full_name || 'S'} className="w-full h-full object-cover" />
+                                        )}
                                     </div>
                                     <div>
                                         <p className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold mb-0.5">Satıcı</p>
-                                        <p className="text-white text-xs font-bold">{item.seller}</p>
+                                        <p className="text-white text-xs font-bold max-w-[100px] truncate">{item.profiles?.full_name || 'Anonim Kullanıcı'}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold mb-0.5">Fiyat</p>
-                                    <p className="text-cyan-400 font-extrabold text-lg">₺{item.price.toFixed(2)}</p>
+                                    <p className="text-cyan-400 font-extrabold text-lg">₺{Number(item.required_balance).toFixed(2)}</p>
                                 </div>
                             </div>
                         </div>
