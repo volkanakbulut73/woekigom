@@ -109,7 +109,7 @@ const Market = () => {
                 ) : displayListings.length === 0 ? (
                     <div className="col-span-full py-20 text-center text-slate-500 font-bold">Burada henüz hiç ilan yok.</div>
                 ) : displayListings.map((item) => (
-                    <div key={item.id} className="bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-lg group hover:border-[#39ff14]/30 transition-colors flex flex-col relative">
+                    <Link key={item.id} to={`/app/market/${item.id}`} className="bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-lg group hover:border-[#39ff14]/30 transition-colors flex flex-col relative">
                         {/* Image Section */}
                         <div className={`relative h-48 w-full p-4 flex flex-col justify-end overflow-hidden ${item.photo_url ? 'bg-slate-800' : 'bg-blue-900'}`}>
                             {item.photo_url ? (
@@ -158,7 +158,7 @@ const Market = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
 

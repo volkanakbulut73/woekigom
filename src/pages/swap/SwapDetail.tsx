@@ -1,38 +1,81 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Trash2, MapPin, Calendar, MessageCircle, AlertTriangle } from 'lucide-react';
-import { SwapService } from '../../lib/services';
+import { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { ChevronLeft, Star, MapPin, Send, MessageSquare, Trash2 } from 'lucide-react';
+import { SwapService } from '../../lib/services';
+import { supabase } from '../../lib/supabase';
 import type { SwapListing } from '../../types';
+
+interface Message {
+    id: string;
+    swap_id: string;
+    sender_id: string;
+    receiver_id: string;
+    content: string;
+    created_at: string;
+}
 
 const SwapDetail = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { profile } = useAuth();
-
+    const { user } = useAuth();
     const [listing, setListing] = useState<SwapListing | null>(null);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [newMessage, setNewMessage] = useState('');
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const fetchListing = async () => {
+        const fetchDetails = async () => {
+            if (!id) return;
             try {
-                const data = await SwapService.getListings();
-                const found = data.find(l => l.id === id);
-                if (found) {
-                    setListing(found as unknown as SwapListing);
-                } else {
-                    navigate('/app/swap', { replace: true });
+                // Fetch Listing
+                const { data: listingData, error: listingError } = await supabase
+                    .from('swap_listings')
+                    .select('*, profiles(full_name, avatar_url, rating)')
+                    .eq('id', id)
+                    .single();
+
+                if (listingError) throw listingError;
+                setListing(listingData as SwapListing);
+
+                // Fetch Messages related to this swap and current user
+                const { data: messagesData, error: messagesError } = await supabase
+                    .from('messages')
+                    .select('*')
+                    .eq('swap_id', id)
+                    .order('created_at', { ascending: true });
+
+                if (messagesError && messagesError.code !== '42P01') {
+                    console.error(messagesError);
+                } else if (messagesData) {
+                    setMessages(messagesData as Message[]);
                 }
             } catch (err) {
-                console.error(err);
+                console.error('Error fetching detail:', err);
             } finally {
                 setLoading(false);
             }
         };
 
-        if (id) fetchListing();
-    }, [id, navigate]);
+        fetchDetails();
+
+        const subscription = supabase
+            .channel(`messages-${id}`)
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `swap_id=eq.${id}` }, (payload) => {
+                setMessages((prev) => [...prev, payload.new as Message]);
+            })
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
+    }, [id]);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
 
     const handleDelete = async () => {
         if (!listing || !window.confirm('Bu ilanı silmek istediğinize emin misiniz?')) return;
@@ -40,7 +83,7 @@ const SwapDetail = () => {
         setDeleting(true);
         try {
             await SwapService.deleteListing(listing.id);
-            navigate('/app/swap', { replace: true });
+            navigate('/app/market', { replace: true });
         } catch (err) {
             console.error(err);
             alert('İlan silinirken bir hata oluştu.');
@@ -48,100 +91,182 @@ const SwapDetail = () => {
         }
     };
 
+    const handleSendMessage = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newMessage.trim() || !user || !listing || !id) return;
+
+        const receiverId = listing.owner_id === user.id
+            ? (messages.find(m => m.sender_id !== user.id)?.sender_id || listing.owner_id)
+            : listing.owner_id;
+
+        const messageObj = {
+            swap_id: id,
+            sender_id: user.id,
+            receiver_id: receiverId,
+            content: newMessage.trim()
+        };
+
+        try {
+            const tempMessage = { ...messageObj, id: Date.now().toString(), created_at: new Date().toISOString() };
+            setMessages(prev => [...prev, tempMessage as Message]);
+            setNewMessage('');
+
+            const { error } = await supabase.from('messages').insert([messageObj]);
+            if (error) {
+                if (error.code === '42P01') {
+                    console.warn("Messages table does not exist. UI demo working.");
+                } else {
+                    throw error;
+                }
+            }
+        } catch (err) {
+            console.error('Error sending message:', err);
+        }
+    };
+
     if (loading) {
-        return (
-            <div className="flex justify-center py-20">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
-            </div>
-        );
+        return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#39ff14]"></div></div>;
     }
 
-    if (!listing) return null;
+    if (!listing) {
+        return <div className="p-10 text-center text-white font-bold">İlan bulunamadı!</div>;
+    }
 
-    const isOwner = profile?.id === listing.owner_id;
+    const isOwner = user?.id === listing.owner_id;
     const sellerInfo = listing.profiles as { full_name?: string; avatar_url?: string; rating?: number } | undefined;
-    const createdDate = new Date(listing.created_at).toLocaleDateString('tr-TR');
+    const sellerName = sellerInfo?.full_name || 'Anonim Kullanıcı';
+    const sellerAvatar = sellerInfo?.avatar_url || `https://ui-avatars.com/api/?name=${sellerName.replace(' ', '+')}&background=random&color=fff`;
 
     return (
-        <div className="max-w-3xl mx-auto space-y-6">
-            <Link to="/app/swap" className="inline-flex items-center text-gray-500 hover:text-teal-600 font-medium transition-colors">
-                <ArrowLeft className="w-5 h-5 mr-2" />
-                Pazara Dön
-            </Link>
-
-            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col md:flex-row">
-                {/* Photo Container */}
-                <div className="md:w-1/2 bg-gray-50 flex items-center justify-center min-h-[300px] border-b md:border-b-0 md:border-r border-gray-100 p-8">
-                    {listing.photo_url ? (
-                        <img src={listing.photo_url} alt={listing.title} className="max-w-full max-h-96 object-contain rounded-xl shadow-sm" />
-                    ) : (
-                        <div className="text-gray-300 flex flex-col items-center">
-                            <AlertTriangle className="w-16 h-16 mb-2" />
-                            <p>Fotoğraf Yok</p>
-                        </div>
-                    )}
+        <div className="w-full flex flex-col lg:flex-row gap-6 animate-in fade-in duration-500 pb-20 lg:pb-10 lg:h-[calc(100vh-100px)]">
+            {/* Left/Top Content: Detail */}
+            <div className="w-full lg:w-1/2 flex flex-col gap-6 overflow-y-auto no-scrollbar">
+                <div className="flex items-center gap-4">
+                    <button onClick={() => navigate('/app/market')} className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#16172d] border border-white/5 text-slate-300 hover:text-[#39ff14] transition-colors shrink-0">
+                        <ChevronLeft size={20} />
+                    </button>
+                    <h2 className="text-xl font-bold text-white tracking-wide">İlan Detayı</h2>
                 </div>
 
-                {/* Details Container */}
-                <div className="md:w-1/2 p-6 md:p-8 flex flex-col">
-                    <div className="flex-1">
-                        <div className="flex justify-between items-start">
-                            <h1 className="text-2xl font-bold text-gray-900 leading-tight">{listing.title}</h1>
-                            <span className="inline-block bg-teal-50 text-teal-700 font-bold px-4 py-1.5 rounded-full text-lg ml-4 whitespace-nowrap">
-                                {listing.required_balance} ₺
-                            </span>
+                <div className="bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-xl shrink-0">
+                    <div className="relative h-64 lg:h-80 w-full bg-slate-800 flex items-center justify-center overflow-hidden">
+                        {listing.photo_url ? (
+                            <img src={listing.photo_url} alt={listing.title} className="w-full h-full object-cover opacity-80 mix-blend-overlay" />
+                        ) : (
+                            <div className="w-full h-full bg-gradient-to-t from-[#0a0b1e] to-blue-900/40 relative flex items-center justify-center">
+                                <span className="text-6xl text-white/10 font-black">{listing.title[0]}</span>
+                            </div>
+                        )}
+                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 flex items-center gap-1.5 shadow-lg">
+                            <Star size={14} className="text-yellow-400 fill-yellow-400" />
+                            <span className="text-white font-bold text-sm">{sellerInfo?.rating || '5.0'}</span>
                         </div>
+                    </div>
 
-                        <p className="text-gray-600 mt-4 leading-relaxed whitespace-pre-wrap">
-                            {listing.description}
-                        </p>
-
-                        <div className="mt-6 space-y-3">
-                            <div className="flex items-center text-sm text-gray-500">
-                                <MapPin className="w-4 h-4 mr-2" />
+                    <div className="p-6 lg:p-8 space-y-6">
+                        <div>
+                            <div className="flex justify-between items-start mb-2">
+                                <h1 className="text-2xl lg:text-3xl font-black text-white">{listing.title}</h1>
+                                <p className="text-[#39ff14] font-black text-2xl lg:text-3xl">₺{Number(listing.required_balance).toFixed(2)}</p>
+                            </div>
+                            <div className="flex items-center gap-1 text-cyan-400 text-sm font-semibold">
+                                <MapPin size={16} />
                                 {listing.location || 'Konum belirtilmedi'}
                             </div>
-                            <div className="flex items-center text-sm text-gray-500">
-                                <Calendar className="w-4 h-4 mr-2" />
-                                {createdDate}
+                        </div>
+
+                        <div className="h-px w-full bg-white/5"></div>
+
+                        <p className="text-slate-300 text-sm lg:text-base leading-relaxed whitespace-pre-wrap">
+                            {listing.description || 'Bu ilan için açıklama girilmemiş.'}
+                        </p>
+
+                        <div className="flex items-center justify-between gap-4 bg-[#0a0b1e] p-4 rounded-2xl border border-white/5">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full border border-white/10 overflow-hidden shrink-0">
+                                    <img src={sellerAvatar} alt={sellerName} className="w-full h-full object-cover" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-0.5">Satıcı Profil</p>
+                                    <p className="text-white font-bold text-sm">{sellerName}</p>
+                                </div>
                             </div>
+                            {isOwner && (
+                                <button
+                                    onClick={handleDelete}
+                                    disabled={deleting}
+                                    className="px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors"
+                                >
+                                    <Trash2 size={16} />
+                                    {deleting ? 'Siliniyor...' : 'İlanı Sil'}
+                                </button>
+                            )}
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div className="mt-8 pt-6 border-t border-gray-100">
-                        <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">Satıcı Bilgileri</h3>
-                        <div className="flex items-center">
-                            <img
-                                src={sellerInfo?.avatar_url || `https://ui-avatars.com/api/?name=${sellerInfo?.full_name}&background=random`}
-                                alt="Satici Avatar"
-                                className="w-12 h-12 rounded-full border border-gray-200"
-                            />
-                            <div className="ml-3">
-                                <p className="font-semibold text-gray-900">{sellerInfo?.full_name}</p>
-                                <p className="text-sm text-orange-500 font-medium">★ {sellerInfo?.rating || '5.0'} / 5.0</p>
-                            </div>
+            {/* Right/Bottom Content: Chat */}
+            <div className="w-full lg:w-1/2 flex flex-col bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-xl h-[500px] lg:h-full shrink-0">
+                <div className="p-4 border-b border-white/5 flex items-center gap-3 bg-[#0a0b1e]/50 backdrop-blur-md">
+                    <div className="w-10 h-10 rounded-full border border-[#39ff14]/30 bg-[#39ff14]/10 flex items-center justify-center shrink-0">
+                        <MessageSquare size={18} className="text-[#39ff14]" />
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-white text-sm">
+                            {isOwner ? 'Gelen Mesajlar' : `${sellerName} ile Sohbet`}
+                        </h3>
+                        <p className="text-[10px] text-[#39ff14] uppercase tracking-widest font-semibold flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#39ff14] animate-pulse"></span> Canlı Sohbet
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
+                    {messages.length === 0 ? (
+                        <div className="h-full flex flex-col items-center justify-center text-slate-500 gap-3 opacity-60">
+                            <MessageSquare size={40} className="text-slate-600" />
+                            <p className="text-sm font-bold">Henüz hiç mesaj yok.</p>
+                            <p className="text-xs">{(isOwner) ? 'Müşteriler mesaj attığında burada görünecek.' : 'İlk mesajı siz gönderin!'}</p>
                         </div>
-                    </div>
+                    ) : (
+                        messages.map((msg, idx) => {
+                            const isMe = msg.sender_id === user?.id;
+                            return (
+                                <div key={msg.id || idx} className={`flex w-full ${isMe ? 'justify-end' : 'justify-start'}`}>
+                                    <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-md ${isMe
+                                            ? 'bg-[#39ff14] text-[#0a0b1e] rounded-tr-sm font-medium'
+                                            : 'bg-slate-800 border border-white/5 text-slate-200 rounded-tl-sm'
+                                        }`}>
+                                        {msg.content}
+                                        <div className={`text-[9px] mt-1 text-right ${isMe ? 'text-[#0a0b1e]/60' : 'text-slate-400'}`}>
+                                            {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    )}
+                    <div ref={messagesEndRef} />
+                </div>
 
-                    <div className="mt-8 flex gap-3">
-                        {isOwner ? (
-                            <button
-                                onClick={handleDelete}
-                                disabled={deleting}
-                                className="flex-1 bg-red-50 hover:bg-red-100 text-danger-500 py-3 rounded-xl font-medium transition-colors flex items-center justify-center border border-red-100"
-                            >
-                                <Trash2 className="w-5 h-5 mr-2" />
-                                {deleting ? 'Siliniyor...' : 'İlanı Sil'}
-                            </button>
-                        ) : (
-                            <button
-                                className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-xl font-medium transition-colors flex items-center justify-center shadow-sm"
-                            >
-                                <MessageCircle className="w-5 h-5 mr-2" />
-                                Satıcıyla İletişime Geç
-                            </button>
-                        )}
-                    </div>
+                <div className="p-4 border-t border-white/5 bg-[#0a0b1e]/30">
+                    <form onSubmit={handleSendMessage} className="relative">
+                        <input
+                            type="text"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            placeholder="Bir mesaj yazın..."
+                            className="w-full bg-[#16172d] border border-white/10 rounded-full py-3.5 pl-5 pr-12 text-sm text-white focus:outline-none focus:border-[#39ff14]/50 transition-colors placeholder:text-slate-500"
+                        />
+                        <button
+                            type="submit"
+                            disabled={!newMessage.trim()}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-[#39ff14] text-[#0a0b1e] rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#39ff14]/90 transition-colors shadow-lg"
+                        >
+                            <Send size={16} className="-ml-0.5" />
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
