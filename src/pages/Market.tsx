@@ -111,9 +111,9 @@ const Market = () => {
                 ) : displayListings.map((item) => (
                     <Link key={item.id} to={`/app/market/${item.id}`} className="bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-lg group hover:border-[#39ff14]/30 transition-colors flex flex-col relative">
                         {/* Image Section */}
-                        <div className={`relative h-48 w-full p-4 flex flex-col justify-end overflow-hidden ${item.photo_url ? 'bg-slate-800' : 'bg-blue-900'}`}>
+                        <div className={`relative h-48 w-full flex flex-col justify-end overflow-hidden ${item.photo_url ? 'bg-transparent' : 'bg-blue-900 p-4'}`}>
                             {item.photo_url ? (
-                                <img src={item.photo_url} alt={item.title} className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay" />
+                                <img src={item.photo_url} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
                             ) : (
                                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-[#16172d] via-transparent to-transparent z-0 opacity-80"></div>
                             )}
@@ -130,7 +130,7 @@ const Market = () => {
                                 <span className="text-white font-bold text-xs">{item.profiles?.rating || '5.0'}</span>
                             </div>
 
-                            <span className="font-extrabold text-cyan-400 text-sm tracking-wider uppercase z-10">İLAN</span>
+                            <span className="font-extrabold text-cyan-400 text-sm tracking-wider uppercase z-10 absolute bottom-4 left-4 bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm">İLAN</span>
                         </div>
 
                         {/* Content Section */}
