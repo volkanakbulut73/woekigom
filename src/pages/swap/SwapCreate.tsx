@@ -32,6 +32,11 @@ const SwapCreate = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!title.trim()) {
+            setError('Lütfen bir başlık girin');
+            return;
+        }
+
         if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
             setError('Lütfen geçerli bir tutar girin');
             return;
@@ -42,13 +47,13 @@ const SwapCreate = () => {
             setError('');
 
             const { error: insertError } = await supabase
-                .from('swaps')
+                .from('swap_listings')
                 .insert([
                     {
-                        user_id: user?.id,
-                        amount: Number(amount),
-                        status: 'active',
-                        currency: 'TRY'
+                        owner_id: user?.id,
+                        title: title,
+                        description: description,
+                        required_balance: Number(amount)
                     }
                 ]);
 
