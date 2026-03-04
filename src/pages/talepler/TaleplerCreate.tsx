@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { ChevronLeft, Info, Plus } from 'lucide-react';
+import { ChevronLeft, Info } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 const TaleplerCreate = () => {
@@ -64,10 +64,6 @@ const TaleplerCreate = () => {
                     </h2>
                 </div>
 
-                {/* Secondary fake action button as seen in design */}
-                <div className="hidden md:flex bg-green-700/80 hover:bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-bold border border-green-500 items-center gap-2 cursor-pointer transition-colors shadow-lg shadow-green-900/40">
-                    <Plus size={16} /> Talep Oluştur
-                </div>
             </div>
 
             {/* White Card Content */}
