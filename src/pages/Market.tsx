@@ -1,5 +1,6 @@
-import { Search, MapPin, SlidersHorizontal, Star } from 'lucide-react';
+import { Search, MapPin, SlidersHorizontal, Star, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const MARKET_ITEMS = [
     {
@@ -77,8 +78,8 @@ const Market = () => {
                     <button
                         onClick={() => setActiveTab('Pazar')}
                         className={`flex-1 py-3 text-sm font-bold flex items-center justify-center gap-2 rounded-lg transition-all ${activeTab === 'Pazar'
-                                ? 'bg-white text-[#0a0b1e] shadow-md'
-                                : 'text-slate-400 hover:text-white'
+                            ? 'bg-white text-[#0a0b1e] shadow-md'
+                            : 'text-slate-400 hover:text-white'
                             }`}
                     >
                         Pazar
@@ -86,8 +87,8 @@ const Market = () => {
                     <button
                         onClick={() => setActiveTab('İlanlarım')}
                         className={`flex-1 py-3 text-sm font-bold flex items-center justify-center gap-2 rounded-lg transition-all ${activeTab === 'İlanlarım'
-                                ? 'bg-white text-[#0a0b1e] shadow-md'
-                                : 'text-slate-400 hover:text-white'
+                            ? 'bg-white text-[#0a0b1e] shadow-md'
+                            : 'text-slate-400 hover:text-white'
                             }`}
                     >
                         İlanlarım
@@ -117,8 +118,8 @@ const Market = () => {
                         key={filter}
                         onClick={() => setActiveFilter(filter)}
                         className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeFilter === filter
-                                ? 'bg-cyan-400 text-[#0a0b1e]'
-                                : 'border border-cyan-400/30 text-cyan-400 hover:bg-cyan-400/10'
+                            ? 'bg-cyan-400 text-[#0a0b1e]'
+                            : 'border border-cyan-400/30 text-cyan-400 hover:bg-cyan-400/10'
                             }`}
                     >
                         {filter}
@@ -172,6 +173,11 @@ const Market = () => {
                     </div>
                 ))}
             </div>
+
+            {/* Floating Action Button */}
+            <Link to="/app/market/create" className="fixed bottom-24 right-4 md:bottom-10 md:right-10 w-14 h-14 bg-[#0a0b1e] border border-[#39ff14]/20 rounded-full flex items-center justify-center text-[#39ff14] shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-40 transition-transform active:scale-95 hover:scale-105">
+                <Plus size={28} />
+            </Link>
         </div>
     );
 };

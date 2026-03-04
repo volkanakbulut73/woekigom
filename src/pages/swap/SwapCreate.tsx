@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { ChevronLeft, Camera, Wallet, Sparkles } from 'lucide-react';
+import { ChevronLeft, Camera, Wallet, Sparkles, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 const SwapCreate = () => {
@@ -10,8 +10,24 @@ const SwapCreate = () => {
     const [title, setTitle] = useState('');
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
+    const [images, setImages] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const newFiles = Array.from(e.target.files);
+            const remainingSlots = 5 - images.length;
+            const filesToAdd = newFiles.slice(0, remainingSlots);
+
+            const newImageUrls = filesToAdd.map(file => URL.createObjectURL(file));
+            setImages(prev => [...prev, ...newImageUrls]);
+        }
+    };
+
+    const removeImage = (indexToRemove: number) => {
+        setImages(images.filter((_, index) => index !== indexToRemove));
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -66,15 +82,46 @@ const SwapCreate = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Image Upload */}
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Ürün Fotoğrafı</label>
-                        <div className="w-full h-48 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-400 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer cursor-not-allowed">
-                            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-3">
-                                <Camera size={24} className="text-slate-300" />
-                            </div>
-                            <span className="font-semibold text-sm text-slate-800">Fotoğraf Seç</span>
-                            <span className="text-xs text-slate-400">veya sürükle bırak</span>
+                    {/* Image Upload (Multi) */}
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Ürün Fotoğrafları ({images.length}/5)</label>
+                        </div>
+
+                        <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                            {images.map((img, index) => (
+                                <div key={index} className="relative w-28 h-28 shrink-0 rounded-2xl overflow-hidden border border-slate-200 group">
+                                    <img src={img} alt={`Upload ${index}`} className="w-full h-full object-cover" />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeImage(index)}
+                                        className="absolute top-1 right-1 w-6 h-6 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-colors"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                    {index === 0 && (
+                                        <div className="absolute bottom-0 left-0 right-0 bg-green-500 text-white text-[9px] font-bold text-center py-1 tracking-widest uppercase">
+                                            VİTRİN RESMİ
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+
+                            {images.length < 5 && (
+                                <label className="w-28 h-28 shrink-0 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-400 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer group">
+                                    <input
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className="hidden"
+                                    />
+                                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm mb-2 group-hover:scale-110 transition-transform">
+                                        <Camera size={16} className="text-slate-400" />
+                                    </div>
+                                    <span className="font-semibold text-[10px] text-slate-600">Fotoğraf Ekle</span>
+                                </label>
+                            )}
                         </div>
                     </div>
 
