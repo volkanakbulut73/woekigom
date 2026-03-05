@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { DBService } from '../../lib/services';
+import { DBService, SwapService } from '../../lib/services';
 import type { Transaction } from '../../types';
 
 import { supabase } from '../../lib/supabase';
@@ -111,19 +111,25 @@ const Tracker = () => {
         }
     };
 
-    const handleQRUpload = async () => {
-        if (!id) return;
+    // Removed unused handleQRUpload function.
+
+    const handleQRFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !id) return;
+
         try {
-            await DBService.updateTransactionStatus(id, 'qr-uploaded');
-            setTransaction({ ...transaction, status: 'qr-uploaded' } as Transaction);
+            const url = await SwapService.uploadImage(file, 'images');
+            await DBService.updateTransactionStatus(id, 'qr-uploaded', { qr_url: url });
+            setTransaction({ ...transaction, status: 'qr-uploaded', qr_url: url } as Transaction);
         } catch (err) {
             console.error(err);
+            alert('Fotoğraf yüklenirken bir hata oluştu.');
         }
     };
 
     const renderActionCard = () => {
         return (
-            <div className="mt-4 glass-panel rounded-xl p-4 border-l-4 border-l-[#00e5ff] shadow-lg">
+            <div className="mt-4 max-w-sm glass-panel rounded-xl p-4 border-l-4 border-l-[#00e5ff] shadow-lg">
                 <div className="mb-3">
                     <h4 className="text-[10px] text-[#00e5ff]/80 uppercase tracking-widest font-bold mb-2">Alıcı Bilgisi</h4>
                     <div className="flex items-center gap-3">
@@ -194,9 +200,13 @@ const Tracker = () => {
             descriptionCompleted: 'Onaylandı',
             descriptionPending: 'Bekliyor',
             renderAction: () => (
-                <div className="mt-4 flex flex-col gap-3">
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-center mb-2">
-                        <span className="material-symbols-outlined text-4xl text-slate-400">image</span>
+                <div className="mt-4 flex flex-col gap-3 max-w-sm">
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-center mb-2 aspect-square overflow-hidden relative">
+                        {transaction?.qr_url ? (
+                            <img src={transaction.qr_url} alt="QR Kod" className="w-full h-full object-contain" />
+                        ) : (
+                            <span className="material-symbols-outlined text-4xl text-slate-400">image</span>
+                        )}
                     </div>
                     <button onClick={handleConfirmTransaction} className="w-full py-3 bg-[#00ff88] hover:bg-[#00ff88]/80 text-[#0A1529] rounded-xl font-bold shadow-[0_0_15px_rgba(0,255,136,0.4)] transition-all">
                         İşlemi Onayla
@@ -240,11 +250,12 @@ const Tracker = () => {
             descriptionCompleted: 'Yüklendi',
             descriptionPending: 'Bekliyor',
             renderAction: () => (
-                <div className="mt-4">
-                    <button onClick={handleQRUpload} className="w-full py-4 rounded-xl border-2 border-dashed border-[#00e5ff]/50 text-[#00e5ff] font-bold flex flex-col items-center justify-center gap-2 hover:bg-[#00e5ff]/10 transition-all bg-[#0A1529]/50 backdrop-blur-sm">
+                <div className="mt-4 max-w-sm">
+                    <label className="w-full py-4 rounded-xl border-2 border-dashed border-[#00e5ff]/50 text-[#00e5ff] font-bold flex flex-col items-center justify-center gap-2 hover:bg-[#00e5ff]/10 transition-all bg-[#0A1529]/50 backdrop-blur-sm cursor-pointer">
                         <span className="material-symbols-outlined text-3xl">add_a_photo</span>
                         FOTOĞRAF YÜKLE
-                    </button>
+                        <input type="file" accept="image/*" className="hidden" onChange={handleQRFileChange} />
+                    </label>
                 </div>
             )
         },
@@ -255,6 +266,17 @@ const Tracker = () => {
             descriptionActive: 'İşleniyor...',
             descriptionCompleted: 'Onaylandı',
             descriptionPending: 'Bekliyor',
+            renderAction: () => (
+                <div className="mt-4 flex flex-col gap-3 max-w-sm">
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-center mb-2 aspect-square overflow-hidden relative">
+                        {transaction?.qr_url ? (
+                            <img src={transaction.qr_url} alt="QR Kod" className="w-full h-full object-contain" />
+                        ) : (
+                            <span className="material-symbols-outlined text-4xl text-slate-400">image</span>
+                        )}
+                    </div>
+                </div>
+            )
         },
         {
             id: 'completed',

@@ -19,7 +19,7 @@ const Home = () => {
                         Birlikte Paylaş, <br className="hidden md:block" /> Daha Fazla Kazan!
                     </h2>
                     <p className="text-white/90 text-sm md:text-base mb-6 md:mb-8 max-w-sm md:max-w-md font-medium">
-                        Yemek kartı bakiyeni nakite çevir veya indirimli kartlarla bütçeni koru. Geleceğin finansı burada.
+                        Yemek kartı bakiyeni paylaş sosyal ağını güçlendir. Geleceğin finansı burada.
                     </p>
                     <button className="bg-white text-indigo-900 hover:bg-slate-100 px-6 py-3 rounded-2xl text-sm font-bold flex items-center gap-3 transition-all active:scale-95 shadow-xl hover:shadow-2xl">
                         Hemen Başla
