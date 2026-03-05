@@ -36,18 +36,8 @@ const Tracker = () => {
                 })
                 .subscribe();
 
-            // Fallback polling every 5 seconds (guarantees updates)
-            const intervalId = setInterval(() => {
-                DBService.getTransactionById(id)
-                    .then(tx => {
-                        if (tx) setTransaction(tx as Transaction);
-                    })
-                    .catch(err => console.error(err));
-            }, 5000);
-
             return () => {
                 supabase.removeChannel(channel);
-                clearInterval(intervalId);
             };
         }
     }, [id]);
