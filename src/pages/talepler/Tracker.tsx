@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import { DBService } from '../../lib/services';
 import type { Transaction } from '../../types';
 
+import { supabase } from '../../lib/supabase';
+
 const Tracker = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -13,10 +15,31 @@ const Tracker = () => {
 
     useEffect(() => {
         if (id) {
+            // Initial fetch
             DBService.getTransactionById(id)
                 .then(tx => setTransaction(tx as Transaction))
                 .catch(err => console.error(err))
                 .finally(() => setLoading(false));
+
+            // Realtime subscription
+            const channel = supabase
+                .channel(`tracker-${id}`)
+                .on('postgres_changes', {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'transactions',
+                    filter: `id=eq.${id}`
+                }, () => {
+                    // Refetch to get updated status and joined profile data
+                    DBService.getTransactionById(id)
+                        .then(tx => setTransaction(tx as Transaction))
+                        .catch(err => console.error(err));
+                })
+                .subscribe();
+
+            return () => {
+                supabase.removeChannel(channel);
+            };
         }
     }, [id]);
 
