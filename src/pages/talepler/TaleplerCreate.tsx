@@ -24,13 +24,13 @@ const TaleplerCreate = () => {
             setLoading(true);
             setError('');
 
-            await DBService.createTransactionRequest(
+            const newTx = await DBService.createTransactionRequest(
                 user!.id,
                 Number(amount),
                 description || 'Paylaşım Talebi'
             );
 
-            navigate('/app/talepler');
+            navigate(`/app/tracker/${newTx.id}`);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Hata oluştu');
         } finally {

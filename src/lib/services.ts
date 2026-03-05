@@ -81,6 +81,17 @@ export const DBService = {
         return data || null;
     },
 
+    async getTransactionById(transactionId: string) {
+        const { data, error } = await supabase
+            .from('transactions')
+            .select(`*, seeker:profiles!transactions_seeker_id_fkey(full_name), supporter:profiles!transactions_supporter_id_fkey(full_name)`)
+            .eq('id', transactionId)
+            .single();
+
+        if (error && error.code !== 'PGRST116') throw error;
+        return data || null;
+    },
+
     async updateTransactionStatus(transactionId: string, status: Transaction['status'], updates: Partial<Transaction> = {}) {
         const { data, error } = await supabase
             .from('transactions')
@@ -93,8 +104,8 @@ export const DBService = {
         return data as Transaction;
     },
 
-    async acceptTransaction(transactionId: string, supporterId: string) {
-        return this.updateTransactionStatus(transactionId, 'waiting-cash-payment', { supporter_id: supporterId });
+    async acceptTransaction(transactionId: string, supporterId: string, supportPercentage: number) {
+        return this.updateTransactionStatus(transactionId, 'waiting-cash-payment', { supporter_id: supporterId, support_percentage: supportPercentage });
     }
 };
 
