@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { DBService } from '../../lib/services';
 import type { Transaction } from '../../types';
@@ -209,7 +209,6 @@ const Tracker = () => {
             descriptionActive: 'İşleniyor...',
             descriptionCompleted: 'Alındı',
             descriptionPending: 'Bekleniyor',
-            renderAction: renderActionCard
         },
         {
             id: 'cash-paid',
@@ -311,7 +310,7 @@ const Tracker = () => {
                 </div>
             </header>
 
-            <main className="flex-1 relative z-10 px-5 py-2 overflow-y-auto pb-24">
+            <main className="flex-1 relative z-10 px-5 py-2 overflow-y-auto pb-8">
                 <div className="mb-8">
                     <h2 className="text-3xl font-bold text-white mb-2 neon-text-blue">İşlem Detayları</h2>
                     <p className="text-slate-400 text-sm">Tahmini tamamlanma: <span className="text-[#00e5ff] font-bold">2 dk</span></p>
@@ -381,40 +380,7 @@ const Tracker = () => {
                 )}
             </main>
 
-            <nav className="fixed bottom-0 left-0 w-full z-50 bg-[#0A1529]/90 backdrop-blur-xl border-t border-[#00e5ff]/20 pb-safe pt-2">
-                <div className="flex justify-around items-end px-2 pb-4">
-                    <Link to="/app/home" className="flex flex-col items-center gap-1 w-16 group">
-                        <div className="text-slate-400 group-hover:text-[#00e5ff] transition-colors">
-                            <span className="material-symbols-outlined text-[24px]">home</span>
-                        </div>
-                        <span className="text-[10px] font-medium text-slate-400 group-hover:text-[#00e5ff] transition-colors">Ana Sayfa</span>
-                    </Link>
-                    <Link to="/app/market" className="flex flex-col items-center gap-1 w-16 group">
-                        <div className="text-slate-400 group-hover:text-[#00e5ff] transition-colors">
-                            <span className="material-symbols-outlined text-[24px]">wallet</span>
-                        </div>
-                        <span className="text-[10px] font-medium text-slate-400 group-hover:text-[#00e5ff] transition-colors">Cüzdan</span>
-                    </Link>
-                    <div className="relative -top-5">
-                        <div className="absolute inset-0 bg-[#00ff88]/20 rounded-full blur-md"></div>
-                        <Link to="/app/talepler" className="relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#00ff88] to-green-400 flex items-center justify-center text-[#050A19] shadow-lg shadow-[#00ff88]/30 border-4 border-[#0A1529] transform transition-transform active:scale-95">
-                            <span className="material-symbols-outlined text-[28px] font-bold">swap_horiz</span>
-                        </Link>
-                    </div>
-                    <Link to="/app/history" className="flex flex-col items-center gap-1 w-16 group">
-                        <div className="text-[#00e5ff] neon-text-blue">
-                            <span className="material-symbols-outlined text-[24px] fill-current">history</span>
-                        </div>
-                        <span className="text-[10px] font-medium text-[#00e5ff]">İşlemler</span>
-                    </Link>
-                    <Link to="/app/profile" className="flex flex-col items-center gap-1 w-16 group">
-                        <div className="text-slate-400 group-hover:text-[#00e5ff] transition-colors">
-                            <span className="material-symbols-outlined text-[24px]">person</span>
-                        </div>
-                        <span className="text-[10px] font-medium text-slate-400 group-hover:text-[#00e5ff] transition-colors">Profil</span>
-                    </Link>
-                </div>
-            </nav>
+
         </div>
     );
 };
