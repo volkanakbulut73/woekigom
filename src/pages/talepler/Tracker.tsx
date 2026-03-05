@@ -217,7 +217,7 @@ const Tracker = () => {
             renderAction: () => (
                 <div className="mt-4 p-4 rounded-xl bg-[#00ff88]/10 border border-[#00ff88]/30">
                     <p className="text-[#00ff88] font-bold text-sm text-center">Tebrikler!</p>
-                    <button onClick={() => navigate('/app/home')} className="mt-4 w-full py-3 bg-[#00ff88] text-[#0A1529] font-bold rounded-xl shadow-[0_0_15px_rgba(0,255,136,0.3)]">Ana Sayfaya Dön</button>
+                    <button onClick={() => navigate('/app')} className="mt-4 w-full py-3 bg-[#00ff88] text-[#0A1529] font-bold rounded-xl shadow-[0_0_15px_rgba(0,255,136,0.3)]">Ana Sayfaya Dön</button>
                 </div>
             )
         }
@@ -266,7 +266,7 @@ const Tracker = () => {
             renderAction: () => (
                 <div className="mt-4 p-4 rounded-xl bg-[#00ff88]/10 border border-[#00ff88]/30">
                     <p className="text-[#00ff88] font-bold text-sm text-center">Tebrikler!</p>
-                    <button onClick={() => navigate('/app/home')} className="mt-4 w-full py-3 bg-[#00ff88] text-[#0A1529] font-bold rounded-xl shadow-[0_0_15px_rgba(0,255,136,0.3)]">Ana Sayfaya Dön</button>
+                    <button onClick={() => navigate('/app')} className="mt-4 w-full py-3 bg-[#00ff88] text-[#0A1529] font-bold rounded-xl shadow-[0_0_15px_rgba(0,255,136,0.3)]">Ana Sayfaya Dön</button>
                 </div>
             )
         }
