@@ -319,13 +319,7 @@ const Tracker = () => {
             <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#00ff88]/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
             <div className="absolute top-40 right-0 w-64 h-64 bg-[#00e5ff]/5 rounded-full blur-[80px] pointer-events-none z-0"></div>
 
-            <header className="relative z-10 flex items-center justify-between p-5 pt-6">
-                <div className="flex items-center gap-3">
-                    <button onClick={() => navigate('/app/talepler')} className="w-10 h-10 flex items-center justify-center rounded-full bg-[#0A1529] border border-[#00e5ff]/30 text-[#00e5ff] hover:bg-[#00e5ff]/10 transition-colors">
-                        <span className="material-symbols-outlined">arrow_back</span>
-                    </button>
-                    <h1 className="text-xl font-bold tracking-tight text-white neon-text-blue uppercase">İşlem Hattı #{id?.substring(0, 4)}</h1>
-                </div>
+            <header className="relative z-10 flex items-center justify-end p-5 pt-6">
                 <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#0A1529] border border-[#00ff88]/30">
                     <div className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse shadow-[0_0_8px_rgba(0,255,136,0.8)]"></div>
                     <span className="text-xs font-medium text-[#00ff88] tracking-wider uppercase">Canlı</span>
@@ -355,21 +349,23 @@ const Tracker = () => {
 
                         return (
                             <div key={step.id} className={stepWrapperClass}>
-                                <div className="flex flex-col items-center">
+                                <div className="flex flex-col items-center shrink-0 w-10">
                                     {isActive ? (
-                                        <div className="relative w-10 h-10 flex items-center justify-center z-10">
+                                        <div className="relative w-10 h-10 flex items-center justify-center z-10 shrink-0">
                                             <div className="absolute inset-0 bg-[#00e5ff]/30 rounded-full animate-ping"></div>
                                             <div className="relative w-10 h-10 rounded-full bg-[#00e5ff] flex items-center justify-center text-[#050A19] font-bold shadow-[0_0_20px_rgba(0,229,255,0.6)] border-2 border-white/20">
-                                                <span className="material-symbols-outlined text-[20px] animate-spin">sync</span>
+                                                <div className="w-3 h-3 bg-[#050A19] rounded-full animate-pulse"></div>
                                             </div>
                                         </div>
                                     ) : isCompleted ? (
-                                        <div className="w-10 h-10 rounded-full bg-[#0A1529] border-2 border-[#00ff88] flex items-center justify-center text-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.3)] z-10">
-                                            <span className="material-symbols-outlined text-[20px]">check_circle</span>
+                                        <div className="w-10 h-10 rounded-full bg-[#0A1529] border-2 border-[#00e5ff] flex items-center justify-center text-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.3)] z-10 shrink-0">
+                                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
                                         </div>
                                     ) : (
-                                        <div className="w-10 h-10 rounded-full bg-[#0A1529] border border-white/10 flex items-center justify-center text-slate-500 z-10">
-                                            <span className="material-symbols-outlined text-[20px]">{step.icon}</span>
+                                        <div className="w-10 h-10 rounded-full bg-[#0A1529] border border-white/10 flex items-center justify-center text-slate-500 z-10 shrink-0 font-bold text-sm">
+                                            {index + 1}
                                         </div>
                                     )}
                                 </div>
@@ -380,8 +376,8 @@ const Tracker = () => {
                                             <div className="absolute bottom-[-4px] left-3 w-2 h-2 bg-[#00e5ff] transform rotate-45"></div>
                                         </div>
                                     )}
-                                    <h3 className={"text-lg font-bold text-white leading-none mb-1 " + (isActive ? "neon-text-blue" : "")}>{step.label}</h3>
-                                    <p className={isCompleted ? "text-[#00ff88]/70 text-sm font-medium" : "text-slate-300 text-sm font-medium"}>
+                                    <h3 className={"text-lg font-bold text-white leading-none mb-1 md:break-words break-all " + (isActive ? "neon-text-blue" : "")}>{step.label}</h3>
+                                    <p className={isCompleted ? "text-[#00e5ff]/70 text-sm font-medium" : "text-slate-300 text-sm font-medium"}>
                                         {isCompleted ? step.descriptionCompleted : isActive ? step.descriptionActive : step.descriptionPending}
                                     </p>
 
