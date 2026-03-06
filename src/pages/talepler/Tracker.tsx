@@ -392,13 +392,14 @@ const Tracker = () => {
                                     )}
                                 </div>
                                 <div className="flex-1 pt-1 relative">
-                                    {isActive && (
-                                        <div className="absolute -top-9 -left-2 bg-[#00e5ff] text-[#050A19] text-[10px] font-bold px-3 py-1 rounded-md shadow-[0_0_15px_rgba(0,229,255,0.4)] transform -translate-y-1 animate-bounce z-20">
-                                            ŞU AN BURADASINIZ
-                                            <div className="absolute bottom-[-4px] left-3 w-2 h-2 bg-[#00e5ff] transform rotate-45"></div>
-                                        </div>
-                                    )}
-                                    <h3 className={"text-lg font-bold text-white leading-none mb-1 md:break-words break-all " + (isActive ? "neon-text-blue" : "")}>{step.label}</h3>
+                                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                                        <h3 className={"text-lg font-bold text-white leading-none md:break-words break-all " + (isActive ? "neon-text-blue" : "")}>{step.label}</h3>
+                                        {isActive && (
+                                            <span className="bg-[#00e5ff] text-[#050A19] text-[9px] font-bold px-2 py-0.5 rounded shadow-[0_0_10px_rgba(0,229,255,0.4)] animate-pulse whitespace-nowrap">
+                                                ŞU AN BURADASINIZ
+                                            </span>
+                                        )}
+                                    </div>
                                     <p className={isCompleted ? "text-[#00e5ff]/70 text-sm font-medium" : "text-slate-300 text-sm font-medium"}>
                                         {isCompleted ? step.descriptionCompleted : isActive ? step.descriptionActive : step.descriptionPending}
                                     </p>
