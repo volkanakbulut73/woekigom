@@ -1,30 +1,97 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowRightLeft, Landmark, Activity, CreditCard, Gift, Send, Trophy } from 'lucide-react';
+import { ArrowRight, ArrowRightLeft, Landmark, Activity, CreditCard, Gift, Send, Trophy, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Home = () => {
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    const slides = [
+        {
+            image: '/slider1.jpg',
+            title: 'Birlikte Paylaş, \nDaha Fazla Kazan!',
+            description: 'Yemek kartı bakiyeni paylaş sosyal ağını güçlendir.',
+            buttonText: 'Hemen Başla'
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop',
+            title: 'Hızlı ve Güvenli \nQR Takas',
+            description: 'Saniyeler içinde eşleş, QR ile hesabını öde ve anında kazan.',
+            buttonText: 'İşlemleri Gör'
+        }
+    ];
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, []);
+
+    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
     return (
         <div className="w-full flex flex-col gap-6 md:gap-8 animate-in fade-in duration-500">
-            {/* Banner Section */}
-            <section className="w-full bg-gradient-to-r from-indigo-500 via-blue-500 to-[#39ff14]/80 rounded-[24px] md:rounded-[32px] p-6 md:p-10 relative overflow-hidden shadow-[0_10px_40px_rgba(57,255,20,0.15)] flex flex-col justify-center min-h-[200px] md:min-h-[240px]">
-                {/* Background decorative elements */}
-                <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-l from-white/10 to-transparent pointer-events-none"></div>
-                <div className="absolute -top-24 -right-10 w-64 h-64 bg-white/20 blur-3xl rounded-full pointer-events-none"></div>
+            {/* Banner Section - Slider */}
+            <section className="relative w-full rounded-[24px] md:rounded-[32px] overflow-hidden shadow-[0_10px_40px_rgba(57,255,20,0.15)] flex flex-col justify-center min-h-[260px] md:min-h-[300px] group">
+                {/* Slides */}
+                <div
+                    className="flex h-full w-full transition-transform duration-700 ease-in-out absolute inset-0"
+                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                >
+                    {slides.map((slide, index) => (
+                        <div key={index} className="min-w-full h-full relative flex-shrink-0">
+                            {/* Background Image */}
+                            <div className="absolute inset-0 w-full h-full">
+                                <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/60 to-transparent"></div>
+                            </div>
 
-                <div className="relative z-10 w-full max-w-xl">
-                    <div className="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-widest mb-4 border border-white/20 shadow-sm">
-                        Yenİ ÖZellİk: Hızlı Takas
-                    </div>
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-3 md:mb-4 tracking-tight leading-tight mix-blend-overlay">
-                        Birlikte Paylaş, <br className="hidden md:block" /> Daha Fazla Kazan!
-                    </h2>
-                    <p className="text-white/90 text-sm md:text-base mb-6 md:mb-8 max-w-sm md:max-w-md font-medium">
-                        Yemek kartı bakiyeni paylaş sosyal ağını güçlendir. Geleceğin finansı burada.
-                    </p>
-                    <button className="bg-white text-indigo-900 hover:bg-slate-100 px-6 py-3 rounded-2xl text-sm font-bold flex items-center gap-3 transition-all active:scale-95 shadow-xl hover:shadow-2xl">
-                        Hemen Başla
-                        <ArrowRight size={18} />
-                    </button>
+                            {/* Content */}
+                            <div className="relative z-10 w-full max-w-xl h-full flex flex-col justify-center p-6 md:p-10">
+                                {index === 0 && (
+                                    <div className="inline-block self-start bg-[#39ff14]/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-[#39ff14] uppercase tracking-widest mb-4 border border-[#39ff14]/20 shadow-sm">
+                                        Yeni Referans Sistemi
+                                    </div>
+                                )}
+                                <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-3 md:mb-4 tracking-tight leading-tight whitespace-pre-line drop-shadow-lg">
+                                    {slide.title}
+                                </h2>
+                                <p className="text-slate-200 text-sm md:text-base mb-6 md:mb-8 max-w-sm md:max-w-md font-medium drop-shadow-md">
+                                    {slide.description}
+                                </p>
+                                <button className="self-start bg-[#39ff14] text-[#0a0b1e] hover:bg-[#39ff14]/90 px-6 py-3 rounded-2xl text-sm font-bold flex items-center gap-3 transition-all active:scale-95 shadow-[0_0_20px_rgba(57,255,20,0.3)] hover:shadow-[0_0_25px_rgba(57,255,20,0.5)]">
+                                    {slide.buttonText}
+                                    <ArrowRight size={18} />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Navigation Arrows */}
+                <button
+                    onClick={prevSlide}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-md border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/50 z-20"
+                >
+                    <ChevronLeft size={24} />
+                </button>
+                <button
+                    onClick={nextSlide}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/30 backdrop-blur-md border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/50 z-20"
+                >
+                    <ChevronRight size={24} />
+                </button>
+
+                {/* Indicators */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                    {slides.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentSlide(index)}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === index ? 'w-6 bg-[#39ff14]' : 'w-2 bg-white/40 hover:bg-white/60'}`}
+                        />
+                    ))}
                 </div>
             </section>
 
