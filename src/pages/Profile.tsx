@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ChevronLeft, Settings, CheckCircle, CircleDollarSign, Wallet, PlusCircle, ArrowUpRight, Utensils, Banknote, Edit2, Shield, Bell, LogOut, Grid, Store, Receipt, User as UserIcon, ChevronRight } from 'lucide-react';
+import { ChevronLeft, Settings, CircleDollarSign, Wallet, PlusCircle, ArrowUpRight, Utensils, Banknote, Edit2, Shield, Bell, LogOut, Grid, Store, Receipt, User as UserIcon, ChevronRight } from 'lucide-react';
 
 const Profile = () => {
-    const { profile, signOut } = useAuth();
+    const { profile, user, signOut } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -15,34 +15,53 @@ const Profile = () => {
         <div className="bg-[#0a0b1e] font-sans text-slate-100 min-h-screen">
             <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden pb-24">
 
-                {/* Header */}
-                <div className="flex items-center p-6 justify-between sticky top-0 z-10 bg-[#0a0b1e]/80 backdrop-blur-md">
-                    <button onClick={() => navigate(-1)} className="flex w-10 h-10 items-center justify-center rounded-full bg-[#3ff91a]/5 border border-[#3ff91a]/10 backdrop-blur-md">
-                        <ChevronLeft className="text-[#3ff91a]" size={20} />
-                    </button>
-                    <h2 className="text-xl font-bold tracking-tight">Profil</h2>
-                    <button className="flex w-10 h-10 items-center justify-center rounded-full bg-[#3ff91a]/5 border border-[#3ff91a]/10 backdrop-blur-md">
-                        <Settings className="text-[#3ff91a]" size={20} />
-                    </button>
-                </div>
+                {/* Header / Top Bar in the Dark Section */}
+                <div className="relative w-full bg-[#181d2f]" style={{ backgroundImage: "linear-gradient(to bottom, #2b324d, #181d2f)" }}>
+                    {/* Faux Bridge Graphic / Background Element */}
+                    <div className="absolute inset-0 opacity-20 pointer-events-none w-full h-full overflow-hidden">
+                        {/* A simple CSS representation of a bridge/lines connecting to the center */}
+                        <div className="absolute top-[60%] left-0 w-[45%] h-[1px] bg-white -rotate-6 origin-left"></div>
+                        <div className="absolute top-[60%] right-0 w-[45%] h-[1px] bg-white rotate-6 origin-right"></div>
+                        <div className="absolute top-[50%] left-[10%] w-[1px] h-32 bg-white"></div>
+                        <div className="absolute top-[50%] right-[10%] w-[1px] h-32 bg-white"></div>
+                        <div className="absolute top-[55%] left-[30%] w-[1px] h-24 bg-white opacity-50"></div>
+                        <div className="absolute top-[55%] right-[30%] w-[1px] h-24 bg-white opacity-50"></div>
+                    </div>
 
-                {/* Profile Header */}
-                <div className="flex flex-col items-center px-6 py-4">
-                    <div className="relative">
-                        <div className="w-32 h-32 rounded-full border-2 border-[#3ff91a] p-1">
-                            <div className="w-full h-full rounded-full bg-cover bg-center" style={{ backgroundImage: "url('https://ui-avatars.com/api/?name=Alex+Rivera&background=0a0b1e&color=fff&rounded=true')" }}></div>
+                    <div className="flex items-center p-6 justify-between relative z-10 pt-10">
+                        <button onClick={() => navigate(-1)} className="flex w-10 h-10 items-center justify-center rounded-full text-white/70 hover:text-white transition-colors">
+                            <ChevronLeft size={28} />
+                        </button>
+                        <h2 className="text-xl font-bold tracking-widest text-white uppercase">Profile</h2>
+                        <button className="flex w-10 h-10 items-center justify-center rounded-full text-white/70 hover:text-white transition-colors">
+                            <Settings size={28} />
+                        </button>
+                    </div>
+
+                    {/* Profile Header Content */}
+                    <div className="flex flex-col items-center pb-8 pt-4 relative z-10 w-full">
+                        <div className="w-28 h-28 rounded-full border-[3px] border-white/10 p-1 mb-4">
+                            <div className="w-full h-full rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${profile?.avatar_url || 'https://ui-avatars.com/api/?name=' + (profile?.full_name?.replace(' ', '+') || 'User') + '&background=0a0b1e&color=fff&rounded=true'}')` }}></div>
                         </div>
-                        <div className="absolute bottom-1 right-1 bg-[#3ff91a] text-[#0a0b1e] w-8 h-8 rounded-full flex items-center justify-center border-4 border-[#0a0b1e]">
-                            <CheckCircle size={16} className="font-bold" />
+                        <div className="text-center w-full px-4">
+                            <h1 className="text-[28px] font-medium tracking-wide text-white mb-1 drop-shadow-md">{profile?.full_name || 'Kullanıcı'}</h1>
+                            <p className="text-white/70 text-[11px] font-bold uppercase tracking-[0.2em] mb-4">
+                                {profile?.location || 'İSTANBUL'}
+                            </p>
+                            <div className="flex flex-col items-center gap-1.5 px-4 text-white/60 text-xs font-semibold tracking-wide">
+                                <p>{user?.phone || '+90 555 123 4567'}</p>
+                                <p>{user?.email || 'kullanici@workigom.com'}</p>
+                            </div>
                         </div>
                     </div>
-                    <div className="mt-4 text-center">
-                        <h1 className="text-2xl font-bold tracking-tight">Alex Rivera</h1>
-                        <p className="text-[#3ff91a]/80 text-sm font-medium uppercase tracking-widest mt-1">Elit Paylaşımcı</p>
-                        <div className="mt-3 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3ff91a]/5 border border-[#3ff91a]/20 backdrop-blur-md">
-                            <CircleDollarSign className="text-[#3ff91a]" size={18} />
-                            <span className="text-[#3ff91a] font-bold">2,450 Puan</span>
-                        </div>
+                </div>
+
+                <div className="mt-4 px-6 py-2 flex justify-center w-full">
+                    <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#16172d] border border-white/5 shadow-lg">
+                        <CircleDollarSign className="text-[#3ff91a]" size={16} />
+                        <span className="text-[#3ff91a] font-bold text-sm">{profile?.rating ? profile.rating * 500 : 2450} Puan</span>
+                        <span className="text-slate-500 mx-2">|</span>
+                        <span className="text-slate-400 font-bold text-xs uppercase">Elit Paylaşımcı</span>
                     </div>
                 </div>
 
