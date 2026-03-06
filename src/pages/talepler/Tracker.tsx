@@ -129,7 +129,7 @@ const Tracker = () => {
 
     const renderActionCard = () => {
         return (
-            <div className="mt-4 max-w-sm glass-panel rounded-xl p-4 border-l-4 border-l-[#00e5ff] shadow-lg">
+            <div className="w-full sm:w-[320px] md:-mt-8 glass-panel rounded-xl p-4 border-l-4 border-l-[#00e5ff] shadow-lg">
                 <div className="mb-3">
                     <h4 className="text-[10px] text-[#00e5ff]/80 uppercase tracking-widest font-bold mb-2">Alıcı Bilgisi</h4>
                     <div className="flex items-center gap-3">
@@ -200,7 +200,7 @@ const Tracker = () => {
             descriptionCompleted: 'Onaylandı',
             descriptionPending: 'Bekliyor',
             renderAction: () => (
-                <div className="mt-4 flex flex-col gap-3 max-w-sm">
+                <div className="w-full sm:w-[320px] md:-mt-8 flex flex-col gap-3">
                     <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-center mb-2 aspect-square overflow-hidden relative">
                         {transaction?.qr_url ? (
                             <img src={transaction.qr_url} alt="QR Kod" className="w-full h-full object-contain" />
@@ -225,7 +225,7 @@ const Tracker = () => {
             descriptionCompleted: 'İşlem Başarılı',
             descriptionPending: 'Bekliyor',
             renderAction: () => (
-                <div className="mt-4 p-4 rounded-xl bg-[#00ff88]/10 border border-[#00ff88]/30">
+                <div className="w-full sm:w-[320px] md:-mt-8 p-4 rounded-xl bg-[#00ff88]/10 border border-[#00ff88]/30">
                     <p className="text-[#00ff88] font-bold text-sm text-center">Tebrikler!</p>
                     <button onClick={() => navigate('/app')} className="mt-4 w-full py-3 bg-[#00ff88] text-[#0A1529] font-bold rounded-xl shadow-[0_0_15px_rgba(0,255,136,0.3)]">Ana Sayfaya Dön</button>
                 </div>
@@ -250,7 +250,7 @@ const Tracker = () => {
             descriptionCompleted: 'Yüklendi',
             descriptionPending: 'Bekliyor',
             renderAction: () => (
-                <div className="mt-4 max-w-sm">
+                <div className="w-full sm:w-[320px] md:-mt-8">
                     <label className="w-full py-4 rounded-xl border-2 border-dashed border-[#00e5ff]/50 text-[#00e5ff] font-bold flex flex-col items-center justify-center gap-2 hover:bg-[#00e5ff]/10 transition-all bg-[#0A1529]/50 backdrop-blur-sm cursor-pointer">
                         <span className="material-symbols-outlined text-3xl">add_a_photo</span>
                         FOTOĞRAF YÜKLE
@@ -267,7 +267,7 @@ const Tracker = () => {
             descriptionCompleted: 'Onaylandı',
             descriptionPending: 'Bekliyor',
             renderAction: () => (
-                <div className="mt-4 flex flex-col gap-3 max-w-sm">
+                <div className="w-full sm:w-[320px] md:-mt-8 flex flex-col gap-3">
                     <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-center mb-2 aspect-square overflow-hidden relative">
                         {transaction?.qr_url ? (
                             <img src={transaction.qr_url} alt="QR Kod" className="w-full h-full object-contain" />
@@ -286,7 +286,7 @@ const Tracker = () => {
             descriptionCompleted: 'İşlem Başarılı',
             descriptionPending: 'Bekliyor',
             renderAction: () => (
-                <div className="mt-4 p-4 rounded-xl bg-[#00ff88]/10 border border-[#00ff88]/30">
+                <div className="w-full sm:w-[320px] md:-mt-8 p-4 rounded-xl bg-[#00ff88]/10 border border-[#00ff88]/30">
                     <p className="text-[#00ff88] font-bold text-sm text-center">Tebrikler!</p>
                     <button onClick={() => navigate('/app')} className="mt-4 w-full py-3 bg-[#00ff88] text-[#0A1529] font-bold rounded-xl shadow-[0_0_15px_rgba(0,255,136,0.3)]">Ana Sayfaya Dön</button>
                 </div>
@@ -392,19 +392,27 @@ const Tracker = () => {
                                     )}
                                 </div>
                                 <div className="flex-1 pt-1 relative">
-                                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                                        <h3 className={"text-lg font-bold text-white leading-none md:break-words break-all " + (isActive ? "neon-text-blue" : "")}>{step.label}</h3>
-                                        {isActive && (
-                                            <span className="bg-[#00e5ff] text-[#050A19] text-[9px] font-bold px-2 py-0.5 rounded shadow-[0_0_10px_rgba(0,229,255,0.4)] animate-pulse whitespace-nowrap">
-                                                ŞU AN BURADASINIZ
-                                            </span>
+                                    <div className="flex flex-col md:flex-row md:items-start gap-3 md:gap-10">
+                                        <div className="flex-1">
+                                            <div className="flex flex-wrap items-center gap-2 mb-1">
+                                                <h3 className={"text-lg font-bold text-white leading-none md:break-words break-all " + (isActive ? "neon-text-blue" : "")}>{step.label}</h3>
+                                                {isActive && (
+                                                    <span className="bg-[#00e5ff] text-[#050A19] text-[9px] font-bold px-2 py-0.5 rounded shadow-[0_0_10px_rgba(0,229,255,0.4)] animate-pulse whitespace-nowrap">
+                                                        ŞU AN BURADASINIZ
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className={isCompleted ? "text-[#00e5ff]/70 text-sm font-medium" : "text-slate-300 text-sm font-medium"}>
+                                                {isCompleted ? step.descriptionCompleted : isActive ? step.descriptionActive : step.descriptionPending}
+                                            </p>
+                                        </div>
+                                        {/* Render Action inline on desktop if active */}
+                                        {isActive && step.renderAction && (
+                                            <div className="shrink-0 mt-3 md:mt-0">
+                                                {step.renderAction()}
+                                            </div>
                                         )}
                                     </div>
-                                    <p className={isCompleted ? "text-[#00e5ff]/70 text-sm font-medium" : "text-slate-300 text-sm font-medium"}>
-                                        {isCompleted ? step.descriptionCompleted : isActive ? step.descriptionActive : step.descriptionPending}
-                                    </p>
-
-                                    {isActive && step.renderAction && step.renderAction()}
                                 </div>
                             </div>
                         );
