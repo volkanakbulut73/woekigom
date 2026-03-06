@@ -16,17 +16,9 @@ const Profile = () => {
             <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden pb-24">
 
                 {/* Header / Top Bar in the Dark Section */}
-                <div className="relative w-full bg-[#181d2f]" style={{ backgroundImage: "linear-gradient(to bottom, #2b324d, #181d2f)" }}>
-                    {/* Faux Bridge Graphic / Background Element */}
-                    <div className="absolute inset-0 opacity-20 pointer-events-none w-full h-full overflow-hidden">
-                        {/* A simple CSS representation of a bridge/lines connecting to the center */}
-                        <div className="absolute top-[60%] left-0 w-[45%] h-[1px] bg-white -rotate-6 origin-left"></div>
-                        <div className="absolute top-[60%] right-0 w-[45%] h-[1px] bg-white rotate-6 origin-right"></div>
-                        <div className="absolute top-[50%] left-[10%] w-[1px] h-32 bg-white"></div>
-                        <div className="absolute top-[50%] right-[10%] w-[1px] h-32 bg-white"></div>
-                        <div className="absolute top-[55%] left-[30%] w-[1px] h-24 bg-white opacity-50"></div>
-                        <div className="absolute top-[55%] right-[30%] w-[1px] h-24 bg-white opacity-50"></div>
-                    </div>
+                <div className="relative w-full bg-[#181d2f] bg-cover bg-center" style={{ backgroundImage: "url('/profile.png')" }}>
+                    {/* Dark gradient overlay so white text remains readable and blends into dark theme */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#0a0b1e]/60 via-[#0a0b1e]/40 to-[#0a0b1e]"></div>
 
                     <div className="flex items-center p-6 justify-between relative z-10 pt-10">
                         <button onClick={() => navigate(-1)} className="flex w-10 h-10 items-center justify-center rounded-full text-white/70 hover:text-white transition-colors">
@@ -41,7 +33,7 @@ const Profile = () => {
                     {/* Profile Header Content */}
                     <div className="flex flex-col items-center pb-8 pt-4 relative z-10 w-full">
                         <div className="w-28 h-28 rounded-full border-[3px] border-white/10 p-1 mb-4">
-                            <div className="w-full h-full rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${profile?.avatar_url || '/profile.png'}')` }}></div>
+                            <div className="w-full h-full rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${profile?.avatar_url || 'https://ui-avatars.com/api/?name=' + (profile?.full_name?.replace(' ', '+') || 'User') + '&background=16172d&color=fff&rounded=true'}')` }}></div>
                         </div>
                         <div className="text-center w-full px-4">
                             <h1 className="text-[28px] font-medium tracking-wide text-white mb-1 drop-shadow-md">{profile?.full_name || 'Kullanıcı'}</h1>
