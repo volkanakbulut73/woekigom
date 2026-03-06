@@ -156,22 +156,19 @@ const Talepler = () => {
                                                 {/* Facilities Features */}
                                                 <div className="flex justify-between items-center mb-6 px-1 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                                                     <div className="flex items-center gap-1.5">
-                                                        <span className="text-yellow-500 material-symbols-outlined !text-sm">lock</span>
                                                         <span>Escrow Güvencesi</span>
                                                     </div>
                                                     <div className="flex items-center gap-1.5">
-                                                        <span className="text-blue-400 material-symbols-outlined !text-sm">qr_code</span>
                                                         <span>QR ile Ödeme</span>
                                                     </div>
                                                     <div className="flex items-center gap-1.5 hidden lg:flex">
-                                                        <span className="text-amber-500 material-symbols-outlined !text-sm">bolt</span>
                                                         <span>Anında Transfer</span>
                                                     </div>
                                                 </div>
 
                                                 {/* Action Button */}
                                                 <button onClick={() => handleAcceptClick(tx)} className="w-full bg-[#1b5e20] hover:bg-[#2e7d32] text-white py-3.5 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(27,94,32,0.4)]">
-                                                    Paylaş & Kazan <span className="material-symbols-outlined !text-lg">arrow_forward</span>
+                                                    Paylaş & Kazan
                                                 </button>
 
                                                 <p className="text-center text-slate-500 text-[10px] mt-4 font-semibold">
