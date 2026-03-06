@@ -21,8 +21,8 @@ const Layout = () => {
             <aside className="hidden md:flex flex-col w-64 bg-[#0a0b1e] border-r border-[#39ff14]/10 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.2)] pb-6 relative">
                 <div className="flex flex-col items-center justify-center p-8">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#39ff14] rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.4)]">
-                            <span className="material-symbols-outlined text-[#0a0b1e] font-bold">account_balance_wallet</span>
+                        <div className="w-10 h-10 bg-[#39ff14] rounded-xl flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(57,255,20,0.4)]">
+                            <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
                         </div>
                         <div>
                             <h1 className="text-xl font-bold text-white tracking-tight leading-tight">Workigom</h1>

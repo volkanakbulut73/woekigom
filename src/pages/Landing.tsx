@@ -10,8 +10,8 @@ const Landing = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-20">
                         <div className="flex items-center gap-2">
-                            <div className="bg-success-500 p-2 rounded-lg">
-                                <span className="text-white font-bold text-xl leading-none">W</span>
+                            <div className="w-10 h-10 bg-success-500 rounded-lg flex items-center justify-center overflow-hidden">
+                                <img src="/logo.png" alt="W" className="w-full h-full object-cover" />
                             </div>
                             <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
                                 Workigom

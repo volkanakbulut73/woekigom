@@ -46,9 +46,10 @@ const Login = () => {
                     </div>
                 </div>
 
-                <div className="px-8 text-center -mt-6 z-30">
-                    <h1 className="text-white tracking-tight text-4xl font-bold leading-tight">Workigom</h1>
-                    <p className="text-[#39ff14]/80 text-sm font-medium uppercase tracking-[0.2em] mt-2">P2P Paylaşım platformu</p>
+                <div className="px-8 text-center -mt-6 z-30 flex flex-col items-center">
+                    <img src="/logo.png" alt="Workigom Logo" className="w-24 h-24 rounded-2xl mb-2 object-cover shadow-lg border border-white/20" />
+                    <h1 className="text-white tracking-tight text-4xl font-bold leading-tight drop-shadow-md">Workigom</h1>
+                    <p className="text-[#39ff14]/80 text-sm font-medium uppercase tracking-[0.2em] mt-2 drop-shadow-sm">P2P Paylaşım platformu</p>
                 </div>
 
                 {/* Form Area */}

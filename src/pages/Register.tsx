@@ -53,8 +53,9 @@ const Register = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-primary-600">
+                <div className="flex flex-col items-center">
+                    <img src="/logo.png" alt="Workigom Logo" className="mt-6 w-20 h-20 rounded-2xl mb-2 object-cover shadow-md" />
+                    <h2 className="text-center text-3xl font-extrabold text-primary-600">
                         Workigom
                     </h2>
                     <p className="mt-2 text-center text-sm text-gray-600">
