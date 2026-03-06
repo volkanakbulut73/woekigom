@@ -1,6 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ChevronLeft, Settings, CircleDollarSign, Wallet, PlusCircle, ArrowUpRight, Utensils, Banknote, Edit2, Shield, Bell, LogOut, Grid, Store, Receipt, User as UserIcon, ChevronRight } from 'lucide-react';
+import { ChevronLeft, Settings, CircleDollarSign, Utensils, Banknote, Edit2, Shield, Bell, LogOut, ChevronRight } from 'lucide-react';
 
 const Profile = () => {
     const { profile, user, signOut } = useAuth();
@@ -41,7 +41,7 @@ const Profile = () => {
                     {/* Profile Header Content */}
                     <div className="flex flex-col items-center pb-8 pt-4 relative z-10 w-full">
                         <div className="w-28 h-28 rounded-full border-[3px] border-white/10 p-1 mb-4">
-                            <div className="w-full h-full rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${profile?.avatar_url || 'https://ui-avatars.com/api/?name=' + (profile?.full_name?.replace(' ', '+') || 'User') + '&background=0a0b1e&color=fff&rounded=true'}')` }}></div>
+                            <div className="w-full h-full rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${profile?.avatar_url || '/profile.png'}')` }}></div>
                         </div>
                         <div className="text-center w-full px-4">
                             <h1 className="text-[28px] font-medium tracking-wide text-white mb-1 drop-shadow-md">{profile?.full_name || 'Kullanıcı'}</h1>
@@ -62,34 +62,6 @@ const Profile = () => {
                         <span className="text-[#3ff91a] font-bold text-sm">{profile?.rating ? profile.rating * 500 : 2450} Puan</span>
                         <span className="text-slate-500 mx-2">|</span>
                         <span className="text-slate-400 font-bold text-xs uppercase">Elit Paylaşımcı</span>
-                    </div>
-                </div>
-
-                {/* Wallet Balance */}
-                <div className="px-6 py-4">
-                    <div className="relative overflow-hidden rounded-xl p-6 bg-gradient-to-br from-[#3ff91a]/20 to-transparent border border-[#3ff91a]/30">
-                        <div className="flex justify-between items-start mb-8">
-                            <div>
-                                <p className="text-xs uppercase tracking-[0.2em] text-[#3ff91a]/60 font-semibold">Toplam Bakiye</p>
-                                <p className="text-4xl font-bold mt-1">₺{profile?.wallet_balance?.toFixed(2) || '1,240.50'}</p>
-                            </div>
-                            <div className="w-10 h-10 bg-[#3ff91a]/10 rounded-lg flex items-center justify-center border border-[#3ff91a]/20">
-                                <Wallet className="text-[#3ff91a]" size={20} />
-                            </div>
-                        </div>
-                        <div className="flex gap-3 relative z-10">
-                            <button className="flex-1 bg-[#3ff91a] text-[#0a0b1e] py-3 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95">
-                                <PlusCircle size={16} />
-                                Bakiye Yükle
-                            </button>
-                            <button className="flex-1 bg-white/5 border border-white/10 text-[#3ff91a] py-3 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-transform active:scale-95">
-                                <ArrowUpRight size={16} />
-                                Para Çek
-                            </button>
-                        </div>
-                        {/* Decorative circles */}
-                        <div className="absolute -right-4 -bottom-4 w-24 h-24 border border-[#3ff91a]/10 rounded-full"></div>
-                        <div className="absolute -right-8 -bottom-8 w-24 h-24 border border-[#3ff91a]/5 rounded-full"></div>
                     </div>
                 </div>
 
@@ -170,36 +142,6 @@ const Profile = () => {
                         </button>
                     </div>
                 </div>
-
-                {/* Bottom Nav */}
-                <nav className="fixed bottom-0 left-0 right-0 h-20 bg-[#0a0b1e]/90 backdrop-blur-xl border-t border-white/5 px-4 pb-6 pt-2 z-50">
-                    <div className="flex gap-2 max-w-md mx-auto">
-                        <Link to="/app" className="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-300 transition-colors">
-                            <div className="flex h-8 items-center justify-center">
-                                <Grid size={24} />
-                            </div>
-                            <p className="text-[10px] font-bold uppercase tracking-wider">Anasayfa</p>
-                        </Link>
-                        <Link to="/app/market" className="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-300 transition-colors">
-                            <div className="flex h-8 items-center justify-center">
-                                <Store size={24} />
-                            </div>
-                            <p className="text-[10px] font-bold uppercase tracking-wider">Pazar</p>
-                        </Link>
-                        <Link to="/app/talepler" className="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 hover:text-slate-300 transition-colors">
-                            <div className="flex h-8 items-center justify-center">
-                                <Receipt size={24} />
-                            </div>
-                            <p className="text-[10px] font-bold uppercase tracking-wider">Talepler</p>
-                        </Link>
-                        <Link to="/app/profile" className="flex flex-1 flex-col items-center justify-end gap-1 text-[#3ff91a]">
-                            <div className="flex h-8 items-center justify-center">
-                                <UserIcon size={24} />
-                            </div>
-                            <p className="text-[10px] font-bold uppercase tracking-wider">Profil</p>
-                        </Link>
-                    </div>
-                </nav>
 
             </div>
         </div>
