@@ -1,6 +1,7 @@
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
 import { Home, Receipt, Store, User, Plus, Bell, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { getSupporterBadge, getMockTransactionCount } from '../utils/badges';
 
 const Layout = () => {
     const { profile, signOut } = useAuth();
@@ -53,7 +54,12 @@ const Layout = () => {
                 {/* Premium User Card at bottom of sidebar */}
                 <div className="px-4 mt-auto">
                     <div className="bg-[#16172d] rounded-2xl p-4 border border-[#39ff14]/10 relative group">
-                        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Premium Üye</p>
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border ${getSupporterBadge(getMockTransactionCount(profile?.id)).bgClasses} ${getSupporterBadge(getMockTransactionCount(profile?.id)).borderClasses} mb-3`}>
+                            {getSupporterBadge(getMockTransactionCount(profile?.id)).icon}
+                            <span className={`text-[10px] uppercase font-bold tracking-wider ${getSupporterBadge(getMockTransactionCount(profile?.id)).colorClasses}`}>
+                                {getSupporterBadge(getMockTransactionCount(profile?.id)).label}
+                            </span>
+                        </div>
                         <div className="flex justify-between items-center mb-3 gap-2">
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-bold text-white truncate">{profile?.full_name || 'Kullanıcı'}</p>

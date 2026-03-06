@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, BarChart2, Plus, Trash2 } from 'lucide-react';
 import { DBService } from '../lib/services';
 import { useAuth } from '../context/AuthContext';
+import { getSupporterBadge, getMockTransactionCount } from '../utils/badges';
 import type { Transaction } from '../types';
 
 const Talepler = () => {
@@ -136,7 +137,12 @@ const Talepler = () => {
                                                         </div>
                                                         <div>
                                                             <h3 className="text-white font-bold text-base leading-tight">{fullName}</h3>
-                                                            <p className="text-yellow-400 text-xs font-semibold mt-0.5">⭐ 5 • 23 İşlem</p>
+                                                            <div className={`mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border ${getSupporterBadge(getMockTransactionCount(tx.profiles?.id)).bgClasses} ${getSupporterBadge(getMockTransactionCount(tx.profiles?.id)).borderClasses}`}>
+                                                                {getSupporterBadge(getMockTransactionCount(tx.profiles?.id)).icon}
+                                                                <span className={`text-[10px] font-bold ${getSupporterBadge(getMockTransactionCount(tx.profiles?.id)).colorClasses}`}>
+                                                                    {getSupporterBadge(getMockTransactionCount(tx.profiles?.id)).label}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div className="bg-[#1a471e] text-center px-4 py-2.5 rounded-2xl border border-green-800/50 shadow-inner">
