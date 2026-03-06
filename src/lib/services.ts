@@ -140,7 +140,7 @@ export const SwapService = {
         if (error) throw error;
     },
 
-    async uploadImage(file: File, bucket: 'images' | 'qr-codes') {
+    async uploadImage(file: File, bucket: 'images' | 'qr-codes' | 'avatars') {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
         const filePath = `${fileName}`;
