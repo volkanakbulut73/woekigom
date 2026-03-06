@@ -109,13 +109,9 @@ const Profile = () => {
                             <h1 className="text-[28px] font-medium tracking-wide text-white mb-1 drop-shadow-md" style={{ fontFamily: "'Playfair Display', serif" }}>
                                 {formatProfileName(profile?.full_name)}
                             </h1>
-                            <p className="text-white/70 text-[11px] font-bold uppercase tracking-[0.2em] mb-4">
+                            <p className="text-white/70 text-[11px] font-bold uppercase tracking-[0.2em]">
                                 {isEditing ? city : (profile?.location || 'İSTANBUL')}
                             </p>
-                            <div className="flex flex-col items-center gap-1.5 px-4 text-white/60 text-xs font-semibold tracking-wide">
-                                <p>{isEditing ? phone : (user?.phone || '+90 555 123 4567')}</p>
-                                <p>{isEditing ? email : (user?.email || 'kullanici@workigom.com')}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -160,6 +156,15 @@ const Profile = () => {
                             </div>
                             <p className="font-bold text-white">+₺100.00</p>
                         </div>
+                    </div>
+                </div>
+
+                {/* Contact Info Display */}
+                <div className="px-6 pb-2">
+                    <div className="bg-white/5 backdrop-blur-xl p-4 rounded-xl border border-white/5 flex flex-col items-center justify-center gap-2">
+                        <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">İletişim Bilgileri</span>
+                        <p className="text-slate-300 font-medium text-sm tracking-wide">{user?.phone || '+90 555 123 4567'}</p>
+                        <p className="text-slate-300 font-medium text-sm tracking-wide">{user?.email || 'kullanici@workigom.com'}</p>
                     </div>
                 </div>
 
