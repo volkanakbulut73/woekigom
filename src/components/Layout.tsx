@@ -54,10 +54,13 @@ const Layout = () => {
                 <div className="px-4 mt-auto">
                     <div className="bg-[#16172d] rounded-2xl p-4 border border-[#39ff14]/10 relative group">
                         <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Premium Üye</p>
-                        <div className="flex justify-between items-center mb-3">
-                            <p className="text-sm font-bold text-white truncate pr-2">{profile?.full_name || 'Kullanıcı'}</p>
-                            <button onClick={signOut} className="w-8 h-8 rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-500 flex items-center justify-center transition-colors border border-red-500/20 shrink-0" title="Çıkış Yap">
+                        <div className="flex justify-between items-center mb-3 gap-2">
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-white truncate">{profile?.full_name || 'Kullanıcı'}</p>
+                            </div>
+                            <button onClick={signOut} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-colors border border-red-500/20 shrink-0" title="Çıkış Yap">
                                 <LogOut size={14} />
+                                <span className="text-xs font-bold">Çıkış</span>
                             </button>
                         </div>
                         <div className="w-full h-1.5 bg-[#0a0b1e] rounded-full overflow-hidden">
