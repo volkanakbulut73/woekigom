@@ -42,9 +42,9 @@ const Home = () => {
                     {slides.map((slide, index) => (
                         <div key={index} className="min-w-full h-full relative flex-shrink-0">
                             {/* Background Image */}
-                            <div className="absolute inset-0 w-full h-full bg-[#0a0b1e]">
-                                <img src={slide.image} alt={slide.title} className="w-full h-full object-contain md:object-cover md:object-right" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/20 md:to-transparent pointer-events-none"></div>
+                            <div className="absolute inset-0 w-full h-full bg-slate-900 border border-slate-800/50 rounded-[24px] md:rounded-[32px] overflow-hidden">
+                                <img src={slide.image} alt={slide.title} className="w-full h-full object-cover md:object-contain md:object-right" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/60 to-transparent pointer-events-none"></div>
                             </div>
 
                             {/* Content */}
