@@ -57,8 +57,8 @@ const TaleplerCreate = () => {
             </div>
 
             {/* White Card Content */}
-            <div className="flex-1 bg-white rounded-t-[32px] md:rounded-[40px] px-6 py-8 md:p-12 shadow-2xl relative w-full overflow-y-auto mt-2">
-                <form onSubmit={handleSubmit} className="max-w-4xl space-y-8 pb-10">
+            <div className="flex-1 bg-white rounded-t-[32px] md:rounded-[40px] px-6 py-8 md:p-12 shadow-2xl relative w-full overflow-y-auto mt-2 flex justify-center">
+                <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-8 pb-10">
 
                     {/* Amount Input */}
                     <div className="space-y-3">
@@ -77,6 +77,18 @@ const TaleplerCreate = () => {
                                 ₺
                             </div>
                         </div>
+
+                        {/* Dynamic Discount Alert Box */}
+                        {Number(amount) > 0 && (
+                            <div className="mt-2 bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl p-4 transition-all animate-in fade-in zoom-in-95 duration-300">
+                                <p className="text-[#166534] font-semibold text-sm mb-1">
+                                    Sizin ödeyeceğiniz tutar <span className="font-bold">{Math.round(Number(amount) * 0.90)} TL</span>'dir.
+                                </p>
+                                <p className="text-[#15803d] text-xs">
+                                    Eşleşme tamamlandığında ödeme sayfasına otomatik yönlendirileceksiniz.
+                                </p>
+                            </div>
+                        )}
                     </div>
 
                     {/* Description Input */}
