@@ -7,7 +7,7 @@ const Home = () => {
 
     const slides = [
         {
-            image: '/slider1.jpg',
+            image: '/slider1.png',
             title: 'Birlikte Paylaş, \nDaha Fazla Kazan!',
             description: 'Yemek kartı bakiyeni paylaş sosyal ağını güçlendir.',
             buttonText: 'Hemen Başla'
