@@ -1,9 +1,9 @@
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
-import { Home, Receipt, Store, User, Plus, Bell } from 'lucide-react';
+import { Home, Receipt, Store, User, Plus, Bell, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Layout = () => {
-    const { profile } = useAuth();
+    const { profile, signOut } = useAuth();
     const location = useLocation();
 
     const isTaleplerActive = location.pathname.includes('/app/talepler');
@@ -52,9 +52,14 @@ const Layout = () => {
 
                 {/* Premium User Card at bottom of sidebar */}
                 <div className="px-4 mt-auto">
-                    <div className="bg-[#16172d] rounded-2xl p-4 border border-[#39ff14]/10">
+                    <div className="bg-[#16172d] rounded-2xl p-4 border border-[#39ff14]/10 relative group">
                         <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Premium Üye</p>
-                        <p className="text-sm font-bold text-white mb-3">{profile?.full_name || 'Kullanıcı'}</p>
+                        <div className="flex justify-between items-center mb-3">
+                            <p className="text-sm font-bold text-white truncate pr-2">{profile?.full_name || 'Kullanıcı'}</p>
+                            <button onClick={signOut} className="w-8 h-8 rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-500 flex items-center justify-center transition-colors border border-red-500/20 shrink-0" title="Çıkış Yap">
+                                <LogOut size={14} />
+                            </button>
+                        </div>
                         <div className="w-full h-1.5 bg-[#0a0b1e] rounded-full overflow-hidden">
                             <div className="w-2/3 h-full bg-[#39ff14] rounded-full shadow-[0_0_10px_#39ff14]"></div>
                         </div>
