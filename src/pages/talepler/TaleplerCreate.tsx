@@ -56,35 +56,35 @@ const TaleplerCreate = () => {
 
             </div>
 
-            {/* White Card Content */}
-            <div className="flex-1 bg-white rounded-t-[32px] md:rounded-[40px] px-6 py-8 md:p-12 shadow-2xl relative w-full overflow-y-auto mt-2 flex justify-center">
-                <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-8 pb-10">
+            {/* Dark Card Content */}
+            <div className="flex-1 bg-[#16172d] border-t border-white/5 rounded-t-[32px] md:rounded-[40px] px-6 py-8 md:p-12 shadow-[0_-10px_40px_rgba(0,0,0,0.3)] relative w-full overflow-y-auto mt-2 flex justify-center">
+                <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-6 pb-10">
 
                     {/* Amount Input */}
-                    <div className="space-y-3">
-                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest block">
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
                             MENÜ TUTARI (TL)
                         </label>
-                        <div className="relative overflow-hidden rounded-2xl bg-[#f8fafc] border border-slate-200/60 transition-all focus-within:ring-2 focus-within:ring-slate-300 focus-within:border-slate-300">
+                        <div className="relative overflow-hidden rounded-2xl bg-[#0a0b1e]/50 border border-white/10 transition-all focus-within:ring-1 focus-within:ring-[#39ff14]/50 focus-within:border-[#39ff14]/50">
                             <input
                                 type="number"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                                 placeholder="0"
-                                className="w-full bg-transparent py-5 px-6 text-3xl font-black text-slate-800 placeholder:text-slate-300 focus:outline-none"
+                                className="w-full bg-transparent py-4 px-5 text-2xl font-black text-white placeholder:text-slate-600 focus:outline-none"
                             />
-                            <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xl pointer-events-none">
+                            <div className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-lg pointer-events-none">
                                 ₺
                             </div>
                         </div>
 
                         {/* Dynamic Discount Alert Box */}
                         {Number(amount) > 0 && (
-                            <div className="mt-2 bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl p-4 transition-all animate-in fade-in zoom-in-95 duration-300">
-                                <p className="text-[#166534] font-semibold text-sm mb-1">
-                                    Sizin ödeyeceğiniz tutar <span className="font-bold">{Math.round(Number(amount) * 0.90)} TL</span>'dir.
+                            <div className="mt-2 bg-[#39ff14]/10 border border-[#39ff14]/20 rounded-xl p-4 transition-all animate-in fade-in zoom-in-95 duration-300 shadow-[0_0_15px_rgba(57,255,20,0.05)]">
+                                <p className="text-white font-medium text-sm mb-1">
+                                    Sizin ödeyeceğiniz tutar <span className="text-[#39ff14] font-black">{Math.round(Number(amount) * 0.90)} TL</span>'dir.
                                 </p>
-                                <p className="text-[#15803d] text-xs">
+                                <p className="text-slate-400 text-[11px] leading-relaxed">
                                     Eşleşme tamamlandığında ödeme sayfasına otomatik yönlendirileceksiniz.
                                 </p>
                             </div>
@@ -92,39 +92,39 @@ const TaleplerCreate = () => {
                     </div>
 
                     {/* Description Input */}
-                    <div className="space-y-3">
-                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest block">
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
                             AÇIKLAMA
                         </label>
-                        <div className="rounded-2xl bg-[#f8fafc] border border-slate-200/60 overflow-hidden transition-all focus-within:ring-2 focus-within:ring-slate-300 focus-within:border-slate-300">
+                        <div className="rounded-2xl bg-[#0a0b1e]/50 border border-white/10 overflow-hidden transition-all focus-within:ring-1 focus-within:ring-[#39ff14]/50 focus-within:border-[#39ff14]/50">
                             <textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="Örn: Burger King menü, Kadıköy şubesi..."
-                                rows={4}
-                                className="w-full bg-transparent py-5 px-6 text-sm font-semibold text-slate-700 placeholder:text-slate-400 focus:outline-none resize-none"
+                                rows={3}
+                                className="w-full bg-transparent py-4 px-5 text-sm font-medium text-slate-300 placeholder:text-slate-600 focus:outline-none resize-none"
                             ></textarea>
                         </div>
                     </div>
 
                     {/* Info Alert */}
-                    <div className="flex items-start gap-4 bg-[#f0f9ff] text-blue-900 px-5 py-4 rounded-2xl border border-blue-100/50">
-                        <div className="w-6 h-6 rounded-full flex items-center justify-center border-2 border-blue-500 text-blue-500 shrink-0 mt-0.5">
-                            <Info size={14} className="font-bold" />
+                    <div className="flex items-start gap-3 bg-blue-500/10 border border-blue-500/20 px-4 py-3 rounded-2xl">
+                        <div className="w-5 h-5 rounded-full flex items-center justify-center bg-blue-500/20 text-blue-400 shrink-0 mt-0.5">
+                            <Info size={12} className="font-bold" />
                         </div>
-                        <p className="text-xs md:text-sm font-semibold leading-relaxed pt-0.5">
+                        <p className="text-[11px] md:text-sm font-medium text-slate-300 leading-relaxed pt-0.5">
                             Talep oluşturduğunuzda destekçiler sizi görecektir. Eşleşme sağlandığında bildirim alırsınız.
                         </p>
                     </div>
 
-                    {error && <p className="text-red-500 text-sm font-bold bg-red-50 p-4 rounded-xl">{error}</p>}
+                    {error && <p className="text-red-400 text-xs font-bold bg-red-500/10 border border-red-500/20 px-4 py-3 rounded-xl">{error}</p>}
 
                     {/* Submit Button */}
-                    <div className="pt-4">
+                    <div className="pt-2">
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#0f172a] hover:bg-[#1e293b] text-white py-5 rounded-2xl text-sm font-black tracking-wide shadow-xl shadow-slate-900/10 transition-transform active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
+                            className="w-full bg-[#39ff14] hover:bg-[#39ff14]/90 text-[#0a0b1e] py-4 rounded-2xl text-sm font-black tracking-wide shadow-[0_0_20px_rgba(57,255,20,0.3)] transition-all active:scale-95 disabled:opacity-70 disabled:active:scale-100 flex justify-center items-center"
                         >
                             {loading ? 'Oluşturuluyor...' : 'Paylaşım Talebi Oluştur'}
                         </button>
