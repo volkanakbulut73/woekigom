@@ -1,220 +1,203 @@
-
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Star, RefreshCw, Smartphone, CheckCircle } from 'lucide-react';
 
 const Landing = () => {
     return (
-        <div className="min-h-screen bg-[#0f172a] font-sans text-gray-100 overflow-x-hidden">
-            {/* Navigation */}
-            <nav className="fixed w-full z-50 transition-all duration-300 bg-[#0f172a]/90 backdrop-blur-md border-b border-gray-800">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
-                        <div className="flex items-center gap-2">
-                            <div className="w-10 h-10 bg-success-500 rounded-lg flex items-center justify-center overflow-hidden">
-                                <img src="/logo.png" alt="W" className="w-full h-full object-cover" />
-                            </div>
-                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
-                                Workigom
-                            </span>
-                        </div>
+        <div className="bg-[#102216] font-sans text-slate-100 antialiased overflow-x-hidden min-h-screen dark">
+            <style>{`
+                .glass {
+                    background: rgba(255, 255, 255, 0.03);
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                }
+                .text-gradient {
+                    background: linear-gradient(to right, #13ec5b, #00ffa3);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+            `}</style>
 
-                        <div className="hidden md:flex items-center space-x-8">
-                            <a href="#how-it-works" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Nasıl Çalışır?</a>
-                            <a href="#benefits" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">Avantajlar</a>
-                            <a href="#faq" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">S.S.S</a>
+            {/* Header */}
+            <header className="sticky top-0 z-50 glass border-b border-white/5 px-4 py-3">
+                <div className="flex items-center justify-between max-w-7xl mx-auto">
+                    <div className="flex items-center gap-2">
+                        <div className="bg-[#13ec5b] rounded-lg p-1">
+                            {/* <span className="material-symbols-outlined text-[#102216] font-bold">sync_alt</span> */}
+                            <img src="/logo.png" alt="W" className="w-6 h-6 object-cover" />
                         </div>
-
-                        <div className="flex items-center space-x-4">
-                            <Link to="/login" className="hidden sm:flex text-gray-300 hover:text-white transition-colors text-sm font-medium items-center gap-2">
-                                <ArrowRight className="w-4 h-4" /> Giriş Yap
-                            </Link>
-                            <Link to="/register" className="bg-white text-gray-900 hover:bg-gray-100 px-5 py-2.5 rounded-full text-sm font-bold transition-all transform hover:scale-105 shadow-lg flex items-center gap-2">
-                                Kayıt Ol
-                            </Link>
-                        </div>
+                        <span className="text-xl font-extrabold tracking-tight">Workigom</span>
+                    </div>
+                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+                        <a className="hover:text-[#13ec5b] transition-colors" href="#">Nasıl Çalışır?</a>
+                        <a className="hover:text-[#13ec5b] transition-colors" href="#">Avantajlar</a>
+                        <a className="hover:text-[#13ec5b] transition-colors" href="#">S.S.S.</a>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <Link to="/login" className="hidden sm:block text-sm font-bold border border-white/10 px-4 py-2 rounded-lg hover:bg-white/5 transition-all text-white">Giriş Yap</Link>
+                        <Link to="/register" className="bg-[#13ec5b] text-[#102216] text-sm font-bold px-4 py-2 rounded-lg hover:shadow-[0_0_20px_rgba(19,236,91,0.3)] transition-all">Kayıt Ol</Link>
                     </div>
                 </div>
-            </nav>
+            </header>
 
-            {/* Hero Section */}
-            <main className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-                {/* Background effects */}
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-success-500/10 rounded-full blur-3xl -z-10"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl -z-10"></div>
+            <main>
+                {/* Hero Section */}
+                <section className="relative pt-12 pb-20 px-4 overflow-hidden">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[#13ec5b]/10 blur-[120px] rounded-full -z-10"></div>
+                    <div className="max-w-7xl mx-auto text-center flex flex-col items-center">
+                        <h1 className="text-4xl md:text-6xl font-black leading-tight tracking-tight mb-6 max-w-3xl">
+                            Güvenli <span className="text-gradient">QR Takas</span> Mekanizması
+                        </h1>
+                        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
+                            P2P yemek kartı bakiyesi paylaşımı ve güvenli QR ödeme sistemi ile yemek masraflarınızı optimize edin.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-16">
+                            <Link to="/register" className="bg-[#13ec5b] text-[#102216] text-lg font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                                Hemen Başla
+                            </Link>
+                            <Link to="/login" className="border border-white/10 glass text-lg font-bold px-8 py-4 rounded-xl hover:bg-white/5 transition-all text-white">
+                                Giriş Yap
+                            </Link>
+                        </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-                        <div className="space-y-8">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-500/10 border border-success-500/20 text-success-400 text-xs font-semibold tracking-wide uppercase">
-                                <div className="w-2 h-2 rounded-full bg-success-500 animate-pulse"></div>
-                                P2P Yemek Kartı Paylaşım Ağı
-                            </div>
-
-                            <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
-                                Güvenli <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-success-400 to-teal-400">
-                                    QR Takas
-                                </span> <br />
-                                Mekanizması
-                            </h1>
-
-                            <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-                                Yemek kartı kullanıcılarını ve restoran ödemesi yapanları buluşturan güvenli P2P platformu.
-                                Bakiyenizi iskontolu kullanım hakkı ile paylaşın, karşılıklı kazanın.
-                            </p>
-
-                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                                <Link to="/register" className="bg-success-500 hover:bg-success-600 text-white px-8 py-4 rounded-xl text-lg font-bold transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(16,185,129,0.3)] flex items-center justify-center gap-2 group">
-                                    Hemen Başla
-                                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                                </Link>
-                                <Link to="/login" className="bg-gray-800/50 hover:bg-gray-800 text-white border border-gray-700 px-8 py-4 rounded-xl text-lg font-bold transition-all flex items-center justify-center">
-                                    Giriş Yap
-                                </Link>
-                            </div>
-
-                            <div className="flex items-center gap-6 pt-6 border-t border-gray-800">
-                                <div className="flex items-center gap-2 text-sm text-gray-400">
-                                    <ShieldCheck className="w-5 h-5 text-gray-500" />
-                                    <span>Escrow Güvencesi</span>
+                        {/* Trust Badges */}
+                        <div className="flex flex-wrap justify-center gap-4 mb-20">
+                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl">
+                                <span className="material-symbols-outlined text-[#13ec5b] text-3xl">verified_user</span>
+                                <div className="text-left">
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">Güvenlik</p>
+                                    <p className="text-lg font-bold">Escrow Güvencesi</p>
                                 </div>
-                                <div className="flex items-center gap-2 text-sm text-gray-400">
-                                    <Star className="w-5 h-5 text-gray-500" />
-                                    <span>Çift Taraflı Puanlama</span>
+                            </div>
+                            <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl">
+                                <span className="material-symbols-outlined text-[#13ec5b] text-3xl">star</span>
+                                <div className="text-left">
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">Topluluk</p>
+                                    <p className="text-lg font-bold">Çift Taraflı Puanlama</p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Visuals - Match the screenshot mockups */}
-                        <div className="relative h-[600px] w-full hidden lg:block">
-                            <div className="absolute top-10 right-0 w-[400px] bg-[#1e293b] rounded-3xl p-6 border border-gray-700 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500 z-10">
-                                <div className="flex items-center justify-between mb-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold">Z</div>
-                                        <div>
-                                            <p className="font-bold text-white">Zeynep K.</p>
-                                            <p className="text-xs text-success-400 flex items-center gap-1"><Star className="w-3 h-3 fill-current" /> 4.9 Puan</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="bg-gray-800/50 rounded-xl p-4 mb-4 border border-gray-700/50">
-                                    <p className="text-sm text-gray-400 mb-1">Yemek Kartı Bakiyesi</p>
-                                    <p className="text-3xl font-bold text-white">₺1.200</p>
-                                </div>
-                                <div className="flex items-center gap-2 text-success-400 text-sm font-medium">
-                                    <CheckCircle className="w-4 h-4" /> Paylaşıma Hazır
-                                </div>
-                            </div>
-
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl z-20 border-4 border-[#0f172a]">
-                                <RefreshCw className="w-6 h-6 text-success-500" />
-                            </div>
-
-                            <div className="absolute bottom-10 left-0 w-[400px] bg-white rounded-3xl p-6 shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-500 z-10">
-                                <div className="flex items-center gap-3 mb-6">
-                                    <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                                        <div className="w-full h-full object-cover bg-gray-300"></div>
-                                    </div>
+                        {/* Floating Mockups (Visual Representation) */}
+                        <div className="relative w-full max-w-4xl h-[400px] mx-auto hidden md:block">
+                            {/* User 1: Zeynep */}
+                            <div className="absolute left-0 top-10 glass p-6 rounded-2xl w-72 text-left shadow-2xl rotate-[-2deg]">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 rounded-full bg-slate-700 font-bold flex items-center justify-center text-xl">Z</div>
                                     <div>
-                                        <p className="font-bold text-gray-900">Ahmet Y.</p>
-                                        <p className="text-xs text-warning-500 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Onaylı Kullanıcı</p>
+                                        <h4 className="font-bold text-white">Zeynep K.</h4>
+                                        <p className="text-xs text-slate-400">Bakiyesini Paylaşıyor</p>
                                     </div>
                                 </div>
-                                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                                    <p className="text-sm text-gray-500 mb-1">Restoran Hesabı</p>
-                                    <p className="text-3xl font-bold text-gray-900">₺1.200</p>
+                                <div className="bg-white/5 rounded-lg p-3 mb-3">
+                                    <p className="text-xs text-slate-400 mb-1">Mevcut Bakiye</p>
+                                    <p className="text-xl font-bold text-[#13ec5b]">1.450,00 TL</p>
                                 </div>
-                                <div className="mt-4 flex justify-between items-center px-2">
-                                    <span className="text-sm text-gray-500">Ödenecek Tutar:</span>
-                                    <span className="font-bold text-success-600 text-lg">₺960 (Nakit)</span>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] bg-[#13ec5b]/20 text-[#13ec5b] px-2 py-1 rounded">Onaylandı</span>
+                                    <span className="material-symbols-outlined text-slate-500">more_horiz</span>
                                 </div>
+                            </div>
+
+                            {/* User 2: Ahmet */}
+                            <div className="absolute right-0 bottom-10 glass p-6 rounded-2xl w-72 text-left shadow-2xl rotate-[2deg]">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 rounded-full bg-slate-700 font-bold flex items-center justify-center text-xl">A</div>
+                                    <div>
+                                        <h4 className="font-bold text-white">Ahmet Y.</h4>
+                                        <p className="text-xs text-slate-400">Restoranda Ödeme Yapıyor</p>
+                                    </div>
+                                </div>
+                                <div className="aspect-square bg-white rounded-lg p-2 mb-4 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-[#102216] text-6xl">qr_code_2</span>
+                                </div>
+                                <button className="w-full bg-[#13ec5b] text-[#102216] font-bold py-2 rounded-lg text-sm">Ödemeyi Tamamla</button>
+                            </div>
+
+                            {/* Decorative connecting line */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                <span className="material-symbols-outlined text-[#13ec5b]/30 text-8xl">sync_alt</span>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
+
+                {/* How it Works Section */}
+                <section className="py-24 px-4 bg-white/5">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-4xl font-black mb-4">Akıllı Takas Modeli</h2>
+                            <p className="text-slate-400 max-w-xl mx-auto">Üç basit adımda güvenli ve hızlı bir şekilde bakiyenizi nakde çevirin veya indirimli yemek yiyin.</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {/* Step 1 */}
+                            <div className="glass p-8 rounded-3xl relative overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
+                                <div className="w-16 h-16 bg-[#13ec5b]/10 rounded-2xl flex items-center justify-center mb-6">
+                                    <span className="material-symbols-outlined text-[#13ec5b] text-3xl">search</span>
+                                </div>
+                                <h3 className="text-xl font-bold mb-3">1. Talep & Eşleşme</h3>
+                                <p className="text-slate-400 leading-relaxed">
+                                    Uygulama üzerinden ihtiyacınıza uygun bakiyeyi veya bakiye arayan kişileri saniyeler içinde bulun.
+                                </p>
+                                <div className="absolute -right-4 -bottom-4 text-white/5 text-9xl font-black opacity-10">01</div>
+                            </div>
+                            {/* Step 2 */}
+                            <div className="glass p-8 rounded-3xl relative overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
+                                <div className="w-16 h-16 bg-[#13ec5b]/10 rounded-2xl flex items-center justify-center mb-6">
+                                    <span className="material-symbols-outlined text-[#13ec5b] text-3xl">qr_code_scanner</span>
+                                </div>
+                                <h3 className="text-xl font-bold mb-3">2. QR ile Ödeme</h3>
+                                <p className="text-slate-400 leading-relaxed">
+                                    Restoranda kasada ödemenizi platform üzerinden oluşturulan QR kodu ile anında gerçekleştirin.
+                                </p>
+                                <div className="absolute -right-4 -bottom-4 text-white/5 text-9xl font-black opacity-10">02</div>
+                            </div>
+                            {/* Step 3 */}
+                            <div className="glass p-8 rounded-3xl relative overflow-hidden group hover:border-[#13ec5b]/30 transition-all">
+                                <div className="w-16 h-16 bg-[#13ec5b]/10 rounded-2xl flex items-center justify-center mb-6">
+                                    <span className="material-symbols-outlined text-[#13ec5b] text-3xl">security</span>
+                                </div>
+                                <h3 className="text-xl font-bold mb-3">3. Güvenli Transfer</h3>
+                                <p className="text-slate-400 leading-relaxed">
+                                    Ödeme onaylandıktan sonra bakiye transferi Workigom güvencesiyle cüzdanlar arasında tamamlanır.
+                                </p>
+                                <div className="absolute -right-4 -bottom-4 text-white/5 text-9xl font-black opacity-10">03</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* CTA Section */}
+                <section className="py-20 px-4">
+                    <div className="max-w-5xl mx-auto glass rounded-[2.5rem] p-10 md:p-20 text-center relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#13ec5b]/20 blur-[100px] rounded-full"></div>
+                        <div className="relative z-10">
+                            <h2 className="text-3xl md:text-5xl font-black mb-8 leading-tight">Yemek kartı bakiyenizi <br />özgürce yönetmeye hazır mısınız?</h2>
+                            <Link to="/register" className="inline-block bg-[#13ec5b] text-[#102216] text-xl font-bold px-12 py-5 rounded-2xl shadow-xl hover:scale-105 transition-transform">
+                                Hemen Ücretsiz Katıl
+                            </Link>
+                            <p className="mt-6 text-slate-500 text-sm">Kurulum gerekmez, hemen kullanmaya başlayın.</p>
+                        </div>
+                    </div>
+                </section>
             </main>
 
-            {/* How it Works Section */}
-            <section id="how-it-works" className="py-24 bg-white text-gray-900">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <p className="text-success-600 font-bold uppercase tracking-wider text-sm mb-2">Ekosistem</p>
-                        <h2 className="text-4xl font-extrabold text-gray-900 mb-4">Akıllı Takas Modeli</h2>
-                        <p className="text-lg text-gray-600">
-                            Workigom, nakit akışını doğrudan yönetmez. Kullanıcıların güvenli bir ortamda "kullanım hakkı" paylaşımı yapmasını sağlar.
-                        </p>
+            {/* Footer */}
+            <footer className="border-t border-white/5 py-12 px-4">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex items-center gap-2">
+                        <div className="bg-[#13ec5b]/20 rounded-lg p-1">
+                            <span className="material-symbols-outlined text-[#13ec5b] text-sm font-bold">sync_alt</span>
+                        </div>
+                        <span className="text-lg font-bold tracking-tight text-white">Workigom</span>
                     </div>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {/* Step 1 */}
-                        <div className="bg-white rounded-3xl p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-gray-100 relative group hover:-translate-y-2 transition-transform duration-300">
-                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 bg-[#0f172a] text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">1</div>
-
-                            <div className="h-40 flex items-center justify-center mb-6">
-                                <div className="bg-gray-50 h-24 w-full rounded-xl flex items-center justify-around px-4 border border-gray-100">
-                                    <div className="text-center">
-                                        <div className="w-12 h-12 rounded-full bg-gray-200 mx-auto mb-2 border-2 border-white shadow-sm"></div>
-                                        <span className="text-xs font-medium">Ahmet Y.</span>
-                                    </div>
-                                    <RefreshCw className="w-6 h-6 text-success-500" />
-                                    <div className="text-center">
-                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 mx-auto mb-2 border-2 border-white shadow-sm"></div>
-                                        <span className="text-xs font-medium">Zeynep K.</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <h3 className="text-xl font-bold text-center mb-3">Talep & Eşleşme</h3>
-                            <p className="text-gray-600 text-center text-sm leading-relaxed">
-                                Restoranda ödeme yapacak kişi ile yemek kartı bakiyesi olan kullanıcı anında online olarak eşleşir ve tüm süreç dakikalar içerisinde tamamlanır.
-                            </p>
-                        </div>
-
-                        {/* Step 2 */}
-                        <div className="bg-white rounded-3xl p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-gray-100 relative group hover:-translate-y-2 transition-transform duration-300">
-                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 bg-success-500 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg shadow-success-500/30">2</div>
-
-                            <div className="h-40 flex items-center justify-center mb-6">
-                                <div className="relative">
-                                    <div className="w-24 h-32 rounded-xl border-4 border-gray-200 flex items-center justify-center">
-                                        <Smartphone className="w-10 h-10 text-gray-400" />
-                                    </div>
-                                    <div className="absolute -right-6 bottom-4 bg-success-500 text-white text-[10px] font-bold px-2 py-1 rounded">Onaylandı</div>
-                                </div>
-                            </div>
-
-                            <h3 className="text-xl font-bold text-center mb-3">QR ile Ödeme</h3>
-                            <p className="text-gray-600 text-center text-sm leading-relaxed">
-                                Kart sahibi oluşturduğu QR/PIN kodunu sistem üzerinden paylaştığı kullanıcıya iletir ve kullanıcı restoranın POS cihazına okutarak hesabı öder. Bu işlem "kullanım hakkı" paylaşımıdır.
-                            </p>
-                        </div>
-
-                        {/* Step 3 */}
-                        <div className="bg-white rounded-3xl p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-gray-100 relative group hover:-translate-y-2 transition-transform duration-300">
-                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg shadow-primary-500/30">3</div>
-
-                            <div className="h-40 flex items-center justify-center mb-6">
-                                <div className="bg-gray-50 w-full p-4 rounded-xl border border-gray-100 text-center">
-                                    <p className="text-xs text-gray-500 flex items-center justify-center gap-1 mb-2">
-                                        Cüzdanım
-                                    </p>
-                                    <p className="text-3xl font-bold text-success-500">+ ₺800</p>
-                                </div>
-                            </div>
-
-                            <h3 className="text-xl font-bold text-center mb-3">Güvenli Transfer</h3>
-                            <p className="text-gray-600 text-center text-sm leading-relaxed">
-                                İşlem kanıtlandığında, alıcının havuza gönderdiği indirimli tutar (Escrow) kart sahibinin cüzdanına anında aktarılır.
-                            </p>
-                        </div>
+                    <div className="flex gap-8 text-sm text-slate-500">
+                        <a className="hover:text-white transition-colors" href="#">Kullanım Koşulları</a>
+                        <a className="hover:text-white transition-colors" href="#">Gizlilik Politikası</a>
+                        <a className="hover:text-white transition-colors" href="#">Destek</a>
                     </div>
-                </div>
-            </section>
-
-            {/* Footer Placeholder for visual completion */}
-            <footer className="bg-gray-50 py-12 border-t border-gray-200 text-center text-gray-500 text-sm">
-                <div className="max-w-7xl mx-auto px-4">
-                    <p>&copy; {new Date().getFullYear()} Workigom. Tüm hakları saklıdır.</p>
+                    <p className="text-slate-500 text-sm font-medium">
+                        © {new Date().getFullYear()} Workigom. Tüm hakları saklıdır.
+                    </p>
                 </div>
             </footer>
         </div>
