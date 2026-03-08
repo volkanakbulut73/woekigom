@@ -3,7 +3,7 @@
 <html class="dark" lang="tr"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Workigom Landing Page</title>
+<title>Workigom Premium Landing Page</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -21,28 +21,15 @@
                     fontFamily: {
                         "display": ["Plus Jakarta Sans", "sans-serif"]
                     },
-                    borderRadius: {
-                        "DEFAULT": "0.5rem",
-                        "lg": "1rem",
-                        "xl": "1.5rem",
-                        "full": "9999px"
-                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
                 },
             },
         }
     </script>
 <style>
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .text-gradient {
-            background: linear-gradient(to right, #13ec5b, #00ffa3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .gradient-glow { background: radial-gradient(circle at top right, rgba(19, 236, 91, 0.15), transparent 40%); }
     </style>
 <style>
     body {
@@ -50,179 +37,202 @@
     }
   </style>
   </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
-<!-- Header -->
-<header class="sticky top-0 z-50 glass border-b border-white/5 px-4 py-3">
-<div class="flex items-center justify-between max-w-7xl mx-auto">
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Top Navigation -->
+<nav class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 border-b border-slate-200 dark:border-primary/10 justify-between">
 <div class="flex items-center gap-2">
-<div class="bg-primary rounded-lg p-1">
-<span class="material-symbols-outlined text-background-dark font-bold">sync_alt</span>
+<span class="material-symbols-outlined text-primary text-3xl">account_balance_wallet</span>
+<h2 class="text-slate-900 dark:text-white text-xl font-extrabold tracking-tight">Workigom</h2>
 </div>
-<span class="text-xl font-extrabold tracking-tight">Workigom</span>
+<div class="flex items-center gap-4">
+<button class="text-primary text-sm font-bold">Giriş Yap</button>
+<button class="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold">Kaydol</button>
 </div>
-<div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-<a class="hover:text-primary transition-colors" href="#">Nasıl Çalışır?</a>
-<a class="hover:text-primary transition-colors" href="#">Avantajlar</a>
-<a class="hover:text-primary transition-colors" href="#">S.S.S.</a>
+</nav>
+<!-- Hero Section (Dark Mode focus) -->
+<section class="relative overflow-hidden pt-8 pb-16 px-4 dark:bg-background-dark gradient-glow">
+<div class="max-w-md mx-auto">
+<div class="flex flex-col gap-6 items-start">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+<span class="material-symbols-outlined text-primary text-sm">verified_user</span>
+<span class="text-primary text-xs font-bold uppercase tracking-wider">Güvenli P2P Ağı</span>
 </div>
-<div class="flex items-center gap-3">
-<button class="hidden sm:block text-sm font-bold border border-white/10 px-4 py-2 rounded-lg hover:bg-white/5 transition-all">Giriş Yap</button>
-<button class="bg-primary text-background-dark text-sm font-bold px-4 py-2 rounded-lg hover:shadow-[0_0_20px_rgba(19,236,91,0.3)] transition-all">Kayıt Ol</button>
-</div>
-</div>
-</header>
-<main>
-<!-- Hero Section -->
-<section class="relative pt-12 pb-20 px-4 overflow-hidden">
-<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/10 blur-[120px] rounded-full -z-10"></div>
-<div class="max-w-7xl mx-auto text-center flex flex-col items-center">
-<h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tight mb-6 max-w-3xl">
-                    Güvenli <span class="text-gradient">QR Takas</span> Mekanizması
+<h1 class="text-slate-900 dark:text-white text-4xl font-extrabold leading-[1.1] tracking-tight">
+                    Workigom: Paylaştıkça Kazandıran Sosyal Dayanışma Ağı
                 </h1>
-<p class="text-slate-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
-                    P2P yemek kartı bakiyesi paylaşımı ve güvenli QR ödeme sistemi ile yemek masraflarınızı optimize edin.
+<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
+                    Yemek kartı sahipleri ile indirimli yemek isteyenleri buluşturan Türkiye'nin en güvenli premium platformu.
                 </p>
-<div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-16">
-<button class="bg-primary text-background-dark text-lg font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+<div class="flex flex-col w-full gap-3 mt-4">
+<button class="w-full bg-primary text-background-dark h-14 rounded-xl font-extrabold text-lg shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
                         Hemen Başla <span class="material-symbols-outlined">arrow_forward</span>
 </button>
-<button class="border border-white/10 glass text-lg font-bold px-8 py-4 rounded-xl hover:bg-white/5 transition-all">
-                        Giriş Yap
+<button class="w-full border-2 border-slate-200 dark:border-primary/30 text-slate-900 dark:text-white h-14 rounded-xl font-extrabold text-lg">
+                        Nasıl Çalışır?
                     </button>
 </div>
 <!-- Trust Badges -->
-<div class="flex flex-wrap justify-center gap-4 mb-20">
-<div class="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl">
-<span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
-<div class="text-left">
-<p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Güvenlik</p>
-<p class="text-lg font-bold">Escrow Güvencesi</p>
+<div class="flex w-full gap-4 mt-8">
+<div class="flex-1 glass-card p-4 rounded-xl">
+<span class="material-symbols-outlined text-primary mb-2">gpp_good</span>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Güvenlik</p>
+<p class="text-slate-900 dark:text-white text-sm font-bold">Escrow Güvencesi</p>
 </div>
+<div class="flex-1 glass-card p-4 rounded-xl">
+<span class="material-symbols-outlined text-primary mb-2">star_half</span>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Değerlendirme</p>
+<p class="text-slate-900 dark:text-white text-sm font-bold">Çift Taraflı Puan</p>
 </div>
-<div class="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl">
-<span class="material-symbols-outlined text-primary text-3xl">star</span>
-<div class="text-left">
-<p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Topluluk</p>
-<p class="text-lg font-bold">Çift Taraflı Puanlama</p>
-</div>
-</div>
-</div>
-<!-- Floating Mockups (Visual Representation) -->
-<div class="relative w-full max-w-4xl h-[400px] mx-auto hidden md:block">
-<!-- User 1: Zeynep -->
-<div class="absolute left-0 top-10 glass p-6 rounded-2xl w-72 text-left shadow-2xl rotate-[-2deg]">
-<div class="flex items-center gap-3 mb-4">
-<div class="w-12 h-12 rounded-full bg-slate-700" data-alt="Profile photo of a professional woman smiling"></div>
-<div>
-<h4 class="font-bold">Zeynep</h4>
-<p class="text-xs text-slate-400">Bakiyesini Paylaşıyor</p>
-</div>
-</div>
-<div class="bg-white/5 rounded-lg p-3 mb-3">
-<p class="text-xs text-slate-400 mb-1">Mevcut Bakiye</p>
-<p class="text-xl font-bold text-primary">1.450,00 TL</p>
-</div>
-<div class="flex justify-between items-center">
-<span class="text-[10px] bg-primary/20 text-primary px-2 py-1 rounded">Onaylandı</span>
-<span class="material-symbols-outlined text-slate-500">more_horiz</span>
-</div>
-</div>
-<!-- User 2: Ahmet -->
-<div class="absolute right-0 bottom-10 glass p-6 rounded-2xl w-72 text-left shadow-2xl rotate-[2deg]">
-<div class="flex items-center gap-3 mb-4">
-<div class="w-12 h-12 rounded-full bg-slate-700" data-alt="Profile photo of a young man smiling"></div>
-<div>
-<h4 class="font-bold">Ahmet</h4>
-<p class="text-xs text-slate-400">Restoranda Ödeme Yapıyor</p>
-</div>
-</div>
-<div class="aspect-square bg-white rounded-lg p-2 mb-4 flex items-center justify-center">
-<span class="material-symbols-outlined text-background-dark text-6xl">qr_code_2</span>
-</div>
-<button class="w-full bg-primary text-background-dark font-bold py-2 rounded-lg text-sm">Ödemeyi Tamamla</button>
-</div>
-<!-- Decorative connecting line -->
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-<span class="material-symbols-outlined text-primary/30 text-8xl">sync_alt</span>
 </div>
 </div>
 </div>
 </section>
-<!-- How it Works Section -->
-<section class="py-24 px-4 bg-white/5">
-<div class="max-w-7xl mx-auto">
-<div class="text-center mb-16">
-<h2 class="text-3xl md:text-4xl font-black mb-4">Akıllı Takas Modeli</h2>
-<p class="text-slate-400 max-w-xl mx-auto">Üç basit adımda güvenli ve hızlı bir şekilde bakiyenizi nakde çevirin veya indirimli yemek yiyin.</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Nasıl Bir Kıyak Yapıyoruz? (Light Mode focus) -->
+<section class="bg-white py-16 px-4">
+<div class="max-w-md mx-auto">
+<h2 class="text-slate-900 text-3xl font-extrabold mb-2">Nasıl Bir Kıyak Yapıyoruz?</h2>
+<p class="text-slate-500 mb-10">5 adımda tasarruflu ve güvenli paylaşım.</p>
+<div class="space-y-8 relative">
+<!-- Timeline Line -->
+<div class="absolute left-6 top-0 bottom-0 w-0.5 bg-slate-100"></div>
 <!-- Step 1 -->
-<div class="glass p-8 rounded-3xl relative overflow-hidden group hover:border-primary/30 transition-all">
-<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
-<span class="material-symbols-outlined text-primary text-3xl">search</span>
+<div class="relative flex gap-6 items-start">
+<div class="z-10 flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-background-dark font-bold text-lg shadow-md">1</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary">post_add</span>
+<h3 class="text-slate-900 font-bold text-lg">İlan Aç</h3>
 </div>
-<h3 class="text-xl font-bold mb-3">1. Talep &amp; Eşleşme</h3>
-<p class="text-slate-400 leading-relaxed">
-                            Uygulama üzerinden ihtiyacınıza uygun bakiyeyi veya bakiye arayan kişileri saniyeler içinde bulun.
-                        </p>
-<div class="absolute -right-4 -bottom-4 text-white/5 text-9xl font-black opacity-10">01</div>
+<p class="text-slate-500 text-sm">Yemek kartı bakiyeni veya yemek talebini sisteme gir.</p>
+</div>
 </div>
 <!-- Step 2 -->
-<div class="glass p-8 rounded-3xl relative overflow-hidden group hover:border-primary/30 transition-all">
-<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
-<span class="material-symbols-outlined text-primary text-3xl">qr_code_scanner</span>
+<div class="relative flex gap-6 items-start">
+<div class="z-10 flex size-12 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-400 font-bold text-lg">2</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-slate-400">lock</span>
+<h3 class="text-slate-900 font-bold text-lg">Güvenli Emanet</h3>
 </div>
-<h3 class="text-xl font-bold mb-3">2. QR ile Ödeme</h3>
-<p class="text-slate-400 leading-relaxed">
-                            Restoranda kasada ödemenizi platform üzerinden oluşturulan QR kodu ile anında gerçekleştirin.
-                        </p>
-<div class="absolute -right-4 -bottom-4 text-white/5 text-9xl font-black opacity-10">02</div>
+<p class="text-slate-500 text-sm">Ödeme Workigom havuz hesabına güvenle aktarılır.</p>
+</div>
 </div>
 <!-- Step 3 -->
-<div class="glass p-8 rounded-3xl relative overflow-hidden group hover:border-primary/30 transition-all">
-<div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
-<span class="material-symbols-outlined text-primary text-3xl">security</span>
+<div class="relative flex gap-6 items-start">
+<div class="z-10 flex size-12 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-400 font-bold text-lg">3</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-slate-400">qr_code_2</span>
+<h3 class="text-slate-900 font-bold text-lg">QR ile Destek</h3>
 </div>
-<h3 class="text-xl font-bold mb-3">3. Güvenli Transfer</h3>
-<p class="text-slate-400 leading-relaxed">
-                            Ödeme onaylandıktan sonra bakiye transferi Workigom güvencesiyle cüzdanlar arasında tamamlanır.
-                        </p>
-<div class="absolute -right-4 -bottom-4 text-white/5 text-9xl font-black opacity-10">03</div>
+<p class="text-slate-500 text-sm">Kart sahibi QR kodu paylaşarak işlemi gerçekleştirir.</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="relative flex gap-6 items-start">
+<div class="z-10 flex size-12 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-400 font-bold text-lg">4</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-slate-400">task_alt</span>
+<h3 class="text-slate-900 font-bold text-lg">Hızlı Onay</h3>
+</div>
+<p class="text-slate-500 text-sm">İşlem tamamlandığında bakiye anında transfer edilir.</p>
+</div>
+</div>
+<!-- Step 5 -->
+<div class="relative flex gap-6 items-start">
+<div class="z-10 flex size-12 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-400 font-bold text-lg">5</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-slate-400">redeem</span>
+<h3 class="text-slate-900 font-bold text-lg">Paylaşım Hediyesi</h3>
+</div>
+<p class="text-slate-500 text-sm">Her başarılı işlemde puan ve ekstra indirim kazan!</p>
+</div>
 </div>
 </div>
 </div>
 </section>
-<!-- CTA Section -->
-<section class="py-20 px-4">
-<div class="max-w-5xl mx-auto glass rounded-[2.5rem] p-10 md:p-20 text-center relative overflow-hidden">
-<div class="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[100px] rounded-full"></div>
-<div class="relative z-10">
-<h2 class="text-3xl md:text-5xl font-black mb-8 leading-tight">Yemek kartı bakiyenizi <br/>özgürce yönetmeye hazır mısınız?</h2>
-<button class="bg-primary text-background-dark text-xl font-bold px-12 py-5 rounded-2xl shadow-xl hover:scale-105 transition-transform">
-                        Hemen Ücretsiz Katıl
-                    </button>
-<p class="mt-6 text-slate-500 text-sm">Kurulum gerekmez, hemen kullanmaya başlayın.</p>
+<!-- Workigom Market Section -->
+<section class="py-16 px-4 bg-slate-50 dark:bg-background-dark/50">
+<div class="max-w-md mx-auto">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="text-slate-900 dark:text-white text-3xl font-extrabold">Workigom Market</h2>
+<p class="text-primary font-bold">Her Şey Burada</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">arrow_outward</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/10 p-5 rounded-2xl shadow-sm">
+<div class="bg-primary/10 size-12 rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary">sync_alt</span>
+</div>
+<h3 class="text-slate-900 dark:text-white font-bold mb-1">Bakiye Paylaşımı</h3>
+<p class="text-slate-500 text-xs">Anlık transfer imkanı</p>
+</div>
+<div class="bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/10 p-5 rounded-2xl shadow-sm">
+<div class="bg-primary/10 size-12 rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary">local_mall</span>
+</div>
+<h3 class="text-slate-900 dark:text-white font-bold mb-1">İndirim Çekleri</h3>
+<p class="text-slate-500 text-xs">%40'a varan fırsatlar</p>
+</div>
+</div>
+<div class="mt-4 bg-gradient-to-r from-primary/20 to-primary/5 p-6 rounded-2xl border border-primary/20 flex items-center justify-between">
+<div>
+<h3 class="text-slate-900 dark:text-white font-extrabold text-lg">Premium Üyelik</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Sıfır komisyon avantajı</p>
+</div>
+<button class="bg-primary text-background-dark px-4 py-2 rounded-lg text-xs font-black uppercase">İncele</button>
 </div>
 </div>
 </section>
-</main>
-<!-- Footer -->
-<footer class="border-t border-white/5 py-12 px-4">
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-<div class="flex items-center gap-2">
-<div class="bg-primary/20 rounded-lg p-1">
-<span class="material-symbols-outlined text-primary text-sm font-bold">sync_alt</span>
+<!-- Neden Bu Aileye Katılmalısın? -->
+<section class="py-16 px-4 bg-white dark:bg-background-dark">
+<div class="max-w-md mx-auto">
+<h2 class="text-slate-900 dark:text-white text-3xl font-extrabold mb-8 text-center">Neden Bu Aileye Katılmalısın?</h2>
+<div class="space-y-4">
+<div class="group p-6 rounded-2xl border border-slate-100 dark:border-primary/5 hover:shadow-xl transition-all duration-300 dark:bg-background-dark">
+<div class="flex items-center gap-4 mb-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">savings</span>
 </div>
-<span class="text-lg font-bold tracking-tight">Workigom</span>
+<h3 class="text-slate-900 dark:text-white font-bold text-xl">Birlikte Tasarruf</h3>
 </div>
-<div class="flex gap-8 text-sm text-slate-500">
-<a class="hover:text-white transition-colors" href="#">Kullanım Koşulları</a>
-<a class="hover:text-white transition-colors" href="#">Gizlilik Politikası</a>
-<a class="hover:text-white transition-colors" href="#">Destek</a>
+<p class="text-slate-500 dark:text-slate-400 leading-relaxed">Kart sahipleri için nakit dönüşümü, alıcılar için %10'dan başlayan kâr marjı.</p>
 </div>
-<p class="text-slate-500 text-sm font-medium">
-                © 2024 Workigom. Tüm hakları saklıdır.
-            </p>
+<div class="group p-6 rounded-2xl border border-slate-100 dark:border-primary/5 hover:shadow-xl transition-all duration-300 dark:bg-background-dark">
+<div class="flex items-center gap-4 mb-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">shield_with_heart</span>
 </div>
-</footer>
+<h3 class="text-slate-900 dark:text-white font-bold text-xl">Sıfır Risk</h3>
+</div>
+<p class="text-slate-500 dark:text-slate-400 leading-relaxed">Emanet (Escrow) sistemiyle işlem tamamlanmadan hiçbir tarafın mağdur olmasına izin vermiyoruz.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- App-like Bottom Nav -->
+<div class="fixed bottom-0 left-0 right-0 z-50 flex border-t border-slate-200 dark:border-primary/10 bg-white/90 dark:bg-background-dark/90 backdrop-blur-xl px-4 pb-6 pt-3">
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">home</span>
+<p class="text-[10px] font-bold">Ana Sayfa</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<p class="text-[10px] font-medium">Market</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">format_list_bulleted</span>
+<p class="text-[10px] font-medium">İlanlar</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<p class="text-[10px] font-medium">Profil</p>
+</a>
+</div>
+<!-- Extra space for bottom nav -->
+<div class="h-24"></div>
 </body></html>
