@@ -30,35 +30,35 @@ export const landingData = {
                 icon: "post_add",
                 title: "İlan Aç",
                 description: "Yemek kartı bakiyeni veya yemek talebini sisteme gir.",
-                color: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                color: "bg-[#dbeafe] text-[#2563eb] dark:bg-[#1e3a8a]/30 dark:text-[#60a5fa]"
             },
             {
                 number: 2,
                 icon: "lock",
                 title: "Güvenli Emanet",
                 description: "Ödeme Workigom havuz hesabına güvenle aktarılır.",
-                color: "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                color: "bg-[#dcfce7] text-[#16a34a] dark:bg-[#14532d]/30 dark:text-[#4ade80]"
             },
             {
                 number: 3,
                 icon: "qr_code_2",
                 title: "QR ile Destek",
                 description: "Kart sahibi QR kodu paylaşarak işlemi gerçekleştirir.",
-                color: "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+                color: "bg-[#fef3c7] text-[#d97706] dark:bg-[#78350f]/30 dark:text-[#fbbf24]"
             },
             {
                 number: 4,
                 icon: "task_alt",
                 title: "Hızlı Onay",
                 description: "İşlem tamamlandığında bakiye anında transfer edilir.",
-                color: "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400"
+                color: "bg-[#f3e8ff] text-[#9333ea] dark:bg-[#581c87]/30 dark:text-[#c084fc]"
             },
             {
                 number: 5,
                 icon: "redeem",
                 title: "Paylaşım Hediyesi",
                 description: "Her başarılı işlemde puan ve ekstra indirim kazan!",
-                color: "bg-pink-100 text-pink-600 dark:bg-pink-900/30 dark:text-pink-400"
+                color: "bg-[#fce7f3] text-[#db2777] dark:bg-[#831843]/30 dark:text-[#f472b6]"
             }
         ]
     },

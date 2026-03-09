@@ -28,9 +28,9 @@ export const HowItWorks: React.FC = () => {
 
     return (
         <section className="bg-white dark:bg-[#102216] py-20 px-4 overflow-hidden relative" ref={ref}>
-            <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 dark:opacity-10 dark:bg-blue-900 animate-blob"></div>
-            <div className="absolute top-40 left-0 -ml-20 w-80 h-80 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 dark:opacity-10 dark:bg-pink-900 animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 dark:opacity-10 dark:bg-green-900 animate-blob animation-delay-4000"></div>
+            <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-[#dbeafe] rounded-full mix-blend-multiply filter blur-3xl opacity-30 dark:opacity-10 dark:bg-[#1e3a8a] animate-blob"></div>
+            <div className="absolute top-40 left-0 -ml-20 w-80 h-80 bg-[#fce7f3] rounded-full mix-blend-multiply filter blur-3xl opacity-30 dark:opacity-10 dark:bg-[#831843] animate-blob animation-delay-2000"></div>
+            <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-[#dcfce7] rounded-full mix-blend-multiply filter blur-3xl opacity-30 dark:opacity-10 dark:bg-[#14532d] animate-blob animation-delay-4000"></div>
 
             <div className="max-w-xl mx-auto relative z-10">
                 <motion.div
@@ -39,7 +39,7 @@ export const HowItWorks: React.FC = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-16 space-y-4"
                 >
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 font-bold text-sm tracking-wide">
+                    <div className="inline-block px-4 py-1.5 rounded-full bg-[#dbeafe] dark:bg-[#1e3a8a]/30 text-[#2563eb] dark:text-[#60a5fa] font-bold text-sm tracking-wide">
                         Sistem
                     </div>
                     <h2 className="text-slate-900 dark:text-white text-3xl md:text-5xl font-black mb-2 tracking-tight">
@@ -57,7 +57,7 @@ export const HowItWorks: React.FC = () => {
                     className="space-y-12 relative"
                 >
                     {/* Timeline Line */}
-                    <div className="absolute left-[2.25rem] top-8 bottom-8 w-1 bg-gradient-to-b from-blue-100 via-green-100 to-pink-100 dark:from-blue-900/30 dark:via-green-900/30 dark:to-pink-900/30 rounded-full"></div>
+                    <div className="absolute left-[2.25rem] top-8 bottom-8 w-1 bg-gradient-to-b from-[#dbeafe] via-[#dcfce7] to-[#fce7f3] dark:from-[#1e3a8a]/50 dark:via-[#14532d]/50 dark:to-[#831843]/50 rounded-full"></div>
 
                     {landingData.howItWorks.steps.map((step) => (
                         <motion.div

@@ -1,18 +1,24 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-export const Header: React.FC = () => {
+export const Header = () => {
+    const navigate = useNavigate();
+
     return (
-        <nav className="sticky top-0 z-50 flex items-center bg-[#f6f8f6]/80 dark:bg-[#102216]/80 backdrop-blur-md p-4 border-b border-slate-200 dark:border-[#13ec5b]/10 justify-between">
-            <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#13ec5b] text-3xl">account_balance_wallet</span>
-                <img src="/logo.png" alt="W" className="w-6 h-6 object-cover md:hidden" />
-                <h2 className="text-slate-900 dark:text-white text-xl font-extrabold tracking-tight hidden md:block">Workigom</h2>
+        <header className="fixed top-0 w-full z-50 glass-panel border-b border-accent/20">
+            <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <span className="material-icons text-primary text-2xl glow-text">hub</span>
+                    <span className="font-display font-bold text-lg tracking-wider">
+                        WORKIGOM<span className="text-accent">.</span>
+                    </span>
+                </div>
+                <button
+                    onClick={() => navigate('/login')}
+                    className="bg-primary/20 border border-primary text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-primary transition-colors cursor-pointer"
+                >
+                    Giriş
+                </button>
             </div>
-            <div className="flex items-center gap-4">
-                <Link to="/login" className="text-[#13ec5b] text-sm font-bold">Giriş Yap</Link>
-                <Link to="/register" className="bg-[#13ec5b] text-[#102216] px-4 py-2 rounded-lg text-sm font-bold">Kaydol</Link>
-            </div>
-        </nav>
+        </header>
     );
 };
