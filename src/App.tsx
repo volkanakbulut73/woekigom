@@ -17,6 +17,8 @@ import Market from './pages/Market';
 
 import SwapDetail from './pages/swap/SwapDetail';
 import SwapCreate from './pages/swap/SwapCreate';
+import MessagesPage from './pages/Messages';
+import NotificationsPage from './pages/Notifications';
 
 function App() {
   return (
@@ -39,8 +41,12 @@ function App() {
               <Route path="market">
                 <Route index element={<Market />} />
                 <Route path="create" element={<SwapCreate />} />
+                <Route path="messages" element={<MessagesPage />} />
+                <Route path="messages/:id" element={<SwapDetail />} />
                 <Route path=":id" element={<SwapDetail />} />
               </Route>
+
+              <Route path="notifications" element={<NotificationsPage />} />
             </Route>
 
             {/* Fullscreen pages outside layout */}

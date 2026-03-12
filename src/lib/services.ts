@@ -155,3 +155,125 @@ export const SwapService = {
         return data.publicUrl;
     }
 };
+
+export const MessageService = {
+    async getListingMessages(listingId: string) {
+        const { data, error } = await supabase
+            .from('messages')
+            .select(`*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url), receiver:profiles!messages_receiver_id_fkey(full_name, avatar_url)`)
+            .eq('listing_id', listingId)
+            .order('created_at', { ascending: true });
+
+        if (error) throw error;
+        return data; // Needs typing if we want strict returns, but ok for now
+    },
+
+    async getUserMessageThreads(userId: string) {
+        // Here we just pull all messages for the user. We'll group them by listing_id in the UI.
+        const { data, error } = await supabase
+            .from('messages')
+            .select(`*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url), receiver:profiles!messages_receiver_id_fkey(full_name, avatar_url), listing:swap_listings(title, photo_url)`)
+            .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data;
+    },
+
+    async sendMessage(listingId: string, senderId: string, receiverId: string, content: string) {
+        const { data, error } = await supabase
+            .from('messages')
+            .insert({
+                listing_id: listingId,
+                sender_id: senderId,
+                receiver_id: receiverId,
+                content,
+                read: false
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        // Also create a notification for the receiver
+        await NotificationService.createNotification(
+            receiverId,
+            'new_message',
+            'Yeni Mesaj',
+            `İlanınız veya bir görüşmeniz için yeni bir mesaj aldınız.`,
+            `/app/market/messages/${listingId}`
+        );
+
+        return data;
+    },
+
+    async markMessagesAsRead(listingId: string, viewerId: string) {
+        const { error } = await supabase
+            .from('messages')
+            .update({ read: true })
+            .eq('listing_id', listingId)
+            .eq('receiver_id', viewerId)
+            .eq('read', false);
+
+        if (error) throw error;
+    }
+};
+
+export const NotificationService = {
+    async getUserNotifications(userId: string) {
+        const { data, error } = await supabase
+            .from('notifications')
+            .select('*')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data;
+    },
+
+    async getUnreadCount(userId: string) {
+        const { count, error } = await supabase
+            .from('notifications')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', userId)
+            .eq('read', false);
+
+        if (error) throw error;
+        return count || 0;
+    },
+
+    async markAsRead(notificationId: string) {
+        const { error } = await supabase
+            .from('notifications')
+            .update({ read: true })
+            .eq('id', notificationId);
+
+        if (error) throw error;
+    },
+
+    async markAllAsRead(userId: string) {
+        const { error } = await supabase
+            .from('notifications')
+            .update({ read: true })
+            .eq('user_id', userId)
+            .eq('read', false);
+
+        if (error) throw error;
+    },
+
+    async createNotification(userId: string, type: string, title: string, content: string, link: string) {
+        const { data, error } = await supabase
+            .from('notifications')
+            .insert({
+                user_id: userId,
+                type,
+                title,
+                content,
+                link,
+                read: false
+            });
+
+        if (error) throw error;
+        return data;
+    }
+};

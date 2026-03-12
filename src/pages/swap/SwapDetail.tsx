@@ -233,7 +233,7 @@ const SwapDetail = () => {
                             {listing.description || 'Bu ilan için açıklama girilmemiş.'}
                         </p>
 
-                        <div className="flex items-center justify-between gap-4 bg-[#0a0b1e] p-4 rounded-2xl border border-white/5">
+                        <div className="flex items-center justify-between gap-4 bg-[#0a0b1e] p-4 rounded-2xl border border-white/5 flex-wrap">
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full border border-white/10 overflow-hidden shrink-0">
                                     <img src={sellerAvatar} alt={sellerName} className="w-full h-full object-cover" />
@@ -243,7 +243,7 @@ const SwapDetail = () => {
                                     <p className="text-white font-bold text-sm">{sellerName}</p>
                                 </div>
                             </div>
-                            {isOwner && (
+                            {isOwner ? (
                                 <button
                                     onClick={handleDelete}
                                     disabled={deleting}
@@ -251,6 +251,14 @@ const SwapDetail = () => {
                                 >
                                     <Trash2 size={16} />
                                     {deleting ? 'Siliniyor...' : 'İlanı Sil'}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => navigate(`/app/market/messages/${listing.id}`)}
+                                    className="px-6 py-2.5 bg-[#39ff14] text-[#0a0b1e] border border-[#39ff14]/50 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#39ff14]/90 hover:scale-105 transition-all shadow-[0_0_15px_rgba(57,255,20,0.3)]"
+                                >
+                                    <MessageSquare size={16} />
+                                    Mesaj Gönder
                                 </button>
                             )}
                         </div>

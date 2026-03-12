@@ -2,10 +2,12 @@ import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
 import { Home, Receipt, Store, User, Plus, Bell, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getSupporterBadge, getMockTransactionCount } from '../utils/badges';
+import { useNotifications } from '../hooks/useNotifications';
 
 const Layout = () => {
     const { profile, signOut } = useAuth();
     const location = useLocation();
+    const { unreadCount } = useNotifications();
 
     const isTaleplerActive = location.pathname.includes('/app/talepler');
 
@@ -90,10 +92,12 @@ const Layout = () => {
                                 Talep Oluştur
                             </Link>
                         )}
-                        <button className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 hover:border-[#39ff14]/30 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
+                        <Link to="/app/notifications" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 hover:border-[#39ff14]/30 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
                             <Bell size={20} />
-                            <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-[#39ff14] rounded-full border-2 border-[#16172d]"></span>
-                        </button>
+                            {unreadCount > 0 && (
+                                <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-[#39ff14] rounded-full shadow-[0_0_10px_#39ff14] border-2 border-[#16172d]"></span>
+                            )}
+                        </Link>
                         <Link to="/app/profile" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 p-1 cursor-pointer hover:border-[#39ff14]/40 transition-all">
                             <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#39ff14]/20 to-blue-500/20 flex items-center justify-center opacity-80">
                                 <User size={20} className="text-[#39ff14]" />

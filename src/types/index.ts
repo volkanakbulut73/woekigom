@@ -46,3 +46,27 @@ export type SwapListing = {
     created_at: string;
     profiles?: Partial<Profile>;
 };
+
+export type Message = {
+    id: string;
+    listing_id: string;
+    sender_id: string;
+    receiver_id: string;
+    content: string;
+    read: boolean;
+    created_at: string;
+    sender?: Partial<Profile>;
+    receiver?: Partial<Profile>;
+    listing?: Partial<SwapListing>;
+};
+
+export type Notification = {
+    id: string;
+    user_id: string;
+    type: 'new_message' | 'system' | 'transaction';
+    title: string;
+    content: string;
+    link?: string;
+    read: boolean;
+    created_at: string;
+};
