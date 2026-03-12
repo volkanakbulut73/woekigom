@@ -3,7 +3,7 @@ export const Market = () => {
         <section className="py-8 bg-[#0F0F1A] relative overflow-hidden">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-6">
-                    <span className="text-accent font-bold tracking-widest uppercase text-sm mb-1 block glow-text">Exclusive</span>
+                    <span className="text-accent font-bold tracking-widest uppercase text-sm mb-1 block glow-text">WORKİGOM MARKET</span>
                     <h2 className="font-display text-2xl md:text-3xl font-black text-white glow-text drop-shadow-lg">
                         YEMEK KARTINIZLA <span className="text-accent">ALIŞVERİŞ</span> YAPABİLİRSİNİZ
                     </h2>
