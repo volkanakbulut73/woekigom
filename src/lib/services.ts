@@ -161,7 +161,7 @@ export const MessageService = {
         const { data, error } = await supabase
             .from('messages')
             .select(`*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url), receiver:profiles!messages_receiver_id_fkey(full_name, avatar_url)`)
-            .eq('listing_id', listingId)
+            .eq('swap_id', listingId)
             .order('created_at', { ascending: true });
 
         if (error) throw error;
@@ -169,7 +169,7 @@ export const MessageService = {
     },
 
     async getUserMessageThreads(userId: string) {
-        // Here we just pull all messages for the user. We'll group them by listing_id in the UI.
+        // Here we just pull all messages for the user. We'll group them by swap_id in the UI.
         const { data, error } = await supabase
             .from('messages')
             .select(`*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url), receiver:profiles!messages_receiver_id_fkey(full_name, avatar_url), listing:swap_listings(title, photo_url)`)
@@ -184,7 +184,7 @@ export const MessageService = {
         const { data, error } = await supabase
             .from('messages')
             .insert({
-                listing_id: listingId,
+                swap_id: listingId,
                 sender_id: senderId,
                 receiver_id: receiverId,
                 content,
@@ -211,7 +211,7 @@ export const MessageService = {
         const { error } = await supabase
             .from('messages')
             .update({ read: true })
-            .eq('listing_id', listingId)
+            .eq('swap_id', listingId)
             .eq('receiver_id', viewerId)
             .eq('read', false);
 

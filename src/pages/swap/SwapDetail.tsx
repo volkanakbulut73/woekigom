@@ -8,7 +8,7 @@ import type { SwapListing } from '../../types';
 
 interface Message {
     id: string;
-    listing_id: string;
+    swap_id: string;
     sender_id: string;
     receiver_id: string;
     content: string;
@@ -79,7 +79,7 @@ const SwapDetail = () => {
 
         const subscription = supabase
             .channel(`messages-${id}`)
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `listing_id=eq.${id}` }, (payload) => {
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `swap_id=eq.${id}` }, (payload) => {
                 setMessages((prev) => [...prev, payload.new as Message]);
             })
             .subscribe();
@@ -122,7 +122,7 @@ const SwapDetail = () => {
         try {
             const tempMessage = {
                 id: Date.now().toString(),
-                listing_id: id,
+                swap_id: id,
                 sender_id: user.id,
                 receiver_id: receiverId,
                 content: content,

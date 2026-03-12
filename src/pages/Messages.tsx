@@ -16,19 +16,19 @@ const MessagesPage = () => {
             try {
                 const messages = await MessageService.getUserMessageThreads(user.id) as Message[];
 
-                // Group messages by listing_id to create thread summaries
+                // Group messages by swap_id to create thread summaries
                 const threadMap = new Map<string, any>();
 
                 messages.forEach(msg => {
-                    const existingThread = threadMap.get(msg.listing_id);
+                    const existingThread = threadMap.get(msg.swap_id);
 
                     // We only want the most recent message per thread for the preview
                     if (!existingThread || new Date(msg.created_at) > new Date(existingThread.lastMessageDate)) {
                         const otherParty = msg.sender_id === user.id ? msg.receiver : msg.sender;
                         const unreadCount = (!msg.read && msg.receiver_id === user.id) ? 1 : 0;
 
-                        threadMap.set(msg.listing_id, {
-                            listing_id: msg.listing_id,
+                        threadMap.set(msg.swap_id, {
+                            listing_id: msg.swap_id,
                             listing_title: msg.listing?.title || 'Bilinmeyen İlan',
                             listing_photo: msg.listing?.photo_url ? msg.listing.photo_url.split(',')[0] : null,
                             otherParty: otherParty || { full_name: 'Anonim' },
