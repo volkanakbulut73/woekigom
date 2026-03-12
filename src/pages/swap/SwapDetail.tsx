@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { ChevronLeft, Star, MapPin, Send, MessageSquare, Trash2 } from 'lucide-react';
-import { SwapService } from '../../lib/services';
+import { SwapService, MessageService } from '../../lib/services';
 import { supabase } from '../../lib/supabase';
 import type { SwapListing } from '../../types';
 
 interface Message {
     id: string;
-    swap_id: string;
+    listing_id: string;
     sender_id: string;
     receiver_id: string;
     content: string;
@@ -46,16 +46,17 @@ const SwapDetail = () => {
                 setListing(listingData as SwapListing);
 
                 // Fetch Messages related to this swap and current user
-                const { data: messagesData, error: messagesError } = await supabase
-                    .from('messages')
-                    .select('*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url)')
-                    .eq('swap_id', id)
-                    .order('created_at', { ascending: true });
-
-                if (messagesError && messagesError.code !== '42P01') {
-                    console.error(messagesError);
-                } else if (messagesData) {
+                try {
+                    const messagesData = await MessageService.getListingMessages(id);
                     setMessages(messagesData as Message[]);
+
+                    if (user && messagesData.length > 0) {
+                        await MessageService.markMessagesAsRead(id, user.id);
+                    }
+                } catch (messagesError: any) {
+                    if (messagesError.code !== '42P01') {
+                        console.error(messagesError);
+                    }
                 }
             } catch (err) {
                 console.error('Error fetching detail:', err);
@@ -68,20 +69,17 @@ const SwapDetail = () => {
 
         const pollInterval = setInterval(async () => {
             if (!id) return;
-            const { data } = await supabase
-                .from('messages')
-                .select('*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url)')
-                .eq('swap_id', id)
-                .order('created_at', { ascending: true });
-
-            if (data) {
+            try {
+                const data = await MessageService.getListingMessages(id);
                 setMessages(data as Message[]);
+            } catch (err: any) {
+                if (err.code !== '42P01') console.error(err);
             }
         }, 3000);
 
         const subscription = supabase
             .channel(`messages-${id}`)
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `swap_id=eq.${id}` }, (payload) => {
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `listing_id=eq.${id}` }, (payload) => {
                 setMessages((prev) => [...prev, payload.new as Message]);
             })
             .subscribe();
@@ -118,17 +116,16 @@ const SwapDetail = () => {
             ? (messages.find(m => m.sender_id !== user.id)?.sender_id || listing.owner_id)
             : listing.owner_id;
 
-        const messageObj = {
-            swap_id: id,
-            sender_id: user.id,
-            receiver_id: receiverId,
-            content: newMessage.trim()
-        };
+        const content = newMessage.trim();
+        setNewMessage('');
 
         try {
             const tempMessage = {
-                ...messageObj,
                 id: Date.now().toString(),
+                listing_id: id,
+                sender_id: user.id,
+                receiver_id: receiverId,
+                content: content,
                 created_at: new Date().toISOString(),
                 sender: {
                     full_name: profile?.full_name || 'Ben',
@@ -136,18 +133,14 @@ const SwapDetail = () => {
                 }
             };
             setMessages(prev => [...prev, tempMessage as Message]);
-            setNewMessage('');
 
-            const { error } = await supabase.from('messages').insert([messageObj]);
-            if (error) {
-                if (error.code === '42P01') {
-                    console.warn("Messages table does not exist. UI demo working.");
-                } else {
-                    throw error;
-                }
+            await MessageService.sendMessage(id, user.id, receiverId, content);
+        } catch (err: any) {
+            if (err.code === '42P01') {
+                console.warn("Messages table does not exist. UI demo working.");
+            } else {
+                console.error('Error sending message:', err);
             }
-        } catch (err) {
-            console.error('Error sending message:', err);
         }
     };
 
