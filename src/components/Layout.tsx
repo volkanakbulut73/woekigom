@@ -107,29 +107,29 @@ const Layout = () => {
                 </main>
 
                 {/* Mobile Bottom Navigation */}
-                <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[88px] bg-[#16172d]/95 backdrop-blur-xl border-t border-[#39ff14]/20 flex items-center justify-around px-2 pb-4 pt-2 z-50">
-                    <NavLink to="/app" end className={({ isActive }) => `flex flex-col items-center gap-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
-                        <Home size={24} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Ana Sayfa</span>
+                <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[70px] bg-[#16172d]/95 backdrop-blur-xl border-t border-[#39ff14]/20 flex items-center justify-around px-2 pb-2 pt-1 z-50">
+                    <NavLink to="/app" end className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <Home size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Ana Sayfa</span>
                     </NavLink>
-                    <NavLink to="/app/talepler" className={({ isActive }) => `flex flex-col items-center gap-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
-                        <Receipt size={24} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Talepler</span>
+                    <NavLink to="/app/talepler" className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <Receipt size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Talepler</span>
                     </NavLink>
 
-                    <div className="relative -top-8">
-                        <Link to="/app/market/create" className="w-16 h-16 bg-[#39ff14] text-[#0a0b1e] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(57,255,20,0.4)] ring-8 ring-[#16172d] transition-transform hover:scale-105 active:scale-95">
-                            <Plus size={36} />
+                    <div className="relative -top-5 flex justify-center w-14">
+                        <Link to="/app/market/create" className="w-14 h-14 bg-[#39ff14] text-[#0a0b1e] rounded-full flex items-center justify-center shadow-[0_4px_15px_rgba(57,255,20,0.5)] ring-4 ring-[#16172d] transition-transform hover:scale-105 active:scale-95">
+                            <Plus size={28} />
                         </Link>
                     </div>
 
-                    <NavLink to="/app/market" end className={({ isActive }) => `flex flex-col items-center gap-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
-                        <Store size={24} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Market</span>
+                    <NavLink to="/app/market" end className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <Store size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Market</span>
                     </NavLink>
-                    <NavLink to="/app/profile" className={({ isActive }) => `flex flex-col items-center gap-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
-                        <User size={24} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Profil</span>
+                    <NavLink to="/app/profile" className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <User size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Profil</span>
                     </NavLink>
                 </nav>
             </div>

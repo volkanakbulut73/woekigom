@@ -103,7 +103,7 @@ const Market = () => {
             </div>
 
             {/* Grid Layout for Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-6 gap-4 mt-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:gap-6 gap-3 sm:gap-4 mt-2">
                 {loading ? (
                     <div className="col-span-full py-20 text-center text-slate-500 font-bold">İlanlar yükleniyor...</div>
                 ) : displayListings.length === 0 ? (
@@ -112,9 +112,9 @@ const Market = () => {
                     const mainPhoto = item.photo_url ? item.photo_url.split(',')[0] : null;
 
                     return (
-                        <Link key={item.id} to={`/app/market/${item.id}`} className="bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-lg group hover:border-[#39ff14]/30 transition-colors flex flex-col relative">
+                        <Link key={item.id} to={`/app/market/${item.id}`} className="bg-[#16172d] border border-white/5 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg group hover:border-[#39ff14]/30 transition-colors flex flex-col relative">
                             {/* Image Section */}
-                            <div className={`relative h-48 w-full flex flex-col justify-end overflow-hidden ${mainPhoto ? 'bg-transparent' : 'bg-blue-900 p-4'}`}>
+                            <div className={`relative h-32 sm:h-48 w-full flex flex-col justify-end overflow-hidden ${mainPhoto ? 'bg-transparent' : 'bg-blue-900 p-2 sm:p-4'}`}>
                                 {mainPhoto ? (
                                     <img src={mainPhoto} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
                                 ) : (
@@ -126,41 +126,41 @@ const Market = () => {
 
                                 {!mainPhoto && (
                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-black/20 rounded-xl backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-2xl">
-                                        <span className="font-black text-white/20 text-4xl">{item.title[0]}</span>
+                                        <span className="font-black text-white/20 text-2xl sm:text-4xl">{item.title[0]}</span>
                                     </div>
                                 )}
 
                                 {/* Rating */}
-                                <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10 flex items-center gap-1 z-10">
-                                    <Star size={12} className="text-yellow-400 fill-yellow-400" />
-                                    <span className="text-white font-bold text-xs">{item.profiles?.rating || '5.0'}</span>
+                                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black/40 backdrop-blur-md px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md sm:rounded-lg border border-white/10 flex items-center gap-1 z-10">
+                                    <Star size={10} className="text-yellow-400 fill-yellow-400 sm:w-3 sm:h-3" />
+                                    <span className="text-white font-bold text-[10px] sm:text-xs">{item.profiles?.rating || '5.0'}</span>
                                 </div>
 
-                                <span className="font-extrabold text-cyan-400 text-sm tracking-wider uppercase z-10 absolute bottom-4 left-4 bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm">İLAN</span>
+                                <span className="font-extrabold text-cyan-400 text-[10px] sm:text-sm tracking-wider uppercase z-10 absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black/50 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded backdrop-blur-sm">İLAN</span>
                             </div>
 
                             {/* Content Section */}
-                            <div className="p-5 flex-1 flex flex-col">
-                                <h3 className="text-white font-bold text-lg mb-1">{item.title}</h3>
-                                <p className="text-slate-400 text-xs mb-4 line-clamp-2">{item.description || 'Açıklama bulunmuyor'}</p>
+                            <div className="p-3 sm:p-5 flex-1 flex flex-col">
+                                <h3 className="text-white font-bold text-sm sm:text-lg mb-1 leading-tight">{item.title}</h3>
+                                <p className="text-slate-400 text-[10px] sm:text-xs mb-3 sm:mb-4 line-clamp-2">{item.description || 'Açıklama bulunmuyor'}</p>
 
                                 <div className="mt-auto flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 rounded-full border border-white/10 overflow-hidden shrink-0">
+                                    <div className="flex items-center gap-1.5 sm:gap-2">
+                                        <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-white/10 overflow-hidden shrink-0">
                                             {item.profiles?.avatar_url ? (
                                                 <img src={item.profiles.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                                             ) : (
                                                 <img src={`https://ui-avatars.com/api/?name=${(item.profiles?.full_name || 'X').replace(' ', '+')}&background=random&color=fff`} alt={item.profiles?.full_name || 'S'} className="w-full h-full object-cover" />
                                             )}
                                         </div>
-                                        <div>
+                                        <div className="hidden sm:block">
                                             <p className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold mb-0.5">Satıcı</p>
-                                            <p className="text-white text-xs font-bold max-w-[100px] truncate">{item.profiles?.full_name || 'Anonim Kullanıcı'}</p>
+                                            <p className="text-white text-xs font-bold max-w-[80px] truncate">{item.profiles?.full_name || 'Anonim'}</p>
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold mb-0.5">Fiyat</p>
-                                        <p className="text-cyan-400 font-extrabold text-lg">₺{Number(item.required_balance).toLocaleString('tr-TR')}</p>
+                                        <p className="text-[8px] sm:text-[9px] text-slate-500 uppercase tracking-widest font-semibold sm:mb-0.5">Fiyat</p>
+                                        <p className="text-cyan-400 font-extrabold text-sm sm:text-lg">₺{Number(item.required_balance).toLocaleString('tr-TR')}</p>
                                     </div>
                                 </div>
                             </div>
