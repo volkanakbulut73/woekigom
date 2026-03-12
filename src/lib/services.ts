@@ -216,6 +216,9 @@ export const MessageService = {
             .eq('read', false);
 
         if (error) throw error;
+
+        // Also clear notifications related to these messages
+        await NotificationService.markMessageNotificationsAsRead(listingId, viewerId);
     }
 };
 
@@ -256,6 +259,18 @@ export const NotificationService = {
             .from('notifications')
             .update({ read: true })
             .eq('user_id', userId)
+            .eq('read', false);
+
+        if (error) throw error;
+    },
+
+    async markMessageNotificationsAsRead(listingId: string, userId: string) {
+        const { error } = await supabase
+            .from('notifications')
+            .update({ read: true })
+            .eq('user_id', userId)
+            .eq('type', 'new_message')
+            .like('link', `%${listingId}%`)
             .eq('read', false);
 
         if (error) throw error;

@@ -95,7 +95,9 @@ const Layout = () => {
                         <Link to="/app/notifications" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 hover:border-[#39ff14]/30 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
                             <Bell size={20} />
                             {unreadCount > 0 && (
-                                <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-[#39ff14] rounded-full shadow-[0_0_10px_#39ff14] border-2 border-[#16172d]"></span>
+                                <span className="absolute top-1.5 right-1.5 min-w-[20px] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-[#16172d]">
+                                    {unreadCount > 9 ? '9+' : unreadCount}
+                                </span>
                             )}
                         </Link>
                         <Link to="/app/profile" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 p-1 cursor-pointer hover:border-[#39ff14]/40 transition-all">
