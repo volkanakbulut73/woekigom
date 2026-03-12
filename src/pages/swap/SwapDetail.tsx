@@ -72,6 +72,9 @@ const SwapDetail = () => {
             try {
                 const data = await MessageService.getListingMessages(id);
                 setMessages(data as Message[]);
+                if (user) {
+                    await MessageService.markMessagesAsRead(id, user.id);
+                }
             } catch (err: any) {
                 if (err.code !== '42P01') console.error(err);
             }
@@ -79,8 +82,11 @@ const SwapDetail = () => {
 
         const subscription = supabase
             .channel(`messages-${id}`)
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `swap_id=eq.${id}` }, (payload) => {
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `swap_id=eq.${id}` }, async (payload) => {
                 setMessages((prev) => [...prev, payload.new as Message]);
+                if (user && id) {
+                    await MessageService.markMessagesAsRead(id, user.id);
+                }
             })
             .subscribe();
 
@@ -88,7 +94,7 @@ const SwapDetail = () => {
             supabase.removeChannel(subscription);
             clearInterval(pollInterval);
         };
-    }, [id]);
+    }, [id, user?.id]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
