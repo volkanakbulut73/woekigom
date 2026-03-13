@@ -303,6 +303,18 @@ export const NotificationService = {
         return count || 0;
     },
 
+    async getUnreadMessageCount(userId: string) {
+        const { count, error } = await supabase
+            .from('notifications')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', userId)
+            .eq('type', 'new_message')
+            .eq('read', false);
+
+        if (error) throw error;
+        return count || 0;
+    },
+
     async markAsRead(notificationId: string) {
         const { error } = await supabase
             .from('notifications')

@@ -7,7 +7,7 @@ import { useNotifications } from '../hooks/useNotifications';
 const Layout = () => {
     const { profile, signOut } = useAuth();
     const location = useLocation();
-    const { unreadCount } = useNotifications();
+    const { unreadCount, unreadMessageCount } = useNotifications();
 
     const isTaleplerActive = location.pathname.includes('/app/talepler');
 
@@ -41,16 +41,23 @@ const Layout = () => {
                             key={item.to}
                             to={item.to}
                             end={item.end}
-                            className={({ isActive }) =>
-                                `flex items-center px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all ${isActive
-                                    ? 'bg-[#16172d] text-[#39ff14] shadow-lg shadow-[#39ff14]/5 border border-[#39ff14]/20'
-                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                }`
-                            }
-                        >
-                            <item.icon className="w-5 h-5 mr-3" />
-                            {item.label}
-                        </NavLink>
+                                className={({ isActive }) =>
+                                    `flex items-center justify-between px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all ${isActive
+                                        ? 'bg-[#16172d] text-[#39ff14] shadow-lg shadow-[#39ff14]/5 border border-[#39ff14]/20'
+                                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                    }`
+                                }
+                            >
+                                <div className="flex items-center">
+                                    <item.icon className="w-5 h-5 mr-3" />
+                                    {item.label}
+                                </div>
+                                {item.label === 'Mesajlarım' && unreadMessageCount > 0 && (
+                                    <span className="min-w-[20px] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg">
+                                        {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
+                                    </span>
+                                )}
+                            </NavLink>
                     ))}
                 </nav>
 
@@ -81,6 +88,24 @@ const Layout = () => {
 
             {/* Main Content Area w/ Desktop Topbar */}
             <div className="flex-1 flex flex-col h-full relative overflow-y-auto no-scrollbar bg-[#0a0b1e]">
+
+                {/* Mobile Topbar */}
+                <header className="md:hidden flex h-[70px] items-center justify-between px-5 sticky top-0 bg-[#0a0b1e]/90 backdrop-blur-xl z-40 border-b border-[#39ff14]/10 shrink-0">
+                    <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-[#39ff14] rounded-lg flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(57,255,20,0.4)]">
+                            <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                        </div>
+                        <h1 className="text-lg font-bold text-white tracking-tight">Workigom</h1>
+                    </div>
+                    <Link to="/app/notifications" className="w-10 h-10 rounded-full bg-[#16172d] border border-white/5 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
+                        <Bell size={20} />
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-[#16172d]">
+                                {unreadCount > 9 ? '9+' : unreadCount}
+                            </span>
+                        )}
+                    </Link>
+                </header>
 
                 {/* Desktop Topbar */}
                 <header className="hidden md:flex h-24 items-center justify-between px-10 sticky top-0 bg-[#0a0b1e]/90 backdrop-blur-xl z-40 border-b border-transparent">
@@ -114,31 +139,32 @@ const Layout = () => {
                 </main>
 
                 {/* Mobile Bottom Navigation */}
-                <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[70px] bg-[#16172d]/95 backdrop-blur-xl border-t border-[#39ff14]/20 flex items-center justify-around px-2 pb-2 pt-1 z-50">
-                    <NavLink to="/app" end className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[70px] bg-[#16172d]/95 backdrop-blur-xl border-t border-[#39ff14]/20 flex items-center px-2 pb-2 pt-1 z-50">
+                    <NavLink to="/app" end className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
                         <Home size={22} />
                         <span className="text-[8px] font-bold uppercase tracking-wider">Ana Sayfa</span>
                     </NavLink>
-                    <NavLink to="/app/talepler" className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                    <NavLink to="/app/talepler" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
                         <Receipt size={22} />
                         <span className="text-[8px] font-bold uppercase tracking-wider">Talepler</span>
                     </NavLink>
 
-                    <div className="relative -top-5 flex justify-center w-14">
-                        <Link to="/app/market/create" className="w-14 h-14 bg-[#39ff14] text-[#0a0b1e] rounded-full flex items-center justify-center shadow-[0_4px_15px_rgba(57,255,20,0.5)] ring-4 ring-[#16172d] transition-transform hover:scale-105 active:scale-95">
-                            <Plus size={28} />
-                        </Link>
-                    </div>
-
-                    <NavLink to="/app/market" end className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                    <NavLink to="/app/market" end className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
                         <Store size={22} />
                         <span className="text-[8px] font-bold uppercase tracking-wider">Market</span>
                     </NavLink>
-                    <NavLink to="/app/messages" className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
-                        <MessageSquare size={22} />
+                    <NavLink to="/app/messages" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <div className="relative">
+                            <MessageSquare size={22} />
+                            {unreadMessageCount > 0 && (
+                                <span className="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-[#16172d]">
+                                    {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
+                                </span>
+                            )}
+                        </div>
                         <span className="text-[8px] font-bold uppercase tracking-wider">Mesaj</span>
                     </NavLink>
-                    <NavLink to="/app/profile" className={({ isActive }) => `flex flex-col items-center gap-1 w-12 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                    <NavLink to="/app/profile" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
                         <User size={22} />
                         <span className="text-[8px] font-bold uppercase tracking-wider">Profil</span>
                     </NavLink>

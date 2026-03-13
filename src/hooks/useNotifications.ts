@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 export function useNotifications() {
     const { user } = useAuth();
     const [unreadCount, setUnreadCount] = useState(0);
+    const [unreadMessageCount, setUnreadMessageCount] = useState(0);
     const location = useLocation();
     const pathRef = useRef(location.pathname);
 
@@ -24,6 +25,9 @@ export function useNotifications() {
             try {
                 const count = await NotificationService.getUnreadCount(user.id);
                 setUnreadCount(count);
+
+                const messageCount = await NotificationService.getUnreadMessageCount(user.id);
+                setUnreadMessageCount(messageCount);
             } catch (err) {
                 console.error("Error fetching notification count:", err);
             }
@@ -52,5 +56,5 @@ export function useNotifications() {
         };
     }, [user]);
 
-    return { unreadCount, setUnreadCount };
+    return { unreadCount, setUnreadCount, unreadMessageCount, setUnreadMessageCount };
 }
