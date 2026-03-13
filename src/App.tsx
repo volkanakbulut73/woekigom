@@ -41,9 +41,12 @@ function App() {
               <Route path="market">
                 <Route index element={<Market />} />
                 <Route path="create" element={<SwapCreate />} />
-                <Route path="messages" element={<MessagesPage />} />
-                <Route path="messages/:id" element={<SwapDetail />} />
                 <Route path=":id" element={<SwapDetail />} />
+              </Route>
+
+              <Route path="messages">
+                <Route index element={<MessagesPage />} />
+                <Route path=":thread_id" element={<MessagesPage />} />
               </Route>
 
               <Route path="notifications" element={<NotificationsPage />} />

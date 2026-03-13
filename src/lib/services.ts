@@ -157,34 +157,86 @@ export const SwapService = {
 };
 
 export const MessageService = {
-    async getListingMessages(listingId: string) {
+    async getThreadMessages(threadId: string) {
         const { data, error } = await supabase
             .from('messages')
             .select(`*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url), receiver:profiles!messages_receiver_id_fkey(full_name, avatar_url)`)
-            .eq('swap_id', listingId)
+            .eq('thread_id', threadId)
             .order('created_at', { ascending: true });
-
-        if (error) throw error;
-        return data; // Needs typing if we want strict returns, but ok for now
-    },
-
-    async getUserMessageThreads(userId: string) {
-        // Here we just pull all messages for the user. We'll group them by swap_id in the UI.
-        const { data, error } = await supabase
-            .from('messages')
-            .select(`*, sender:profiles!messages_sender_id_fkey(full_name, avatar_url), receiver:profiles!messages_receiver_id_fkey(full_name, avatar_url), listing:swap_listings(title, photo_url)`)
-            .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
-            .order('created_at', { ascending: false });
 
         if (error) throw error;
         return data;
     },
 
-    async sendMessage(listingId: string, senderId: string, receiverId: string, content: string) {
+    async getUserThreads(userId: string) {
+        const { data, error } = await supabase
+            .from('threads')
+            .select(`
+                *,
+                buyer:profiles!threads_buyer_id_fkey(full_name, avatar_url),
+                seller:profiles!threads_seller_id_fkey(full_name, avatar_url),
+                listing:swap_listings(title, photo_url, required_balance)
+            `)
+            .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`)
+            .order('updated_at', { ascending: false });
+
+        if (error) throw error;
+        return data;
+    },
+
+    async getThreadDetails(threadId: string) {
+         const { data, error } = await supabase
+            .from('threads')
+            .select(`
+                *,
+                buyer:profiles!threads_buyer_id_fkey(full_name, avatar_url),
+                seller:profiles!threads_seller_id_fkey(full_name, avatar_url),
+                listing:swap_listings(title, photo_url, required_balance)
+            `)
+            .eq('id', threadId)
+            .single();
+         if (error) throw error;
+         return data;
+    },
+
+    async findOrCreateThread(listingId: string | null, buyerId: string, sellerId: string, type: 'market' | 'task' | 'private') {
+        let query = supabase.from('threads').select('*').eq('buyer_id', buyerId).eq('seller_id', sellerId).eq('type', type);
+        if (listingId) query = query.eq('listing_id', listingId);
+        else query = query.is('listing_id', null);
+
+        const { data: found } = await query;
+        if (found && found.length > 0) return found[0];
+
+        // Try reverse buyer/seller
+        let query2 = supabase.from('threads').select('*').eq('buyer_id', sellerId).eq('seller_id', buyerId).eq('type', type);
+        if (listingId) query2 = query2.eq('listing_id', listingId);
+        else query2 = query2.is('listing_id', null);
+
+        const { data: found2 } = await query2;
+        if (found2 && found2.length > 0) return found2[0];
+
+        // Create new
+        const { data: created, error } = await supabase
+            .from('threads')
+            .insert({
+                listing_id: listingId,
+                buyer_id: buyerId,
+                seller_id: sellerId,
+                type,
+                last_message: null
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+        return created;
+    },
+
+    async sendMessage(threadId: string, senderId: string, receiverId: string, content: string) {
         const { data, error } = await supabase
             .from('messages')
             .insert({
-                swap_id: listingId,
+                thread_id: threadId,
                 sender_id: senderId,
                 receiver_id: receiverId,
                 content,
@@ -195,30 +247,36 @@ export const MessageService = {
 
         if (error) throw error;
 
+        // Update thread last_message and updated_at
+        await supabase
+            .from('threads')
+            .update({ last_message: content, updated_at: new Date().toISOString() })
+            .eq('id', threadId);
+
         // Also create a notification for the receiver
         await NotificationService.createNotification(
             receiverId,
             'new_message',
             'Yeni Mesaj',
-            `İlanınız veya bir görüşmeniz için yeni bir mesaj aldınız.`,
-            `/app/market/messages/${listingId}`
+            `Yeni bir mesajınız var.`,
+            `/app/messages/${threadId}`
         );
 
         return data;
     },
 
-    async markMessagesAsRead(listingId: string, viewerId: string) {
+    async markThreadMessagesAsRead(threadId: string, viewerId: string) {
         const { error } = await supabase
             .from('messages')
             .update({ read: true })
-            .eq('swap_id', listingId)
+            .eq('thread_id', threadId)
             .eq('receiver_id', viewerId)
             .eq('read', false);
 
         if (error) throw error;
 
         // Also clear notifications related to these messages
-        await NotificationService.markMessageNotificationsAsRead(listingId, viewerId);
+        await NotificationService.markMessageNotificationsAsRead(threadId, viewerId);
     }
 };
 
@@ -264,13 +322,13 @@ export const NotificationService = {
         if (error) throw error;
     },
 
-    async markMessageNotificationsAsRead(listingId: string, userId: string) {
+    async markMessageNotificationsAsRead(threadId: string, userId: string) {
         const { error } = await supabase
             .from('notifications')
             .update({ read: true })
             .eq('user_id', userId)
             .eq('type', 'new_message')
-            .like('link', `%${listingId}%`)
+            .like('link', `%${threadId}%`)
             .eq('read', false);
 
         if (error) throw error;

@@ -1,132 +1,302 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { MessageService } from '../lib/services';
-import { Link } from 'react-router-dom';
-import { MessageSquare, ArrowRight, Clock } from 'lucide-react';
-import type { Message } from '../types';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { MessageSquare, ArrowLeft, Send, ShoppingCart, Briefcase, Lock, ChevronRight } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import type { Message, MessageThread } from '../types';
 
 const MessagesPage = () => {
-    const { user } = useAuth();
-    const [threads, setThreads] = useState<any[]>([]); // Using any for grouped thread representation
-    const [loading, setLoading] = useState(true);
+    const { user, profile } = useAuth();
+    const { thread_id } = useParams<{ thread_id: string }>();
+    const navigate = useNavigate();
 
+    const [threads, setThreads] = useState<MessageThread[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [loadingThreads, setLoadingThreads] = useState(true);
+    const [loadingChat, setLoadingChat] = useState(false);
+    const [newMessage, setNewMessage] = useState('');
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const activeThread = threads.find(t => t.id === thread_id);
+
+    // Fetch Threads
     useEffect(() => {
-        const fetchMessages = async () => {
+        const fetchThreads = async () => {
             if (!user) return;
             try {
-                const messages = await MessageService.getUserMessageThreads(user.id) as Message[];
-
-                // Group messages by swap_id to create thread summaries
-                const threadMap = new Map<string, any>();
-
-                messages.forEach(msg => {
-                    const existingThread = threadMap.get(msg.swap_id);
-
-                    // We only want the most recent message per thread for the preview
-                    if (!existingThread || new Date(msg.created_at) > new Date(existingThread.lastMessageDate)) {
-                        const otherParty = msg.sender_id === user.id ? msg.receiver : msg.sender;
-                        const unreadCount = (!msg.read && msg.receiver_id === user.id) ? 1 : 0;
-
-                        threadMap.set(msg.swap_id, {
-                            listing_id: msg.swap_id,
-                            listing_title: msg.listing?.title || 'Bilinmeyen İlan',
-                            listing_photo: msg.listing?.photo_url ? msg.listing.photo_url.split(',')[0] : null,
-                            otherParty: otherParty || { full_name: 'Anonim' },
-                            lastMessage: msg.content,
-                            lastMessageDate: msg.created_at,
-                            unreadCount: (existingThread?.unreadCount || 0) + unreadCount
-                        });
-                    } else if (!msg.read && msg.receiver_id === user.id) {
-                        // Increment unread count for older unread messages in the thread
-                        existingThread.unreadCount += 1;
-                    }
-                });
-
-                setThreads(Array.from(threadMap.values()).sort((a, b) => new Date(b.lastMessageDate).getTime() - new Date(a.lastMessageDate).getTime()));
+                const data = await MessageService.getUserThreads(user.id);
+                setThreads(data as MessageThread[]);
             } catch (err) {
-                console.error("Error fetching message threads:", err);
+                console.error("Error fetching threads:", err);
             } finally {
-                setLoading(false);
+                setLoadingThreads(false);
+            }
+        };
+
+        fetchThreads();
+
+        // Optional: Poll or Real-time for thread updates
+        const interval = setInterval(fetchThreads, 10000);
+        return () => clearInterval(interval);
+    }, [user]);
+
+    // Fetch Messages for Active Thread
+    useEffect(() => {
+        if (!thread_id || !user) {
+            setMessages([]);
+            return;
+        }
+
+        const fetchMessages = async () => {
+            setLoadingChat(true);
+            try {
+                const data = await MessageService.getThreadMessages(thread_id);
+                setMessages(data as Message[]);
+                await MessageService.markThreadMessagesAsRead(thread_id, user.id);
+            } catch (err: any) {
+                if (err.code !== '42P01') console.error("Error fetching messages:", err);
+            } finally {
+                setLoadingChat(false);
             }
         };
 
         fetchMessages();
-    }, [user]);
+
+        const subscription = supabase
+            .channel(`messages-${thread_id}`)
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `thread_id=eq.${thread_id}` }, async (payload) => {
+                setMessages((prev) => [...prev, payload.new as Message]);
+                if (user && thread_id) {
+                    await MessageService.markThreadMessagesAsRead(thread_id, user.id);
+                }
+            })
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
+    }, [thread_id, user]);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+    }, [messages]);
+
+    const handleSendMessage = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newMessage.trim() || !user || !activeThread || !thread_id) return;
+
+        const content = newMessage.trim();
+        setNewMessage('');
+        const receiverId = activeThread.buyer_id === user.id ? activeThread.seller_id : activeThread.buyer_id;
+
+        try {
+            const tempMessage = {
+                id: Date.now().toString(),
+                thread_id: thread_id,
+                sender_id: user.id,
+                receiver_id: receiverId,
+                content: content,
+                read: false,
+                created_at: new Date().toISOString(),
+                sender: {
+                    full_name: profile?.full_name || 'Ben',
+                    avatar_url: profile?.avatar_url || ''
+                }
+            };
+            setMessages(prev => [...prev, tempMessage as Message]);
+
+            await MessageService.sendMessage(thread_id, user.id, receiverId, content);
+        } catch (err: any) {
+            console.error('Error sending message:', err);
+        }
+    };
+
+    const getOtherParty = (thread: MessageThread) => {
+        if (!user) return null;
+        return thread.buyer_id === user.id ? thread.seller : thread.buyer;
+    };
+
+    const formatTime = (isoString?: string | null) => {
+        if (!isoString) return '';
+        const d = new Date(isoString);
+        return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    const getThreadIcon = (type: string) => {
+        switch (type) {
+            case 'market': return <ShoppingCart size={14} className="text-cyan-400" />;
+            case 'task': return <Briefcase size={14} className="text-pink-400" />;
+            case 'private': return <Lock size={14} className="text-[#39ff14]" />;
+            default: return <MessageSquare size={14} />;
+        }
+    };
+
+    const isMobileView = window.innerWidth < 1024;
+    const showList = !isMobileView || !thread_id;
+    const showChat = !isMobileView || !!thread_id;
 
     return (
-        <div className="w-full flex flex-col gap-6 animate-in fade-in duration-500 pb-10">
-            <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-[#16172d] border border-white/5 rounded-2xl flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
-                    <MessageSquare size={24} />
-                </div>
-                <div>
-                    <h1 className="text-2xl font-black text-white tracking-wide">Mesajlarım</h1>
-                    <p className="text-sm text-slate-400 font-medium">Görüşmeleriniz ve ilan soruları</p>
-                </div>
-            </div>
+        <div className="w-full flex gap-4 xl:gap-6 animate-in fade-in duration-500 pb-10 h-[calc(100vh-100px)]">
+            {/* Left Panel: Thread List */}
+            {showList && (
+                <div className="w-full lg:w-[350px] xl:w-[400px] flex flex-col bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-xl shrink-0">
+                    <div className="p-5 border-b border-white/5 flex flex-col gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-[#0a0b1e] border border-white/10 rounded-xl flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                                <MessageSquare size={20} />
+                            </div>
+                            <div>
+                                <h1 className="text-xl font-black text-white tracking-wide">Mesajlarım</h1>
+                            </div>
+                        </div>
+                        <div className="relative">
+                            <input type="text" placeholder="Sohbetlerde ara..." className="w-full bg-[#0a0b1e] border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white placeholder:text-slate-500 focus:border-[#39ff14]/50 focus:outline-none transition-colors" />
+                        </div>
+                    </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {loading ? (
-                    <div className="col-span-full py-20 flex justify-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400"></div>
-                    </div>
-                ) : threads.length === 0 ? (
-                    <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-500 gap-4 bg-[#16172d] border border-white/5 rounded-3xl">
-                        <MessageSquare size={48} className="text-slate-600 opacity-50" />
-                        <p className="text-lg font-bold">Hiç mesajınız yok.</p>
-                        <p className="text-sm">İlanlarınıza mesaj geldiğinde burada görünecek.</p>
-                    </div>
-                ) : (
-                    threads.map((thread) => (
-                        <Link
-                            key={thread.listing_id}
-                            to={`/app/market/messages/${thread.listing_id}`}
-                            className="bg-[#16172d] border border-white/5 hover:border-cyan-400/30 rounded-3xl p-5 flex flex-col gap-4 transition-all group shadow-lg"
-                        >
-                            <div className="flex items-start justify-between gap-4">
-                                <div className="flex items-center gap-3 flex-1 min-w-0">
-                                    <div className="w-12 h-12 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/10">
-                                        {thread.listing_photo ? (
-                                            <img src={thread.listing_photo} alt="" className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center font-bold text-white/30 text-xl">
-                                                {thread.listing_title[0]}
+                    <div className="flex-1 overflow-y-auto no-scrollbar p-2">
+                        {loadingThreads ? (
+                            <div className="flex justify-center p-10"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400"></div></div>
+                        ) : threads.length === 0 ? (
+                            <div className="p-10 text-center text-slate-500 text-sm font-medium">Sohbetiniz bulunmuyor.</div>
+                        ) : (
+                            threads.map((thread) => {
+                                const other = getOtherParty(thread);
+                                const isActive = thread.id === thread_id;
+                                const avatar = other?.avatar_url || `https://ui-avatars.com/api/?name=${other?.full_name?.replace(' ', '+') || 'A'}&background=random`;
+
+                                return (
+                                    <Link
+                                        key={thread.id}
+                                        to={`/app/messages/${thread.id}`}
+                                        className={`flex items-start gap-3 p-3 rounded-2xl transition-all mb-1 ${isActive ? 'bg-[#0a0b1e] border border-[#39ff14]/20 shadow-[0_0_15px_rgba(57,255,20,0.05)]' : 'hover:bg-white/5 border border-transparent'}`}
+                                    >
+                                        <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-white/10 relative">
+                                            <img src={avatar} className="w-full h-full object-cover" alt="" />
+                                        </div>
+                                        <div className="flex-1 min-w-0 flex flex-col justify-center h-12">
+                                            <div className="flex justify-between items-center mb-0.5">
+                                                <h3 className="text-white font-bold text-sm truncate">{other?.full_name || 'Kullanıcı'}</h3>
+                                                <span className="text-[10px] text-slate-500">{formatTime(thread.updated_at)}</span>
                                             </div>
-                                        )}
+                                            <p className="text-xs text-slate-400 truncate pr-4 flex items-center gap-1.5">
+                                                <span className="shrink-0">{getThreadIcon(thread.type)}</span>
+                                                <span className="truncate">{thread.last_message || 'İlan sorusu...'}</span>
+                                            </p>
+                                        </div>
+                                    </Link>
+                                );
+                            })
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Right Panel: Active Chat */}
+            {showChat && (
+                <div className="flex-1 flex flex-col bg-[#16172d] border border-white/5 rounded-3xl overflow-hidden shadow-xl lg:flex relative">
+                    {!thread_id ? (
+                        <div className="flex-1 flex flex-col items-center justify-center text-slate-500 gap-4 opacity-50 p-10">
+                            <MessageSquare size={64} className="text-slate-600" />
+                            <p className="text-lg font-bold text-center">Bir sohbet seçin veya yeni mesaj gönderin.</p>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Chat Context Header */}
+                            <div className="bg-[#0a0b1e]/80 backdrop-blur-xl border-b border-white/5 flex flex-col z-10 shrink-0">
+                                <div className="p-3 lg:p-4 flex items-center gap-3 border-b border-white/5 relative">
+                                    <button onClick={() => navigate('/app/messages')} className="lg:hidden w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg text-white">
+                                        <ArrowLeft size={18} />
+                                    </button>
+                                    <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shrink-0">
+                                        <img src={getOtherParty(activeThread as MessageThread)?.avatar_url || `https://ui-avatars.com/api/?name=${getOtherParty(activeThread as MessageThread)?.full_name?.replace(' ', '+') || 'A'}&background=random`} className="w-full h-full object-cover" alt="" />
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="text-white font-bold text-sm truncate">{thread.listing_title}</h3>
-                                        <p className="text-xs text-cyan-400 font-bold mt-0.5 truncate flex items-center gap-1.5">
-                                            <span className="w-4 h-4 rounded-full overflow-hidden inline-block shrink-0 border border-white/20">
-                                                <img src={thread.otherParty?.avatar_url || `https://ui-avatars.com/api/?name=${thread.otherParty?.full_name}&background=random`} alt="" className="w-full h-full object-cover" />
-                                            </span>
-                                            {thread.otherParty?.full_name}
+                                    <div>
+                                        <h3 className="font-bold text-white text-base leading-tight">
+                                            {getOtherParty(activeThread as MessageThread)?.full_name || 'Kullanıcı'}
+                                        </h3>
+                                        <p className="text-[10px] text-[#39ff14] uppercase tracking-widest font-bold flex items-center gap-1 mt-0.5">
+                                            Çevrimiçi
                                         </p>
                                     </div>
                                 </div>
-                                {thread.unreadCount > 0 && (
-                                    <div className="w-6 h-6 rounded-full bg-[#39ff14] text-[#0a0b1e] flex items-center justify-center text-xs font-black shadow-[0_0_10px_#39ff14] shrink-0">
-                                        {thread.unreadCount}
+                                {activeThread?.listing && (
+                                    <div className="px-3 py-2 bg-[#16172d]/50 flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors group">
+                                        <div className="flex items-center gap-3">
+                                            {activeThread.listing.photo_url && (
+                                                <div className="w-9 h-9 rounded-lg overflow-hidden shrink-0 border border-white/10">
+                                                    <img src={activeThread.listing.photo_url.split(',')[0]} className="w-full h-full object-cover" alt="" />
+                                                </div>
+                                            )}
+                                            <div>
+                                                <p className="text-xs font-bold text-slate-300 truncate max-w-[150px] lg:max-w-xs">{activeThread.listing.title}</p>
+                                                <p className="text-[10px] text-cyan-400 font-bold">₺{activeThread.listing.required_balance}</p>
+                                            </div>
+                                        </div>
+                                        <Link to={`/app/market/${activeThread.listing_id}`} className="text-xs font-bold text-[#39ff14] flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#39ff14]/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            İlana Git <ChevronRight size={14} />
+                                        </Link>
                                     </div>
                                 )}
                             </div>
 
-                            <div className="bg-[#0a0b1e] rounded-2xl p-4 border border-white/5 relative">
-                                <p className={`text-sm line-clamp-2 ${thread.unreadCount > 0 ? 'text-white font-medium' : 'text-slate-400'}`}>
-                                    {thread.lastMessage}
-                                </p>
-                                <div className="flex justify-between items-center mt-3">
-                                    <span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-                                        <Clock size={12} />
-                                        {new Date(thread.lastMessageDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                                    </span>
-                                    <ArrowRight size={16} className={`transition-transform group-hover:translate-x-1 ${thread.unreadCount > 0 ? 'text-[#39ff14]' : 'text-slate-600'}`} />
+                            {/* Messages List */}
+                            <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 no-scrollbar bg-[url('https://i.ibb.co/3W6qWbH/dark-chat-bg.jpg')] bg-cover bg-center bg-no-repeat relative">
+                                <div className="absolute inset-0 bg-[#0a0b1e]/90 backdrop-blur-[2px]"></div>
+                                <div className="relative z-10 flex flex-col space-y-4">
+                                {loadingChat ? (
+                                    <div className="flex justify-center p-10"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#39ff14]"></div></div>
+                                ) : messages.length === 0 ? (
+                                    <div className="text-center p-10 text-slate-400 text-sm">Mesajınız yok.</div>
+                                ) : (
+                                    messages.map((msg, idx) => {
+                                        const isMe = msg.sender_id === user?.id;
+                                        return (
+                                            <div key={msg.id || idx} className={`flex w-full gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                                                <div className="flex flex-col max-w-[80%] lg:max-w-[70%]">
+                                                    <div className={`px-4 py-2.5 text-[14px] leading-relaxed shadow-lg relative group ${isMe
+                                                        ? 'bg-[#005c4b] text-[#e9edef] rounded-2xl rounded-tr-sm' // WhatsApp Dark Mode Sender
+                                                        : 'bg-[#202c33] border border-white/5 text-[#e9edef] rounded-2xl rounded-tl-sm' // WhatsApp Dark Mode Receiver
+                                                        }`}>
+                                                        {msg.content}
+                                                        <div className={`text-[10px] mt-1 text-right flex items-center justify-end gap-1 ${isMe ? 'text-white/60' : 'text-slate-400'}`}>
+                                                            {formatTime(msg.created_at)}
+                                                            {isMe && <span className="text-[#53bdeb] text-[8px]">✓✓</span>}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                )}
+                                <div ref={messagesEndRef} />
                                 </div>
                             </div>
-                        </Link>
-                    ))
-                )}
-            </div>
+
+                            {/* Message Input */}
+                            <div className="p-3 lg:p-4 border-t border-white/5 bg-[#202c33] shrink-0 z-10 relative">
+                                <form onSubmit={handleSendMessage} className="relative flex items-center gap-2 max-w-4xl mx-auto">
+                                    <input
+                                        type="text"
+                                        value={newMessage}
+                                        onChange={(e) => setNewMessage(e.target.value)}
+                                        placeholder="Bir mesaj yazın..."
+                                        className="flex-1 bg-[#2a3942] rounded-xl py-3.5 px-5 text-[15px] text-[#e9edef] focus:outline-none focus:ring-1 focus:ring-white/10 transition-shadow placeholder:text-[#8696a0]"
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={!newMessage.trim()}
+                                        className="w-12 h-12 shrink-0 bg-[#00a884] text-white rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#00a884]/90 transition-colors shadow-lg"
+                                    >
+                                        <Send size={20} className="-ml-0.5" />
+                                    </button>
+                                </form>
+                            </div>
+                        </>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

@@ -47,17 +47,32 @@ export type SwapListing = {
     profiles?: Partial<Profile>;
 };
 
+export type MessageThreadType = 'market' | 'task' | 'private';
+
+export type MessageThread = {
+    id: string;
+    listing_id: string | null;
+    buyer_id: string;
+    seller_id: string;
+    type: MessageThreadType;
+    last_message: string | null;
+    updated_at: string;
+    created_at: string;
+    buyer?: Partial<Profile>;
+    seller?: Partial<Profile>;
+    listing?: Partial<SwapListing>; // Generic listing info, can be expanded for tasks
+};
+
 export type Message = {
     id: string;
-    swap_id: string;
+    thread_id: string;
     sender_id: string;
-    receiver_id: string;
+    receiver_id: string; // Keep for direct notifications or fallback
     content: string;
     read: boolean;
     created_at: string;
     sender?: Partial<Profile>;
     receiver?: Partial<Profile>;
-    listing?: Partial<SwapListing>;
 };
 
 export type Notification = {
