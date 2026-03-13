@@ -112,8 +112,8 @@ const MessagesPage = () => {
         }
     };
 
-    const getOtherParty = (thread: MessageThread) => {
-        if (!user) return null;
+    const getOtherParty = (thread?: MessageThread) => {
+        if (!user || !thread) return null;
         return thread.buyer_id === user.id ? thread.seller : thread.buyer;
     };
 
@@ -210,11 +210,11 @@ const MessagesPage = () => {
                                         <ArrowLeft size={18} />
                                     </button>
                                     <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shrink-0">
-                                        <img src={getOtherParty(activeThread as MessageThread)?.avatar_url || `https://ui-avatars.com/api/?name=${getOtherParty(activeThread as MessageThread)?.full_name?.replace(' ', '+') || 'A'}&background=random`} className="w-full h-full object-cover" alt="" />
+                                        <img src={getOtherParty(activeThread)?.avatar_url || `https://ui-avatars.com/api/?name=${getOtherParty(activeThread)?.full_name?.replace(' ', '+') || 'A'}&background=random`} className="w-full h-full object-cover" alt="" />
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-white text-base leading-tight">
-                                            {getOtherParty(activeThread as MessageThread)?.full_name || 'Kullanıcı'}
+                                            {getOtherParty(activeThread)?.full_name || 'Kullanıcı'}
                                         </h3>
                                         <p className="text-[10px] text-[#39ff14] uppercase tracking-widest font-bold flex items-center gap-1 mt-0.5">
                                             Çevrimiçi
@@ -242,8 +242,8 @@ const MessagesPage = () => {
                             </div>
 
                             {/* Messages List */}
-                            <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 no-scrollbar bg-[url('https://i.ibb.co/3W6qWbH/dark-chat-bg.jpg')] bg-cover bg-center bg-no-repeat relative">
-                                <div className="absolute inset-0 bg-[#0a0b1e]/90 backdrop-blur-[2px]"></div>
+                            <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 no-scrollbar bg-[#0b141a] relative">
+                                <div className="absolute inset-0 bg-[#0a0b1e]/50 backdrop-blur-[2px]"></div>
                                 <div className="relative z-10 flex flex-col space-y-4">
                                 {loadingChat ? (
                                     <div className="flex justify-center p-10"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#39ff14]"></div></div>
