@@ -42,7 +42,8 @@ Kullanıcı '${user_name || 'Bir kullanıcı'}' sana şu mesajı gönderdi:
 Türkçe olarak kısa, yardımcı ve biraz eğlenceli bir yanıt yaz. Yanıtın en fazla 2 paragraf olsun. Kendinden bahsederken her zaman "Workigom AI" ismini kullan.`
 
     // Try v1 endpoint first, then v1beta as fallback
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`
+    // gemini-1.5-flash: Free tier'da en stabil, en düşük gecikmeli model
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
     
     console.log("Calling Gemini API...")
 
