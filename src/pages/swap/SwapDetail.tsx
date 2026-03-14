@@ -73,7 +73,7 @@ const SwapDetail = () => {
 
             // Navigate to the unified messages page for this thread
             navigate(`/app/messages/${thread.id}`);
-        } catch (err: any) {
+        } catch (err) {
             console.error('Error starting chat:', err);
             alert('Mesajlaşma başlatılamadı.');
         } finally {

@@ -76,7 +76,8 @@ const Tracker = () => {
     }
 
     const isSeeker = user?.id === transaction.seeker_id;
-    const otherPartyName = isSeeker ? (transaction as any).supporter?.full_name : (transaction as any).seeker?.full_name;
+    const tx = transaction as unknown as { supporter?: { full_name: string }, seeker?: { full_name: string } };
+    const otherPartyName = isSeeker ? tx.supporter?.full_name : tx.seeker?.full_name;
 
     const handlePaymentComplete = async () => {
         if (!id) return;

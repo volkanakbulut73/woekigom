@@ -2,23 +2,23 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowRightLeft, Landmark, Activity, CreditCard, Gift, Send, Trophy, ChevronLeft, ChevronRight } from 'lucide-react';
 
+const slides = [
+    {
+        image: '/slider1.png',
+        title: 'Birlikte Paylaş, \nDaha Fazla Kazan!',
+        description: 'Yemek kartı bakiyeni paylaş sosyal ağını güçlendir.',
+        buttonText: 'Hemen Başla'
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop',
+        title: 'Hızlı ve Güvenli \nQR Takas',
+        description: 'Saniyeler içinde eşleş, QR ile hesabını öde ve anında kazan.',
+        buttonText: 'İşlemleri Gör'
+    }
+];
+
 const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
-
-    const slides = [
-        {
-            image: '/slider1.png',
-            title: 'Birlikte Paylaş, \nDaha Fazla Kazan!',
-            description: 'Yemek kartı bakiyeni paylaş sosyal ağını güçlendir.',
-            buttonText: 'Hemen Başla'
-        },
-        {
-            image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop',
-            title: 'Hızlı ve Güvenli \nQR Takas',
-            description: 'Saniyeler içinde eşleş, QR ile hesabını öde ve anında kazan.',
-            buttonText: 'İşlemleri Gör'
-        }
-    ];
 
     useEffect(() => {
         const timer = setInterval(() => {

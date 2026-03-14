@@ -17,6 +17,7 @@ export function useNotifications() {
 
     useEffect(() => {
         if (!user) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setUnreadCount(0);
             return;
         }

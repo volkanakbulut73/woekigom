@@ -54,8 +54,9 @@ const MessagesPage = () => {
                 const data = await MessageService.getThreadMessages(thread_id);
                 setMessages(data as Message[]);
                 await MessageService.markThreadMessagesAsRead(thread_id, user.id);
-            } catch (err: any) {
-                if (err.code !== '42P01') console.error("Error fetching messages:", err);
+            } catch (err) {
+                const error = err as { code?: string };
+                if (error.code !== '42P01') console.error("Error fetching messages:", error);
             } finally {
                 setLoadingChat(false);
             }
@@ -107,7 +108,7 @@ const MessagesPage = () => {
             setMessages(prev => [...prev, tempMessage as Message]);
 
             await MessageService.sendMessage(thread_id, user.id, receiverId, content);
-        } catch (err: any) {
+        } catch (err) {
             console.error('Error sending message:', err);
         }
     };

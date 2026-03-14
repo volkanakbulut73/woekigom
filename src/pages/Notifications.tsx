@@ -11,19 +11,19 @@ const NotificationsPage = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchNotifications = async () => {
-        if (!user) return;
-        try {
-            const data = await NotificationService.getUserNotifications(user.id);
-            setNotifications(data as Notification[]);
-        } catch (err) {
-            console.error("Error fetching notifications:", err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
+        const fetchNotifications = async () => {
+            if (!user) return;
+            try {
+                const data = await NotificationService.getUserNotifications(user.id);
+                setNotifications(data as Notification[]);
+            } catch (err) {
+                console.error("Error fetching notifications:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchNotifications();
 
         if (!user) return;
