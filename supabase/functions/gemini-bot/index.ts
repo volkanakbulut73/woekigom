@@ -1,6 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { GoogleGenerativeAI } from "npm:@google/generative-ai"
 
+export const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
 console.log("Gemini Bot edge function is running!")
 
 serve(async (req) => {
@@ -29,7 +34,7 @@ serve(async (req) => {
         // Use the flash model for faster responses
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
 
-        const prompt = `You are a helpful and chill AI assistant named HelperBot in a cyberpunk/neon-style group chat called 'Muhabbet'.
+        const prompt = `You are a helpful and chill AI assistant named Workigom AI in a cyberpunk/neon-style group chat called 'Muhabbet'.
 User '${user_name || 'A user'}' sent the following message containing your trigger:
 "${message}"
 
@@ -51,7 +56,3 @@ Write a concise, helpful, and slightly playful response. Keep it under 2 paragra
     }
 })
 
-export const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
