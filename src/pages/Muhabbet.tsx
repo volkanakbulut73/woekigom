@@ -108,7 +108,7 @@ const Muhabbet = () => {
         });
 
         // Check for bot trigger
-        const isBotTriggered = msgText.toLowerCase().includes('@bot') || msgText.toLowerCase().includes('/bot');
+        const isBotTriggered = msgText.toLowerCase().includes('@workigom') || msgText.toLowerCase().includes('/workigom');
         
         if (isBotTriggered) {
             setIsBotTyping(true);
@@ -117,7 +117,10 @@ const Muhabbet = () => {
                     body: { message: msgText, user_name: profile.full_name }
                 });
 
-                if (error) throw error;
+                if (error) {
+                    console.error("Supabase Edge Function Error:", error);
+                    throw error;
+                }
 
                 const botReply = data?.response || "Sanırım sistemlerimde bir arıza var...";
 
@@ -125,7 +128,7 @@ const Muhabbet = () => {
                     id: Date.now().toString() + '-bot',
                     text: botReply,
                     senderId: 'bot-1',
-                    senderName: 'HelperBot',
+                    senderName: 'Workigom AI',
                     senderAvatar: null,
                     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                     isBot: true,
@@ -141,7 +144,17 @@ const Muhabbet = () => {
                     payload: botMessage,
                 });
             } catch (err) {
-                console.error("Bot error:", err);
+                console.error("Bot error details:", err);
+                const errorMessage: ChatMessage = {
+                    id: Date.now().toString() + '-err',
+                    text: "Bağlantı hatası oluştu, Workigom AI'a ulaşılamıyor.",
+                    senderId: 'bot-1',
+                    senderName: 'Workigom AI',
+                    senderAvatar: null,
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    isBot: true,
+                }
+                setMessages((prev) => [...prev, errorMessage]);
             } finally {
                 setIsBotTyping(false);
             }
@@ -218,7 +231,7 @@ const Muhabbet = () => {
                                         <div className="flex flex-col gap-1 w-full max-w-[85%] md:max-w-md">
                                             <div className="flex items-center gap-2 px-1">
                                                 <span className="text-sm font-bold text-[#FF007F]">{msg.senderName}</span>
-                                                <span className="flex items-center gap-1 rounded bg-[#FF007F]/20 px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#FF007F]">Bot</span>
+                                                <span className="flex items-center gap-1 rounded bg-[#FF007F]/20 px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#FF007F]">AI</span>
                                                 <span className="text-[10px] text-slate-500">{msg.timestamp}</span>
                                             </div>
                                             <div className="glass-panel-chat rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed text-slate-100 border-[#FF007F]/20 shadow-md">
@@ -273,8 +286,8 @@ const Muhabbet = () => {
                                 <Smile size={20} />
                             </button>
                             <input 
-                                className="flex-1 border-none bg-transparent py-2.5 px-2 text-[15px] text-white placeholder:text-slate-500 focus:ring-0 outline-none" 
-                                placeholder="Mesaj yazın... (@bot veya /bot ile yapay zekaya sorun)" 
+                                className="flex-1 border-none bg-transparent py-2.5 px-2 text-[15px] text-white placeholder:text-white/30 focus:ring-0 outline-none" 
+                                placeholder="Workigom AI'ı çağırmak için konuşmanın başına @workigom yazın..." 
                                 type="text"
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
@@ -312,7 +325,7 @@ const Muhabbet = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-1.5">
-                                            <span className="text-sm font-semibold text-[#FF007F]">HelperBot</span>
+                                            <span className="text-sm font-semibold text-[#FF007F]">Workigom AI</span>
                                         </div>
                                         <span className="text-[10px] text-slate-400">Her zaman aktif</span>
                                     </div>

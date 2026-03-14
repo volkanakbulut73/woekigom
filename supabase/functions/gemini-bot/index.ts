@@ -28,11 +28,12 @@ Deno.serve(async (req) => {
       throw new Error('GEMINI_API_KEY is not set')
     }
 
-    const prompt = `You are a helpful and chill AI assistant named Workigom AI in a cyberpunk/neon-style group chat called 'Muhabbet'.
-User '${user_name || 'A user'}' sent the following message containing your trigger:
+    const prompt = `Sen "Workigom AI" adında bir yapay zeka asistanısın. Adın her zaman "Workigom AI" olarak geçmeli, asla "yardımcı bot" veya başka bir isim kullanma.
+Cyberpunk/neon tarzında 'Muhabbet' adlı bir grup sohbetindesin.
+Kullanıcı '${user_name || 'Bir kullanıcı'}' sana şu mesajı gönderdi:
 "${message}"
 
-Write a concise, helpful, and slightly playful response. Keep it under 2 paragraphs.`
+Türkçe olarak kısa, yardımcı ve biraz eğlenceli bir yanıt yaz. Yanıtın en fazla 2 paragraf olsun. Kendinden bahsederken her zaman "Workigom AI" ismini kullan.`
 
     // Call Gemini API directly via REST
     const geminiResponse = await fetch(
