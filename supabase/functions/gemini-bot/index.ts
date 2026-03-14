@@ -11,7 +11,10 @@ console.log("Gemini Bot edge function is running!")
 serve(async (req) => {
     // Handle CORS preflight requests
     if (req.method === 'OPTIONS') {
-        return new Response('ok', { headers: corsHeaders })
+        return new Response(null, { 
+            status: 204, 
+            headers: corsHeaders 
+        })
     }
 
     try {
@@ -49,7 +52,8 @@ Write a concise, helpful, and slightly playful response. Keep it under 2 paragra
             status: 200,
         })
     } catch (error) {
-        return new Response(JSON.stringify({ error: error.message }), {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return new Response(JSON.stringify({ error: errorMessage }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 400,
         })
