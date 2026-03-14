@@ -1,5 +1,5 @@
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
-import { Home, Receipt, Store, MessageSquare, User, Plus, Bell, LogOut } from 'lucide-react';
+import { Home, Receipt, Store, MessageSquare, User, Plus, Bell, LogOut, MessageCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getSupporterBadge, getMockTransactionCount } from '../utils/badges';
 import { useNotifications } from '../hooks/useNotifications';
@@ -16,6 +16,7 @@ const Layout = () => {
         { to: '/app/talepler', icon: Receipt, label: 'Talepler' },
         { to: '/app/market', icon: Store, label: 'Market' },
         { to: '/app/messages', icon: MessageSquare, label: 'Mesajlarım' },
+        { to: '/app/muhabbet', icon: MessageCircle, label: 'Muhabbet' },
         { to: '/app/profile', icon: User, label: 'Profil' },
     ];
 
@@ -163,6 +164,10 @@ const Layout = () => {
                             )}
                         </div>
                         <span className="text-[8px] font-bold uppercase tracking-wider">Mesaj</span>
+                    </NavLink>
+                    <NavLink to="/app/muhabbet" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <MessageCircle size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Muhabbet</span>
                     </NavLink>
                     <NavLink to="/app/profile" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
                         <User size={22} />

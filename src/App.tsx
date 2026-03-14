@@ -19,6 +19,7 @@ import SwapDetail from './pages/swap/SwapDetail';
 import SwapCreate from './pages/swap/SwapCreate';
 import MessagesPage from './pages/Messages';
 import NotificationsPage from './pages/Notifications';
+import Muhabbet from './pages/Muhabbet';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
               </Route>
 
               <Route path="notifications" element={<NotificationsPage />} />
+              <Route path="muhabbet" element={<Muhabbet />} />
             </Route>
 
             {/* Fullscreen pages outside layout */}
