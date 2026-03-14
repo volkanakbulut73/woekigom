@@ -122,7 +122,12 @@ const Muhabbet = () => {
                     throw error;
                 }
 
-                const botReply = data?.response || "Sanırım sistemlerimde bir arıza var...";
+                // Check if the response contains an error from the Gemini API
+                if (data?.error) {
+                    console.error("Gemini API Error:", data.error, data.detail);
+                }
+
+                const botReply = data?.response || data?.error || "Sanırım sistemlerimde bir arıza var...";
 
                 const botMessage: ChatMessage = {
                     id: Date.now().toString() + '-bot',

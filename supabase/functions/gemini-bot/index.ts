@@ -25,8 +25,14 @@ Deno.serve(async (req) => {
     // Get API key from environment
     const apiKey = Deno.env.get('GEMINI_API_KEY')
     if (!apiKey) {
-      throw new Error('GEMINI_API_KEY is not set')
+      console.error("GEMINI_API_KEY is not set in environment")
+      return new Response(JSON.stringify({ error: "GEMINI_API_KEY is not set" }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
+
+    console.log("API Key found, length:", apiKey.length)
 
     const prompt = `Sen "Workigom AI" adında bir yapay zeka asistanısın. Adın her zaman "Workigom AI" olarak geçmeli, asla "yardımcı bot" veya başka bir isim kullanma.
 Cyberpunk/neon tarzında 'Muhabbet' adlı bir grup sohbetindesin.
@@ -35,25 +41,35 @@ Kullanıcı '${user_name || 'Bir kullanıcı'}' sana şu mesajı gönderdi:
 
 Türkçe olarak kısa, yardımcı ve biraz eğlenceli bir yanıt yaz. Yanıtın en fazla 2 paragraf olsun. Kendinden bahsederken her zaman "Workigom AI" ismini kullan.`
 
-    // Call Gemini API directly via REST
-    const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
-      }
-    )
+    // Try v1 endpoint first, then v1beta as fallback
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`
+    
+    console.log("Calling Gemini API...")
+
+    const geminiResponse = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+      }),
+    })
+
+    const responseBody = await geminiResponse.text()
+    console.log("Gemini API status:", geminiResponse.status)
+    console.log("Gemini API response:", responseBody.substring(0, 500))
 
     if (!geminiResponse.ok) {
-      const errorBody = await geminiResponse.text()
-      console.error("Gemini API error:", geminiResponse.status, errorBody)
-      throw new Error(`Gemini API returned ${geminiResponse.status}`)
+      console.error("Gemini API error:", geminiResponse.status, responseBody)
+      return new Response(JSON.stringify({ 
+        error: `Gemini API error: ${geminiResponse.status}`,
+        detail: responseBody 
+      }), {
+        status: 200, // Return 200 so we can see the error in the client
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
-    const data = await geminiResponse.json()
+    const data = JSON.parse(responseBody)
     const responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sanırım sistemlerimde bir arıza var..."
 
     return new Response(JSON.stringify({ response: responseText }), {
@@ -65,7 +81,7 @@ Türkçe olarak kısa, yardımcı ve biraz eğlenceli bir yanıt yaz. Yanıtın 
     console.error("Edge function error:", errorMessage)
     return new Response(JSON.stringify({ error: errorMessage }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 400,
+      status: 200, // Return 200 so we can see the error in the client
     })
   }
 })
