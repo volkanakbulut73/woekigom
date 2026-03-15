@@ -40,12 +40,11 @@ Deno.serve(async (req: Request) => {
 
     console.log("API Key found, length:", apiKey.length)
 
-    const prompt = `Sen "Workigom AI" adında bir yapay zeka asistanısın. Adın her zaman "Workigom AI" olarak geçmeli, asla "yardımcı bot" veya başka bir isim kullanma.
-Cyberpunk/neon tarzında 'Muhabbet' adlı bir grup sohbetindesin.
+    const prompt = `Sen "Workigom AI" adında bir yapay zeka asistanısın. Cyberpunk/neon tarzında 'Muhabbet' adlı bir grup sohbetindesin.
 Kullanıcı '${user_name || 'Bir kullanıcı'}' sana şu mesajı gönderdi:
 "${message}"
 
-Türkçe olarak kısa, yardımcı ve biraz eğlenceli bir yanıt yaz. Yanıtın en fazla 2 paragraf olsun. Kendinden bahsederken her zaman "Workigom AI" ismini kullan.`
+Türkçe olarak EKSTREM KISA, NET ve öz bir yanıt yaz. Yanıtın en fazla 1-2 cümle olsun. Gereksiz nezaket ifadelerinden kaçın, doğrudan konuya gir.`
 
     // gemini-2.5-flash: Latest premium model for 2026
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`
