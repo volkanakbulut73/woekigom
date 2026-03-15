@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Workigom Gamified Cyber Landing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Rajdhani:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF007A",
+                        "background-light": "#0F0F1A", // Enforcing dark theme for the cyber look even in "light" mode to fit prompt
+                        "background-dark": "#05050A",
+                        accent: "#00F0FF",
+                        success: "#00FF66",
+                        warning: "#FFD700"
+                    },
+                    fontFamily: {
+                        display: ["Orbitron", "sans-serif"],
+                        body: ["Rajdhani", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                    boxShadow: {
+                        'neon': '0 0 15px rgba(0, 240, 255, 0.5)',
+                        'neon-primary': '0 0 20px rgba(255, 0, 122, 0.6)',
+                        'neon-success': '0 0 20px rgba(0, 255, 102, 0.6)',
+                        'neon-warning': '0 0 20px rgba(255, 215, 0, 0.6)',
+                    },
+                    backgroundImage: {
+                        'cyber-gradient': 'linear-gradient(135deg, #0F0F1A 0%, #1A0B2E 100%)',
+                        'glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)'
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'Rajdhani', sans-serif; background-color: #0F0F1A; color: white; }
+        h1, h2, h3, .font-display { font-family: 'Orbitron', sans-serif; }
+        .glass-panel {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 10px #FF007A; transform: scale(1); }
+            50% { box-shadow: 0 0 30px #FF007A, 0 0 10px #FF007A inset; transform: scale(1.05); }
+            100% { box-shadow: 0 0 10px #FF007A; transform: scale(1); }
+        }
+        .btn-pulse {
+            animation: pulse-glow 2s infinite;
+        }
+        .bg-liquid {
+            background: linear-gradient(-45deg, #FF007A, #7A00FF, #00F0FF, #0F0F1A);
+            background-size: 400% 400%;
+            animation: gradient-bg 10s ease infinite;
+        }
+        @keyframes gradient-bg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }.float-anim {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes spin-slow {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        .spin-3d {
+            animation: spin-slow 8s linear infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>.no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }.no-scrollbar {
+      -ms-overflow-style: none;scrollbar-width: none;}
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen overflow-x-hidden selection:bg-accent selection:text-black text-white">
+<header class="fixed top-0 w-full z-50 glass-panel border-b border-accent/20">
+<div class="container mx-auto px-4 h-14 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-icons text-primary text-2xl glow-text" style="">hub</span>
+<span class="font-display font-bold text-lg tracking-wider" style="">WORKIGOM<span class="text-accent" style="">.</span></span>
+</div>
+<button class="bg-primary/20 border border-primary text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-primary transition-colors" style="">
+                Giriş
+            </button>
+</div>
+</header>
+<section class="relative pt-20 pb-4 min-h-[500px] flex flex-col items-center justify-center bg-background-light overflow-hidden bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgwem0yMCAyMGgtdi0waDIwdjIwaC0yMHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-opacity-30">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0F0F1A]/80 to-[#0F0F1A]"></div>
+<div class="absolute top-1/4 left-4 w-12 h-12 bg-warning rounded-full blur-xl opacity-40 float-anim mix-blend-screen"></div>
+<div class="absolute bottom-1/4 right-8 w-16 h-16 bg-accent rounded-full blur-xl opacity-30 float-anim mix-blend-screen" style="animation-delay: 1s;"></div>
+<div class="container mx-auto px-4 relative z-10 text-center w-full">
+<div class="inline-flex mb-2 px-3 py-0.5 rounded-full border border-accent/50 bg-black/60 backdrop-blur-md">
+<span class="text-accent text-[10px] font-bold tracking-widest uppercase flex items-center gap-1.5 justify-center" style="">
+<span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+                    Sistem Aktif
+                </span>
+</div>
+<h1 class="font-display text-2xl md:text-3xl font-black mb-1 leading-tight drop-shadow-2xl" style="">
+                SOSYAL <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-white to-primary" style="">DAYANIŞMA</span><br/>
+                VE AKILLI YEMEK PAYLAŞIMI
+            </h1>
+<p class="text-xs text-gray-400 mb-4 max-w-md mx-auto font-body" style="">
+                Nakit akışını yönet, kullanım hakkını güvenle paylaş.
+            </p>
+<div class="relative w-full max-w-sm mx-auto h-32 mb-6 mt-2 flex items-center justify-between px-2">
+<div class="absolute top-1/2 left-0 w-full h-1 -translate-y-1/2 bg-gradient-to-r from-accent via-primary to-warning opacity-50 z-0">
+<div class="absolute top-0 left-0 h-full w-1/3 bg-white/50 blur-[2px] animate-[pulse-glow_2s_ease-in-out_infinite]"></div>
+</div>
+<div class="relative z-10 float-anim group">
+<div class="w-14 h-14 rounded-full border-2 border-accent bg-black p-1 shadow-neon overflow-hidden">
+<img alt="Saver Avatar" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBroJFsjZJMvuYMIE0VnH2wJUseajPfjn2mrcy0Z4-4oOFbv0CAGm85m0YIKPAAUwjSVMP7JknJ1ZOwKq5WF8NJqOBSBMNpn9qcJ90wMHQqdF174ZtB0d1HlzvcrHMcyCnBhTIaFTeXwnLorTOkALx24cuNZmHyPzFjrTcDNRaIxoByauVeEcShSkNk-icE840wyqqkXJ_vF6i2KcfJaDnRPOy8ePe58YYoZaPXOlLopsH3E1Ybi8QzPe0Q0YD07aD-BMZLvfFrFeMF" style=""/>
+</div>
+<div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-accent text-black text-[9px] font-bold px-1.5 py-0.5 rounded shadow-lg whitespace-nowrap" style="">
+                        Tasarrufçu
+                    </div>
+<div class="absolute -top-3 -right-3 bg-black/80 border border-accent text-accent text-[10px] font-bold px-1 rounded-full" style="">
+                        ₺300
+                    </div>
+<div class="absolute top-0 -left-4 w-4 h-4 text-warning opacity-70 animate-bounce" style="animation-delay: 0.2s">
+<span class="material-icons text-sm" style="">monetization_on</span>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-xl border border-primary/50 shadow-neon-primary flex items-center justify-center spin-3d preserve-3d">
+<span class="material-icons text-white text-3xl" style="">qr_code_2</span>
+</div>
+<div class="mt-2 text-[10px] text-primary font-bold animate-pulse" style="">
+                        TAKAS
+                    </div>
+</div>
+<div class="relative z-10 float-anim group" style="animation-delay: 1.5s">
+<div class="w-14 h-14 rounded-full border-2 border-warning bg-black p-1 shadow-neon-warning overflow-hidden">
+<img alt="Provider Avatar" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZD5m_jY8gl40HteM3pCaDLfzgWoR5z-PtFPna3kBW2LmVhjBxve6qtfv54qzF5yGooJuz6I9PQbmqdaXhI9n0swsuBJGu3DgnJCWZ5J5eBARyT8bkkrBQh9iiG2PXtcxWDp8ZcIKQOxPsx_5qrHHEUHMxr6Jb3WP9MvnkIrt8RhybyefnJN0J1z_XnYtSqsy00dvNwTHtG_0RK7qxy-saqYCx2q0KIi9cbWbRbVgEwtQxPL3-FhCcaQieVsAGsLH7GbIhnrSgkNll" style=""/>
+</div>
+<div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-warning text-black text-[9px] font-bold px-1.5 py-0.5 rounded shadow-lg whitespace-nowrap" style="">
+                        Paylaşımcı
+                    </div>
+<div class="absolute -top-3 -left-3 bg-black/80 border border-warning text-warning flex items-center justify-center w-6 h-6 rounded-full shadow-neon-warning">
+<span class="material-icons text-[12px]" style="">account_balance_wallet</span>
+</div>
+<div class="absolute top-4 -right-4 w-4 h-4 text-warning opacity-70 animate-bounce" style="animation-delay: 0.5s">
+<span class="material-icons text-sm" style="">monetization_on</span>
+</div>
+</div>
+</div>
+<button class="btn-pulse bg-primary text-white font-display font-bold text-sm px-6 py-2.5 rounded-xl uppercase tracking-widest border-2 border-white/20 hover:border-white transition-all w-full max-w-[200px] mx-auto flex items-center justify-center gap-2" style="">
+                HEMEN BAŞLA <span class="material-icons text-sm" style="">rocket_launch</span>
+</button>
+</div>
+</section>
+<section class="py-8 relative bg-background-light dark:bg-background-dark">
+<div class="container mx-auto px-4">
+<div class="text-center mb-6">
+<span class="text-accent font-bold tracking-widest uppercase text-sm mb-1 block glow-text" style="">Ekosistem</span>
+<h2 class="font-display text-2xl md:text-3xl font-bold" style="">AKILLI TAKAS MODELİ</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+<div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent z-0 opacity-50"></div>
+<div class="glass-panel p-5 rounded-2xl relative z-10 hover:border-accent transition-colors group">
+<div class="absolute -top-4 -left-4 w-10 h-10 bg-primary rounded-full flex items-center justify-center font-display font-bold border-2 border-background-light" style="">1</div>
+<div class="h-32 bg-black/40 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden border border-white/10 group-hover:border-accent/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full border-2 border-accent p-1 float-anim">
+<img alt="User Avatar" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBroJFsjZJMvuYMIE0VnH2wJUseajPfjn2mrcy0Z4-4oOFbv0CAGm85m0YIKPAAUwjSVMP7JknJ1ZOwKq5WF8NJqOBSBMNpn9qcJ90wMHQqdF174ZtB0d1HlzvcrHMcyCnBhTIaFTeXwnLorTOkALx24cuNZmHyPzFjrTcDNRaIxoByauVeEcShSkNk-icE840wyqqkXJ_vF6i2KcfJaDnRPOy8ePe58YYoZaPXOlLopsH3E1Ybi8QzPe0Q0YD07aD-BMZLvfFrFeMF" style=""/>
+</div>
+<span class="material-icons text-accent animate-pulse" style="">sync_alt</span>
+<div class="w-14 h-14 rounded-full border-2 border-primary p-1 float-anim" style="animation-delay: 1s;">
+<img alt="User Avatar" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZD5m_jY8gl40HteM3pCaDLfzgWoR5z-PtFPna3kBW2LmVhjBxve6qtfv54qzF5yGooJuz6I9PQbmqdaXhI9n0swsuBJGu3DgnJCWZ5J5eBARyT8bkkrBQh9iiG2PXtcxWDp8ZcIKQOxPsx_5qrHHEUHMxr6Jb3WP9MvnkIrt8RhybyefnJN0J1z_XnYtSqsy00dvNwTHtG_0RK7qxy-saqYCx2q0KIi9cbWbRbVgEwtQxPL3-FhCcaQieVsAGsLH7GbIhnrSgkNll" style=""/>
+</div>
+</div>
+</div>
+<h3 class="font-display text-lg font-bold mb-2 text-center" style="">Talep &amp; Eşleşme</h3>
+<p class="text-gray-400 text-xs text-center" style="">Restoranda ödeme yapacak kişi ile yemek kartı bakiyesi olan kullanıcı anında eşleşir.</p>
+</div>
+<div class="glass-panel p-5 rounded-2xl relative z-10 hover:border-success transition-colors group">
+<div class="absolute -top-4 -left-4 w-10 h-10 bg-success text-black rounded-full flex items-center justify-center font-display font-bold border-2 border-background-light" style="">2</div>
+<div class="h-32 bg-black/40 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden border border-white/10 group-hover:border-success/50 transition-colors">
+<div class="w-20 h-28 bg-white rounded-xl flex flex-col items-center justify-center p-2 float-anim shadow-neon">
+<span class="material-icons text-black text-4xl" style="">qr_code_2</span>
+</div>
+<div class="absolute bottom-3 right-3 bg-success/20 border border-success text-success px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 backdrop-blur-sm" style="">
+<span class="material-icons text-[10px]" style="">check_circle</span> Onaylandı
+                        </div>
+</div>
+<h3 class="font-display text-lg font-bold mb-2 text-center" style="">QR ile Ödeme</h3>
+<p class="text-gray-400 text-xs text-center" style="">Sistem üzerinden paylaşılan QR kod ile POS cihazından işlem güvenle tamamlanır.</p>
+</div>
+<div class="glass-panel p-5 rounded-2xl relative z-10 hover:border-warning transition-colors group">
+<div class="absolute -top-4 -left-4 w-10 h-10 bg-warning text-black rounded-full flex items-center justify-center font-display font-bold border-2 border-background-light" style="">3</div>
+<div class="h-32 bg-black/40 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden border border-white/10 group-hover:border-warning/50 transition-colors">
+<div class="relative float-anim">
+<span class="material-icons text-5xl text-white/50" style="">account_balance_wallet</span>
+<div class="absolute -top-2 -right-6 bg-warning text-black font-display font-bold px-2 py-0.5 rounded-lg shadow-lg rotate-12 text-sm" style="">
+                                + ₺800
+                            </div>
+</div>
+</div>
+<h3 class="font-display text-lg font-bold mb-2 text-center" style="">Güvenli Transfer</h3>
+<p class="text-gray-400 text-xs text-center" style="">İşlem kanıtlandığında, tutar alıcının cüzdanına anında aktarılır.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-8 relative bg-[#120e1a]">
+<div class="container mx-auto px-4">
+<h2 class="font-display text-2xl md:text-3xl font-bold mb-6 text-center flex items-center justify-center gap-2 glow-text" style="">
+<span class="material-icons text-accent text-3xl" style="">map</span> GÖREV AŞAMALARI
+            </h2>
+<div class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-accent before:via-primary before:to-warning before:shadow-neon">
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-accent bg-background-light shadow-neon shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-icons text-accent text-lg" style="">add_task</span>
+</div>
+<div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-panel p-3 rounded-xl border border-accent/50 hover:shadow-neon transition-all">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-accent font-display text-xs font-bold animate-pulse" style="">LEVEL 1</span>
+<h4 class="font-bold text-lg text-white" style="">İlan Oluşturma</h4>
+</div>
+<p class="text-xs text-gray-300" style="">Talebini sisteme gir ve eşleşmeyi bekle.</p>
+</div>
+</div>
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary bg-background-light shadow-neon-primary shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
+<span class="material-icons text-primary text-lg" style="">security</span>
+</div>
+<div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-panel p-3 rounded-xl border border-primary/50 hover:shadow-neon-primary transition-all">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-primary font-display text-xs font-bold animate-pulse" style="">LEVEL 2</span>
+<h4 class="font-bold text-lg text-white" style="">Emanet Sistemi</h4>
+</div>
+<p class="text-xs text-gray-300" style="">İşlem güvenliği için tutar havuza aktarılır.</p>
+</div>
+</div>
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-accent bg-background-light shadow-neon shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-icons text-accent text-lg" style="">qr_code_scanner</span>
+</div>
+<div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-panel p-3 rounded-xl border border-accent/50 hover:shadow-neon transition-all">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-accent font-display text-xs font-bold animate-pulse" style="">LEVEL 3</span>
+<h4 class="font-bold text-lg text-white" style="">QR Kod Paylaşımı</h4>
+</div>
+<p class="text-xs text-gray-300" style="">Ödeme için eşsiz QR kodunuzu taratın.</p>
+</div>
+</div>
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-success bg-background-light shadow-neon-success shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-icons text-success text-lg" style="">verified</span>
+</div>
+<div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-panel p-3 rounded-xl border border-success/50 hover:shadow-neon-success transition-all">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-success font-display text-xs font-bold animate-pulse" style="">LEVEL 4</span>
+<h4 class="font-bold text-lg text-white" style="">Ödeme ve Onay</h4>
+</div>
+<p class="text-xs text-gray-300" style="">İşlemi onaylayın ve bildirimi alın.</p>
+</div>
+</div>
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-warning bg-background-light shadow-neon-warning shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-icons text-warning text-lg" style="">currency_exchange</span>
+</div>
+<div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-panel p-3 rounded-xl border border-warning/50 hover:shadow-neon-warning transition-all">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-warning font-display text-xs font-bold animate-pulse" style="">LEVEL 5</span>
+<h4 class="font-bold text-lg text-white" style="">Transfer</h4>
+</div>
+<p class="text-xs text-gray-300" style="">Kazanımlarınız cüzdanınıza aktarılsın.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-8 bg-[#0F0F1A] relative overflow-hidden">
+<div class="container mx-auto px-4">
+<div class="text-center mb-6">
+<span class="text-accent font-bold tracking-widest uppercase text-sm mb-1 block glow-text">Exclusive</span>
+<h2 class="font-display text-2xl md:text-3xl font-black text-white glow-text drop-shadow-lg">
+        YEMEK KARTINIZLA <span class="text-accent">ALIŞVERİŞ</span> YAPABİLİRSİNİZ
+      </h2>
+</div>
+<div class="flex flex-col items-center mb-6">
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 w-full justify-start md:justify-center">
+<button class="whitespace-nowrap bg-[#00F0FF] text-[#05050A] font-bold px-4 py-1.5 rounded-full text-sm border border-[#00F0FF]">Tüm İlanlar</button>
+<button class="whitespace-nowrap bg-transparent text-gray-300 px-4 py-1.5 rounded-full text-sm border border-gray-600 hover:border-accent hover:text-accent transition-colors">Gıda</button>
+<button class="whitespace-nowrap bg-transparent text-gray-300 px-4 py-1.5 rounded-full text-sm border border-gray-600 hover:border-accent hover:text-accent transition-colors">Elektronik</button>
+<button class="whitespace-nowrap bg-transparent text-gray-300 px-4 py-1.5 rounded-full text-sm border border-gray-600 hover:border-accent hover:text-accent transition-colors">Tekstil</button>
+<button class="whitespace-nowrap bg-transparent text-gray-300 px-4 py-1.5 rounded-full text-sm border border-gray-600 hover:border-accent hover:text-accent transition-colors">Hediye Kartları</button>
+<button class="whitespace-nowrap bg-transparent text-gray-300 px-4 py-1.5 rounded-full text-sm border border-gray-600 hover:border-accent hover:text-accent transition-colors">Kuponlar</button>
+</div>
+<p class="text-xs text-gray-400 mt-2 font-display tracking-wider text-center w-full">ve daha birçok ürün kategorisi</p>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4">
+<div class="min-w-[260px] w-[260px] snap-center glass-panel rounded-2xl overflow-hidden flex flex-col border border-white/10 hover:border-accent/50 transition-colors">
+<div class="relative h-40 bg-gray-800">
+<img alt="Tripod" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeo1SVb0wxTo0ZBgFAyRADX_DPldGY1havj4npx-KzQP4UDCmDpLfTtpnBbg6uMiRu7dt7vFBIKt88hEumN7BF5w8I2JQB90sxTGWZGAXF3Qmy-2QumeWXUpDrbiJe6rPwC5mXqbbP725M1qrj_89nYS3Zxa1Yfx0tkOKfzwjxTZ40mS-1Pz2HFUzRkCsEXZhIRQgK-hEnMU8L81EjdKYUVo2JWu37V0-qGEw1ifaSS5O5CKsvAAtfSMXZ2pwROqO4m4id2St0Xg9N"/>
+<div class="absolute top-2 right-2 bg-black/70 backdrop-blur text-warning px-2 py-0.5 rounded flex items-center gap-1 text-xs font-bold">
+<span class="material-icons text-[12px]">star</span> 5
+          </div>
+<div class="absolute bottom-2 left-2 bg-[#1B2A3B]/80 backdrop-blur text-accent px-2 py-0.5 rounded text-[10px] font-bold uppercase border border-accent/30">
+            İLAN
+          </div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between bg-[#151522]">
+<h3 class="font-bold text-sm text-white mb-2 line-clamp-2">Siyah Renk Işıklı Bluetooth Kumandalı Dikey ve Yatay...</h3>
+<div class="flex items-end justify-between mt-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-gray-600 overflow-hidden">
+<img alt="Seller" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBroJFsjZJMvuYMIE0VnH2wJUseajPfjn2mrcy0Z4-4oOFbv0CAGm85m0YIKPAAUwjSVMP7JknJ1ZOwKq5WF8NJqOBSBMNpn9qcJ90wMHQqdF174ZtB0d1HlzvcrHMcyCnBhTIaFTeXwnLorTOkALx24cuNZmHyPzFjrTcDNRaIxoByauVeEcShSkNk-icE840wyqqkXJ_vF6i2KcfJaDnRPOy8ePe58YYoZaPXOlLopsH3E1Ybi8QzPe0Q0YD07aD-BMZLvfFrFeMF"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[9px] text-gray-500 uppercase">SATICI</span>
+<span class="text-xs font-bold text-white leading-tight">hasan iki</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[9px] text-gray-500 uppercase">FİYAT</span>
+<span class="text-accent font-bold text-base leading-tight">₺400</span>
+</div>
+</div>
+</div>
+</div>
+<div class="min-w-[260px] w-[260px] snap-center glass-panel rounded-2xl overflow-hidden flex flex-col border border-white/10 hover:border-accent/50 transition-colors">
+<div class="relative h-40 bg-gray-800">
+<img alt="Jacket" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkpUwxVWOhtK8qSWvPfge16UPue6eLX3WQEA8sysWDnOH1nfRZsPeuZOmECztFEtmnA5L26EKdj-pr_eaPaNAIQ7nE-5PDLH2mVZxzzcXw3SXmwaaFMeVqlT-iTOcyOki5-R4BzDMlNHeISurZvGUGKk2Uwi1S8a8fwPY9UMp7D5VdlXOm7Kf6TvZhyyHgTitHCnSNcyJ0nHm6RN-8RyTb9vjHDkoOiDMagcO1J2IH9zmBwnKxD0QJ5GTfZus4nGEVmMQj_w3LmSTD"/>
+<div class="absolute top-2 right-2 bg-black/70 backdrop-blur text-warning px-2 py-0.5 rounded flex items-center gap-1 text-xs font-bold">
+<span class="material-icons text-[12px]">star</span> 5
+          </div>
+<div class="absolute bottom-2 left-2 bg-[#1B2A3B]/80 backdrop-blur text-accent px-2 py-0.5 rounded text-[10px] font-bold uppercase border border-accent/30">
+            İLAN
+          </div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between bg-[#151522]">
+<h3 class="font-bold text-sm text-white mb-2 line-clamp-2">ERKEK SUNNİ DERİ MONT</h3>
+<div class="flex items-end justify-between mt-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-gray-600 overflow-hidden">
+<img alt="Seller" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZD5m_jY8gl40HteM3pCaDLfzgWoR5z-PtFPna3kBW2LmVhjBxve6qtfv54qzF5yGooJuz6I9PQbmqdaXhI9n0swsuBJGu3DgnJCWZ5J5eBARyT8bkkrBQh9iiG2PXtcxWDp8ZcIKQOxPsx_5qrHHEUHMxr6Jb3WP9MvnkIrt8RhybyefnJN0J1z_XnYtSqsy00dvNwTHtG_0RK7qxy-saqYCx2q0KIi9cbWbRbVgEwtQxPL3-FhCcaQieVsAGsLH7GbIhnrSgkNll"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[9px] text-gray-500 uppercase">SATICI</span>
+<span class="text-xs font-bold text-white leading-tight">hasan iki</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[9px] text-gray-500 uppercase">FİYAT</span>
+<span class="text-accent font-bold text-base leading-tight">₺6.000</span>
+</div>
+</div>
+</div>
+</div>
+<div class="min-w-[260px] w-[260px] snap-center glass-panel rounded-2xl overflow-hidden flex flex-col border border-white/10 hover:border-accent/50 transition-colors">
+<div class="relative h-40 bg-gray-800">
+<img alt="Bracelet" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBobzTERv8KxCARXVDt1An_ihLfLV0uRJlAha2lvazrXv5oT8uPxfEMn4fMqL_PcKHKHDW5rz5xKwwCG4W6aIfPGQaZQtbMeo8E2d9TayHtDVXIzvCOtr0jodSnzpyyPo4suoivQ9hvm1pcP5ozhA70aNJ21f6mZEw4chkJOc6eHRxYz7D9cMescpVEsdEbVOALburz8VsI8NleeKHrHuTbVFHx5TKiQd3p2378epuC19JbJoSJeKxfPEmtnFp_2nf7-CMm95g3A0hA"/>
+<div class="absolute top-2 right-2 bg-black/70 backdrop-blur text-warning px-2 py-0.5 rounded flex items-center gap-1 text-xs font-bold">
+<span class="material-icons text-[12px]">star</span> 5
+          </div>
+<div class="absolute bottom-2 left-2 bg-[#1B2A3B]/80 backdrop-blur text-accent px-2 py-0.5 rounded text-[10px] font-bold uppercase border border-accent/30">
+            İLAN
+          </div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between bg-[#151522]">
+<h3 class="font-bold text-sm text-white mb-2 line-clamp-2">muhteşem bileklik</h3>
+<div class="flex items-end justify-between mt-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-[10px] font-bold text-white">
+                MA
+              </div>
+<div class="flex flex-col">
+<span class="text-[9px] text-gray-500 uppercase">SATICI</span>
+<span class="text-xs font-bold text-white leading-tight">mehmet ahmet</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[9px] text-gray-500 uppercase">FİYAT</span>
+<span class="text-accent font-bold text-base leading-tight">₺35.000</span>
+</div>
+</div>
+</div>
+</div>
+<div class="min-w-[260px] w-[260px] snap-center glass-panel rounded-2xl overflow-hidden flex flex-col border border-white/10 hover:border-accent/50 transition-colors">
+<div class="relative h-40 bg-gray-800">
+<img alt="Taze Kaşar Peyniri" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPow804Bx8v_kBENsIfk8KpGA3p_J485Xwl2hvdAq182m-YZkaeW6pO80u8l-qUBfjws4l5q73PKUX90otampPfIiBWZgF8UtrK8m5-YwHEH8IviJVUFgbLz8t-6dt8nTSSyIuP9FVhGpcp-xsWqqFwj4QNkj8FtIMtw2gln72XsRmBhm1sqBWh1diLMPUxuTcYa5vws-rvlbdaeBC6Da7F04s8ZnU0wa1fzexN7n31N3BpD9jRbetb8_sRXsQwBjyLs8V3tVJuYif"/>
+<div class="absolute top-2 right-2 bg-black/70 backdrop-blur text-warning px-2 py-0.5 rounded flex items-center gap-1 text-xs font-bold">
+<span class="material-icons text-[12px]">star</span> 5
+          </div>
+<div class="absolute bottom-2 left-2 bg-[#1B2A3B]/80 backdrop-blur text-accent px-2 py-0.5 rounded text-[10px] font-bold uppercase border border-accent/30">
+            İLAN
+          </div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between bg-[#151522]">
+<h3 class="font-bold text-sm text-white mb-2 line-clamp-2">Taze Kaşar Peyniri</h3>
+<div class="flex items-end justify-between mt-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-[10px] font-bold text-white">
+                AY
+              </div>
+<div class="flex flex-col">
+<span class="text-[9px] text-gray-500 uppercase">SATICI</span>
+<span class="text-xs font-bold text-white leading-tight">ayşe yılmaz</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[9px] text-gray-500 uppercase">FİYAT</span>
+<span class="text-accent font-bold text-base leading-tight">₺250</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-8 relative bg-background-light">
+<div class="container mx-auto px-4">
+<h2 class="font-display text-2xl md:text-3xl font-bold mb-6 text-center" style="">NEDEN BU AİLEYE KATILMALISIN?</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="glass-panel p-6 rounded-3xl border border-success/30 hover:border-success/80 transition-all relative overflow-hidden group">
+<div class="absolute -right-10 -bottom-10 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[150px] text-success" style="">savings</span>
+</div>
+<div class="w-16 h-16 bg-success/20 rounded-2xl flex items-center justify-center mb-4 shadow-neon-success border border-success/50 float-anim">
+<span class="material-symbols-outlined text-3xl text-success" style="">trending_up</span>
+</div>
+<h3 class="font-display text-2xl font-bold mb-3 text-white" style="">Birlikte Tasarruf</h3>
+<p class="text-gray-300 text-sm mb-4" style="">Her işlemde ortalama <span class="text-success font-bold font-display text-xl" style="">%10 Kâr</span> elde et. Harcarken kazanmanın en akıllı yolu.</p>
+</div>
+<div class="glass-panel p-6 rounded-3xl border border-accent/30 hover:border-accent/80 transition-all relative overflow-hidden group">
+<div class="absolute -right-10 -bottom-10 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[150px] text-accent" style="">gpp_good</span>
+</div>
+<div class="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mb-4 shadow-neon border border-accent/50 float-anim" style="animation-delay: 1s;">
+<span class="material-symbols-outlined text-3xl text-accent" style="">shield</span>
+</div>
+<h3 class="font-display text-2xl font-bold mb-3 text-white" style="">Sıfır Risk</h3>
+<p class="text-gray-300 text-sm mb-4" style="">Emanet sistemi ile paranız güvende. İşlem onaylanana kadar tutar havuzda bekletilir.</p>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-[#0a0a12] pt-8 pb-6 border-t border-accent/20 relative overflow-hidden">
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-warning"></div>
+<div class="container mx-auto px-4">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-8 border-b border-white/10 pb-8">
+<div class="flex items-center gap-3">
+<span class="material-icons text-primary text-3xl glow-text" style="">hub</span>
+<span class="font-display font-black text-xl tracking-widest text-white" style="">WORKIGOM<span class="text-accent" style="">.</span></span>
+</div>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-accent hover:text-accent hover:shadow-neon transition-all" href="#" style="">
+<span class="material-icons text-sm" style="">share</span>
+</a>
+<a class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-primary hover:text-primary hover:shadow-neon-primary transition-all" href="#" style="">
+<span class="material-icons text-sm" style="">chat</span>
+</a>
+<a class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-warning hover:text-warning hover:shadow-neon-warning transition-all" href="#" style="">
+<span class="material-icons text-sm" style="">mail</span>
+</a>
+</div>
+</div>
+<div class="text-center">
+<p class="text-gray-400 font-display tracking-widest text-xs glow-text" style="">© COPYRIGHT WORKIGOM CYBER SYSTEMS 2024. ALL RIGHTS RESERVED.</p>
+</div>
+</div>
+<div class="absolute top-10 right-20 w-8 h-8 bg-warning rounded-full blur-sm opacity-50 float-anim"></div>
+<div class="absolute bottom-10 left-10 w-6 h-6 bg-accent rounded-full blur-sm opacity-50 float-anim" style="animation-delay: 2s;"></div>
+</footer>
+</body></html>

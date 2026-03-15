@@ -1,0 +1,182 @@
+import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
+import { Home, Receipt, Store, MessageSquare, User, Plus, Bell, LogOut, MessageCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { getSupporterBadge, getMockTransactionCount } from '../utils/badges';
+import { useNotifications } from '../hooks/useNotifications';
+
+const Layout = () => {
+    const { profile, signOut } = useAuth();
+    const location = useLocation();
+    const { unreadCount, unreadMessageCount } = useNotifications();
+
+    const isTaleplerActive = location.pathname.includes('/app/talepler');
+
+    const navItems = [
+        { to: '/app', icon: Home, label: 'Ana Sayfa', end: true },
+        { to: '/app/talepler', icon: Receipt, label: 'Talepler' },
+        { to: '/app/market', icon: Store, label: 'Market' },
+        { to: '/app/messages', icon: MessageSquare, label: 'Mesajlarım' },
+        { to: '/app/muhabbet', icon: MessageCircle, label: 'Muhabbet' },
+        { to: '/app/profile', icon: User, label: 'Profil' },
+    ];
+
+    return (
+        <div className="flex h-screen bg-[#0a0b1e] text-slate-100 font-sans overflow-hidden">
+            {/* Desktop Sidebar */}
+            <aside className="hidden md:flex flex-col w-64 bg-[#0a0b1e] border-r border-[#39ff14]/10 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.2)] pb-6 relative">
+                <div className="flex flex-col items-center justify-center p-8">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-[#39ff14] rounded-xl flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(57,255,20,0.4)]">
+                            <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-bold text-white tracking-tight leading-tight">Workigom</h1>
+                            <p className="text-[9px] text-[#39ff14] tracking-widest uppercase font-bold">Cyber Finance P2P</p>
+                        </div>
+                    </div>
+                </div>
+
+                <nav className="flex-1 px-4 py-4 space-y-2">
+                    {navItems.map((item) => (
+                        <NavLink
+                            key={item.to}
+                            to={item.to}
+                            end={item.end}
+                                className={({ isActive }) =>
+                                    `flex items-center justify-between px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all ${isActive
+                                        ? 'bg-[#16172d] text-[#39ff14] shadow-lg shadow-[#39ff14]/5 border border-[#39ff14]/20'
+                                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                    }`
+                                }
+                            >
+                                <div className="flex items-center">
+                                    <item.icon className="w-5 h-5 mr-3" />
+                                    {item.label}
+                                </div>
+                                {item.label === 'Mesajlarım' && unreadMessageCount > 0 && (
+                                    <span className="min-w-[20px] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg">
+                                        {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
+                                    </span>
+                                )}
+                            </NavLink>
+                    ))}
+                </nav>
+
+                {/* Premium User Card at bottom of sidebar */}
+                <div className="px-4 mt-auto">
+                    <div className="bg-[#16172d] rounded-2xl p-4 border border-[#39ff14]/10 relative group">
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border ${getSupporterBadge(getMockTransactionCount(profile?.id)).bgClasses} ${getSupporterBadge(getMockTransactionCount(profile?.id)).borderClasses} mb-3`}>
+                            {getSupporterBadge(getMockTransactionCount(profile?.id)).icon}
+                            <span className={`text-[10px] uppercase font-bold tracking-wider ${getSupporterBadge(getMockTransactionCount(profile?.id)).colorClasses}`}>
+                                {getSupporterBadge(getMockTransactionCount(profile?.id)).label}
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-center mb-3 gap-2">
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-white truncate">{profile?.full_name || 'Kullanıcı'}</p>
+                            </div>
+                            <button onClick={signOut} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-colors border border-red-500/20 shrink-0" title="Çıkış Yap">
+                                <LogOut size={14} />
+                                <span className="text-xs font-bold">Çıkış</span>
+                            </button>
+                        </div>
+                        <div className="w-full h-1.5 bg-[#0a0b1e] rounded-full overflow-hidden">
+                            <div className="w-2/3 h-full bg-[#39ff14] rounded-full shadow-[0_0_10px_#39ff14]"></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            {/* Main Content Area w/ Desktop Topbar */}
+            <div className="flex-1 flex flex-col h-full relative overflow-y-auto no-scrollbar bg-[#0a0b1e]">
+
+                {/* Mobile Topbar */}
+                <header className="md:hidden flex h-[70px] items-center justify-between px-5 sticky top-0 bg-[#0a0b1e]/90 backdrop-blur-xl z-40 border-b border-[#39ff14]/10 shrink-0">
+                    <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-[#39ff14] rounded-lg flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(57,255,20,0.4)]">
+                            <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                        </div>
+                        <h1 className="text-lg font-bold text-white tracking-tight">Workigom</h1>
+                    </div>
+                    <Link to="/app/notifications" className="w-10 h-10 rounded-full bg-[#16172d] border border-white/5 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
+                        <Bell size={20} />
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-[#16172d]">
+                                {unreadCount > 9 ? '9+' : unreadCount}
+                            </span>
+                        )}
+                    </Link>
+                </header>
+
+                {/* Desktop Topbar */}
+                <header className="hidden md:flex h-24 items-center justify-between px-10 sticky top-0 bg-[#0a0b1e]/90 backdrop-blur-xl z-40 border-b border-transparent">
+                    <div className="flex-1"></div>
+
+                    <div className="flex items-center gap-4">
+                        {isTaleplerActive && (
+                            <Link to="/app/talepler/create" className="bg-[#39ff14] text-[#0a0b1e] hover:bg-[#39ff14]/90 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-transform active:scale-95 shadow-[0_0_15px_rgba(57,255,20,0.3)]">
+                                <Plus size={18} />
+                                Talep Oluştur
+                            </Link>
+                        )}
+                        <Link to="/app/notifications" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 hover:border-[#39ff14]/30 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
+                            <Bell size={20} />
+                            {unreadCount > 0 && (
+                                <span className="absolute top-1.5 right-1.5 min-w-[20px] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-[#16172d]">
+                                    {unreadCount > 9 ? '9+' : unreadCount}
+                                </span>
+                            )}
+                        </Link>
+                        <Link to="/app/profile" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 p-1 cursor-pointer hover:border-[#39ff14]/40 transition-all">
+                            <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#39ff14]/20 to-blue-500/20 flex items-center justify-center opacity-80">
+                                <User size={20} className="text-[#39ff14]" />
+                            </div>
+                        </Link>
+                    </div>
+                </header>
+
+                <main className="flex-1 p-5 md:p-10 w-full max-w-[1400px] mx-auto pb-32 md:pb-10">
+                    <Outlet />
+                </main>
+
+                {/* Mobile Bottom Navigation */}
+                <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[70px] bg-[#16172d]/95 backdrop-blur-xl border-t border-[#39ff14]/20 flex items-center px-2 pb-2 pt-1 z-50">
+                    <NavLink to="/app" end className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <Home size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Ana Sayfa</span>
+                    </NavLink>
+                    <NavLink to="/app/talepler" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <Receipt size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Talepler</span>
+                    </NavLink>
+
+                    <NavLink to="/app/market" end className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <Store size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Market</span>
+                    </NavLink>
+                    <NavLink to="/app/messages" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <div className="relative">
+                            <MessageSquare size={22} />
+                            {unreadMessageCount > 0 && (
+                                <span className="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-[#16172d]">
+                                    {unreadMessageCount > 9 ? '9+' : unreadMessageCount}
+                                </span>
+                            )}
+                        </div>
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Mesaj</span>
+                    </NavLink>
+                    <NavLink to="/app/muhabbet" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <MessageCircle size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Muhabbet</span>
+                    </NavLink>
+                    <NavLink to="/app/profile" className={({ isActive }) => `flex flex-col items-center justify-center gap-1 flex-1 ${isActive ? 'text-[#39ff14]' : 'text-slate-500'}`}>
+                        <User size={22} />
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Profil</span>
+                    </NavLink>
+                </nav>
+            </div>
+        </div>
+    );
+};
+
+export default Layout;

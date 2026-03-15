@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Neon Chat Module</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF007F",
+                        "accent-cyan": "#00FFFF",
+                        "accent-green": "#39FF14",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#0B132B",
+                        "surface-dark": "#1C2541",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(28, 37, 65, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-border-pink {
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+            border: 1px solid rgba(255, 0, 127, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+<div class="flex h-screen w-full flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex h-16 w-full items-center justify-between border-b border-white/10 bg-surface-dark/50 px-6 backdrop-blur-md">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-[0_0_15px_rgba(255,0,127,0.5)]">
+<span class="material-symbols-outlined text-white">bolt</span>
+</div>
+<h1 class="hidden text-xl font-bold tracking-tight text-white sm:block">NEON<span class="text-primary">CHAT</span></h1>
+</div>
+<!-- Room Dropdown -->
+<div class="relative group">
+<button class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold transition-all hover:bg-white/10">
+<span class="text-accent-cyan">#</span>
+<span>General Chat</span>
+<span class="material-symbols-outlined text-xs">expand_more</span>
+</button>
+<!-- Mock Dropdown Menu -->
+<div class="absolute left-0 top-full z-50 mt-2 hidden w-48 flex-col rounded-xl border border-white/10 bg-surface-dark p-2 shadow-2xl group-hover:flex">
+<a class="flex items-center gap-2 rounded-lg bg-primary/20 px-3 py-2 text-sm text-primary" href="#">
+<span class="material-symbols-outlined text-sm">tag</span> General Chat
+                        </a>
+<a class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5" href="#">
+<span class="material-symbols-outlined text-sm">tag</span> Development
+                        </a>
+<a class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-white/5" href="#">
+<span class="material-symbols-outlined text-sm">tag</span> Announcements
+                        </a>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="h-10 w-64 rounded-xl border-none bg-white/5 pl-10 text-sm focus:ring-2 focus:ring-primary/50" placeholder="Search messages..." type="text"/>
+</div>
+<button class="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-white/5">
+<span class="material-symbols-outlined text-slate-300">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-xl bg-cover bg-center ring-2 ring-primary/20" data-alt="User profile avatar neon style" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCdzq_8zG9iJ-D0Wdxw0gLsG3rxkTMFpFen5IehhCL4kePtOo_S-zPw6eTSMZG2dqQgMso308erPAvL6ylIRWurEUSTEHHWD8DeuxhExiMu2oIPSfzCcqPNCQm-vZoAGuiFgZPTnwWU6dlbMVYQ1hwFFhef41acYf3-WtQcxibp0KiMjmPJvDIGVN3ZyFix4Vzv3aX2JYQe29SksqOmazImEg5vTo-0VvSQbnNzTG1oIIKmCaNiEeeAKLoRMa0wbL6QQKCPZaikHr4')"></div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex flex-1 overflow-hidden">
+<!-- Chat Flow Section -->
+<section class="flex flex-1 flex-col bg-background-dark/50">
+<!-- Messages List -->
+<div class="custom-scrollbar flex-1 overflow-y-auto p-6 space-y-6">
+<!-- System Message -->
+<div class="flex justify-center">
+<span class="rounded-full bg-white/5 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 border border-white/5">Welcome to the encrypted session</span>
+</div>
+<!-- Message Left -->
+<div class="flex items-start gap-4">
+<div class="h-10 w-10 shrink-0 rounded-2xl bg-cover bg-center border border-accent-cyan/30" data-alt="User avatar male cyberpunk" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA0WnfsI_-AZdRsvQQUuN7IcCZ6-L5ZDGm0brqNExo4p0zuqHdxyC7Z7F7vQXSaTBqp9ZsIuqI-mknx_mDBvTD21gMSE6TdYzmpFBfh15DgDr3cFvP-digqzV-PgCwaPNLyFj1kxXjc431JWNtoVyXmOHvHqMA_tOv8h5FpeCDgMqLlgotH30xy2tPe1Ywzcxkd9cPM50ffLX5TmpSldtLgf2S-xSK5WxN0d2LBXU-sCiZbHi2zfp5zSMn1MDQnQg0uxVsHSfKNBVI')"></div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-accent-cyan">CyberViper</span>
+<span class="text-[10px] text-slate-500">10:42 AM</span>
+</div>
+<div class="glass-panel max-w-md rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed text-slate-100">
+                                Has anyone seen the new mIRC-inspired theme updates? The glow effects are sick!
+                            </div>
+</div>
+</div>
+<!-- Message Right (Me) -->
+<div class="flex flex-row-reverse items-start gap-4">
+<div class="h-10 w-10 shrink-0 rounded-2xl bg-cover bg-center border border-primary/30" data-alt="User avatar personal" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6FcBlv04jPRWVufu9KtPRJjDx0k_wF9GVyN1M3i3kBjpDStf8t22407KfbiEVldJuAN438_5Nk2ViU_hyll6ft3i4N53kUkpqojPw9M3Ag79v80HiulTTg2dG5WuUlxUa79pem1VpPsY7OEN_E2dxM00p-GH32zJ9c0gD3Cq6zG1f5s4qO6n06WiIAHDGfENDVfskAZd9SdtxysuksWmXz7kNLxLpdfG84TPjVAqVjHkb-pzFBuM6OKcKpWsAexbq9m57Lx-znp8')"></div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex flex-row-reverse items-center gap-2">
+<span class="text-sm font-bold text-primary">GhostCode</span>
+<span class="text-[10px] text-slate-500">10:45 AM</span>
+</div>
+<div class="max-w-md rounded-2xl rounded-tr-none bg-primary px-4 py-3 text-sm leading-relaxed text-white shadow-[0_0_20px_rgba(255,0,127,0.2)]">
+                                Yeah, just pushed the glassmorphism updates. Let me know if the neon green accents are too much for the mod badges.
+                            </div>
+</div>
+</div>
+<!-- Message Left (Bot) -->
+<div class="flex items-start gap-4">
+<div class="h-10 w-10 shrink-0 rounded-2xl bg-cover bg-center border border-primary/50" data-alt="Robot bot avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC_gJfwtrwqEy-1wx7l2p26jNxoKdogNHizy7K_S5hvvTKchgO1dSA3tSn9rPQUH37VgmhCG9dLlu21FgDxSRZa-gKO88-2DC5IaQFlTVGEt1qMydTQZpd6IrBxUz57mCSiNjJaVatxy_mkar5dfa3pOw8yDC6FVbcuzvzMz9A9g0sfnIMal7M_4Y9A51poIdOI3R504BlkXbfaMkLZ17pyw7SXCN0AQiDWwJmYoSFYwQDek0sJf238j3xNle02vjWRsUE4rpdBuKI')"></div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-primary">HelperBot</span>
+<span class="flex items-center gap-1 rounded bg-primary/20 px-1.5 py-0.5 text-[9px] font-bold uppercase text-primary">Bot</span>
+<span class="text-[10px] text-slate-500">10:46 AM</span>
+</div>
+<div class="glass-panel max-w-md rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed text-slate-100 border-primary/20">
+                                Type <code class="text-accent-cyan">/help</code> to see all available commands. Beep boop!
+                            </div>
+</div>
+</div>
+<!-- Message Left (Mod) -->
+<div class="flex items-start gap-4">
+<div class="h-10 w-10 shrink-0 rounded-2xl bg-cover bg-center border border-accent-green/30" data-alt="Moderator avatar female" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBg94g0-a7AKilD66L46CV_e_iMlkO1zonfwpv9d_9nQasWButJvCI9JUYjE7UE6um7mxcCl110QkmH-m9q58Eha3B1_1c9ODhTiLvlvJ2BdwrTPyGOny2HSITPA-DUiSbTsbvfSHMQ_zBf6yVnxeUqnRtt7-fVnrV0Qh5ea6ayKl0u2ebbelbeYtJYqmObveSquSvSvzfALwlOnYMUOdIHxtg9RGLBjLyLOiwZEWPgap3uj4QNQelWZffUQM28uMKUd8ojhj3qiac')"></div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-accent-green">NeonQueen</span>
+<span class="text-[10px] text-slate-500">10:50 AM</span>
+</div>
+<div class="glass-panel max-w-md rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed text-slate-100">
+                                Looks perfect to me. The contrast is exactly what we needed for readability. ⚡️
+                            </div>
+</div>
+</div>
+</div>
+<!-- Chat Input Section -->
+<div class="p-6">
+<div class="glass-panel neon-border-pink relative flex items-center gap-2 rounded-2xl p-2 pr-4 focus-within:ring-1 focus-within:ring-primary/50">
+<button class="flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 hover:text-accent-cyan">
+<span class="material-symbols-outlined">sentiment_satisfied</span>
+</button>
+<input class="flex-1 border-none bg-transparent py-2 text-sm text-white placeholder:text-slate-500 focus:ring-0" placeholder="Message #General Chat..." type="text"/>
+<button class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-lg transition-transform active:scale-95">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Sidebar: User List -->
+<aside class="hidden w-72 flex-col border-l border-white/10 bg-surface-dark/30 lg:flex">
+<div class="flex h-14 items-center border-b border-white/10 px-6">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-400">Online — 42</h3>
+</div>
+<div class="custom-scrollbar flex-1 overflow-y-auto p-4 space-y-6">
+<!-- Admin Group -->
+<div>
+<p class="mb-3 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Admins</p>
+<div class="space-y-1">
+<div class="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/5 cursor-pointer">
+<div class="relative">
+<div class="h-10 w-10 rounded-xl bg-cover bg-center" data-alt="Admin user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD-GV0Cu-_6rm96h05nJPDM_ov5gx_EmjDl0rGMTRBYuBsec5W9zVDIfwNdDTuxjv7jvaPJJ4XDgTHPPDBxaqd7bfbmOKMD4JNskWMX2R9vQ5-OsG0BV5-sY6T_ykoC80QuoZ1araGKxM3QACVQ7Ydb3xXw8enGV9I4Bb2XoK34IBS_XAjCOEuo7mE1DYQH6uBjcqHf1E6BhXj5tHO7b0R-vQo3kaZ9raMJNJmVsYh7EU7QSPsoac16PKF7b7ToZ5Frx9hGFy77O_s')"></div>
+<div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-surface-dark bg-accent-green"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-semibold text-white">GhostCode</span>
+<span class="material-symbols-outlined text-[14px] text-yellow-400">workspace_premium</span>
+</div>
+<span class="text-[10px] text-slate-400">Writing code...</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Mod Group -->
+<div>
+<p class="mb-3 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Moderators</p>
+<div class="space-y-1">
+<div class="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/5 cursor-pointer">
+<div class="relative">
+<div class="h-10 w-10 rounded-xl bg-cover bg-center" data-alt="Moderator user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCysaPQRfF-YrEVjcZJq83BnR9xc-gPPIWTZZ7mqQ_pyFU0GR8hl0Kh-QyNce8uRQoIP5ggStAUHqBPII1FYT7I6HrRWYGuT4UJtkl8rDosmV5YqT1cPtDjvyJ0iowmXpvBgWtcKQ01BUxlem31V8AOA6mNHd5tdiF5MhuBw_KSPAOAu2BK05CCcJwX_tBP6YPPqzZX1DW_Umb84ZQzvWEitvzno9wMZ0-v5l0a4aHiv-9us7U_atGEChbZ6zBujSWgbNYQgygf1ik')"></div>
+<div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-surface-dark bg-accent-green"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-semibold text-white">NeonQueen</span>
+<span class="material-symbols-outlined text-[14px] text-accent-cyan">shield</span>
+</div>
+<span class="text-[10px] text-slate-400">Keeping peace</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bot Group -->
+<div>
+<p class="mb-3 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Droids</p>
+<div class="space-y-1">
+<div class="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/5 cursor-pointer">
+<div class="relative">
+<div class="h-10 w-10 rounded-xl bg-cover bg-center" data-alt="Bot avatar rounded" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAa46Jrap6cAR5XtkANTwjQtan6w7TavFsmyQ4hfvFHg-58Xwh2qBHK9ih2OVUFyZCeG3gmbct4Ib5znpz74jW-pilij25XJkKucs9UrhIVmN_kJE1JY8rpDW0xJFI-M8t8VJx8lMTqM1L0eBNSnj7QCCBs9Awej6iMBxFF50vrLoUrPqWlCmmQ8x2UcgpTlWq-uZMeQ9VBl9PTonq0lTju9r1ORxs8SzRaFaP0JZJ17aq_OwZ26fynpbFkyqXqzfPrdenEzvlbPvc')"></div>
+<div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-surface-dark bg-accent-green"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-semibold text-primary">HelperBot</span>
+<span class="material-symbols-outlined text-[14px] text-primary">smart_toy</span>
+</div>
+<span class="text-[10px] text-slate-400">Always active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Users Group -->
+<div>
+<p class="mb-3 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Citizens</p>
+<div class="space-y-1">
+<div class="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/5 cursor-pointer opacity-80 hover:opacity-100">
+<div class="relative">
+<div class="h-10 w-10 rounded-xl bg-cover bg-center" data-alt="Normal user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApCuRWaxTagoxCanNTRlGOWrHgLC_O2W92ijn66KNRfRo0hbukXlqoHztAtsejPllD7uStuSvI5hOZDf7uSadV00C_ZioeKTbBl828sf92vG6A-SleD8Y1IimoZrLXW6aoYZVLrpfnnkN3KYW5gSuGUh8wzs9x5EhQA1GgoylIPut695-cTwYx_-XvJTkU6khkre7Zcq8grQI5sr6wLmkpuOCcvirvBeWyUV1oId22BClwwUIPt7TWZd27sxcdKLUK9QBsLMUDmWU')"></div>
+<div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-surface-dark bg-accent-green"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-300">CyberViper</span>
+<span class="text-[10px] text-slate-500">Online</span>
+</div>
+</div>
+<div class="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/5 cursor-pointer opacity-60">
+<div class="relative">
+<div class="h-10 w-10 rounded-xl bg-cover bg-center grayscale" data-alt="Offline user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDlTT71ZwZIpHHYHFW1vzfJZHM8w9I6r56TBkKzLS1uSFnxCx5HdMdXRbELq-WJ4ePPYvxtNAA1kIksKREPDY9kn7NV8_b_KKdlMftElcMnWB6LCQFDXFv-bUHIsN687uKjgc7R3rjU_rWofroe2UPaccrClCmXTdjtZaNLW8aotS7Mo6MQO45Lk2PV-o3tPDNHloEwXIeufHQo0UyEdGTz1P9EobuIWOKjnfJSqAgDx_pAnOJIbTka7BwHrhTuwqi9czPp03iJUos')"></div>
+<div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-surface-dark bg-slate-600"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-400">SynthRunner</span>
+<span class="text-[10px] text-slate-600">Away for 2h</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</body></html>
