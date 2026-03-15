@@ -47,8 +47,8 @@ Kullanıcı '${user_name || 'Bir kullanıcı'}' sana şu mesajı gönderdi:
 
 Türkçe olarak kısa, yardımcı ve biraz eğlenceli bir yanıt yaz. Yanıtın en fazla 2 paragraf olsun. Kendinden bahsederken her zaman "Workigom AI" ismini kullan.`
 
-    // gemini-2.5-flash: 2026 güncel model
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
+    // gemini-2.0-flash: Standard model for 2026
+    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`
     
     console.log("Calling Gemini API...")
 
