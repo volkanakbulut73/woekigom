@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
-import { Send, Smile, Search, Hash, Users } from 'lucide-react';
+import { Send, Smile, Hash, Users, Bell } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useNotifications } from '../hooks/useNotifications';
 
 interface ChatMessage {
     id: string;
@@ -21,6 +23,7 @@ interface OnlineUser {
 
 const Muhabbet = () => {
     const { profile, user } = useAuth();
+    const { unreadCount } = useNotifications();
     const [newMessage, setNewMessage] = useState('');
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
@@ -167,7 +170,7 @@ const Muhabbet = () => {
     };
 
     return (
-        <div className="flex h-[calc(100vh-140px)] w-full flex-col bg-[#0B132B] rounded-3xl overflow-hidden border border-white/10 shadow-2xl animate-in fade-in duration-500">
+        <div className="flex h-[calc(100vh-70px)] md:h-screen w-full flex-col bg-[#0B132B] md:rounded-none overflow-hidden border-none shadow-2xl animate-in fade-in duration-500">
             <style>{`
                 .glass-panel-chat {
                     background: rgba(28, 37, 65, 0.7);
@@ -201,10 +204,14 @@ const Muhabbet = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <div className="relative hidden md:block">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                        <input className="h-10 w-64 rounded-xl border-none bg-white/5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:ring-1 focus:ring-[#FF007F]/50 outline-none" placeholder="Mesajlarda ara..." type="text"/>
-                    </div>
+                    <Link to="/app/notifications" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-[#FF007F] transition-all relative">
+                        <Bell size={20} />
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-[#1C2541]">
+                                {unreadCount > 9 ? '9+' : unreadCount}
+                            </span>
+                        )}
+                    </Link>
                     <div className="md:hidden flex items-center justify-center h-10 w-10 bg-white/5 rounded-xl text-slate-300">
                         <Users size={18} />
                     </div>
@@ -235,11 +242,11 @@ const Muhabbet = () => {
                                         </div>
                                         <div className="flex flex-col gap-1 w-full max-w-[85%] md:max-w-md">
                                             <div className="flex items-center gap-2 px-1">
-                                                <span className="text-sm font-bold text-[#FF007F]">{msg.senderName}</span>
+                                                <span className="text-xs font-bold text-[#FF007F]">{msg.senderName}</span>
                                                 <span className="flex items-center gap-1 rounded bg-[#FF007F]/20 px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#FF007F]">AI</span>
-                                                <span className="text-[10px] text-slate-500">{msg.timestamp}</span>
+                                                <span className="text-[9px] text-slate-500">{msg.timestamp}</span>
                                             </div>
-                                            <div className="glass-panel-chat rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed text-slate-100 border-[#FF007F]/20 shadow-md">
+                                            <div className="glass-panel-chat rounded-2xl rounded-tl-none px-4 py-2.5 text-xs leading-relaxed text-slate-100 border-[#FF007F]/20 shadow-md">
                                                 {msg.text}
                                             </div>
                                         </div>
@@ -256,10 +263,10 @@ const Muhabbet = () => {
                                     </div>
                                     <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} gap-1 w-full max-w-[85%] md:max-w-md`}>
                                         <div className={`flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-center gap-2 px-1`}>
-                                            <span className={`text-sm font-bold ${isMe ? 'text-[#FF007F]' : 'text-[#00FFFF]'}`}>{msg.senderName}</span>
-                                            <span className="text-[10px] text-slate-500">{msg.timestamp}</span>
+                                            <span className={`text-xs font-bold ${isMe ? 'text-[#FF007F]' : 'text-[#00FFFF]'}`}>{msg.senderName}</span>
+                                            <span className="text-[9px] text-slate-500">{msg.timestamp}</span>
                                         </div>
-                                        <div className={`${isMe ? 'bg-[#FF007F] text-white rounded-tr-none shadow-[0_0_15px_rgba(255,0,127,0.2)]' : 'glass-panel-chat text-slate-100 rounded-tl-none shadow-md'} rounded-2xl px-4 py-3 text-sm leading-relaxed`}>
+                                        <div className={`${isMe ? 'bg-[#FF007F] text-white rounded-tr-none shadow-[0_0_15px_rgba(255,0,127,0.2)]' : 'glass-panel-chat text-slate-100 rounded-tl-none shadow-md'} rounded-2xl px-4 py-2.5 text-xs leading-relaxed`}>
                                             {msg.text}
                                         </div>
                                     </div>
@@ -291,7 +298,7 @@ const Muhabbet = () => {
                                 <Smile size={20} />
                             </button>
                             <input 
-                                className="flex-1 border-none bg-transparent py-2.5 px-2 text-[15px] text-white placeholder:text-white/30 focus:ring-0 outline-none" 
+                                className="flex-1 border-none bg-transparent py-2.5 px-2 text-[14px] text-white placeholder:text-white/30 focus:ring-0 outline-none" 
                                 placeholder="Workigom AI'ı çağırmak için konuşmanın başına @workigom yazın..." 
                                 type="text"
                                 value={newMessage}
@@ -330,9 +337,9 @@ const Muhabbet = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-1.5">
-                                            <span className="text-sm font-semibold text-[#FF007F]">Workigom AI</span>
+                                            <span className="text-xs font-semibold text-[#FF007F]">Workigom AI</span>
                                         </div>
-                                        <span className="text-[10px] text-slate-400">Her zaman aktif</span>
+                                        <span className="text-[9px] text-slate-400">Her zaman aktif</span>
                                     </div>
                                 </div>
                             </div>
@@ -353,8 +360,8 @@ const Muhabbet = () => {
                                             <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-[#1C2541] bg-[#39FF14]"></div>
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-semibold text-slate-200">{ou.id === user?.id ? (ou.name + ' (Siz)') : ou.name}</span>
-                                            <span className="text-[10px] text-slate-500">Online</span>
+                                            <span className="text-xs font-semibold text-slate-200">{ou.id === user?.id ? (ou.name + ' (Siz)') : ou.name}</span>
+                                            <span className="text-[9px] text-slate-500">Online</span>
                                         </div>
                                     </div>
                                 ))}

@@ -10,6 +10,7 @@ const Layout = () => {
     const { unreadCount, unreadMessageCount } = useNotifications();
 
     const isTaleplerActive = location.pathname.includes('/app/talepler');
+    const isMuhabbetActive = location.pathname.includes('/app/muhabbet');
 
     const navItems = [
         { to: '/app', icon: Home, label: 'Ana Sayfa', end: true },
@@ -109,33 +110,35 @@ const Layout = () => {
                 </header>
 
                 {/* Desktop Topbar */}
-                <header className="hidden md:flex h-24 items-center justify-between px-10 sticky top-0 bg-[#0a0b1e]/90 backdrop-blur-xl z-40 border-b border-transparent">
-                    <div className="flex-1"></div>
+                {!isMuhabbetActive && (
+                    <header className="hidden md:flex h-24 items-center justify-between px-10 sticky top-0 bg-[#0a0b1e]/90 backdrop-blur-xl z-40 border-b border-transparent">
+                        <div className="flex-1"></div>
 
-                    <div className="flex items-center gap-4">
-                        {isTaleplerActive && (
-                            <Link to="/app/talepler/create" className="bg-[#39ff14] text-[#0a0b1e] hover:bg-[#39ff14]/90 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-transform active:scale-95 shadow-[0_0_15px_rgba(57,255,20,0.3)]">
-                                <Plus size={18} />
-                                Talep Oluştur
-                            </Link>
-                        )}
-                        <Link to="/app/notifications" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 hover:border-[#39ff14]/30 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
-                            <Bell size={20} />
-                            {unreadCount > 0 && (
-                                <span className="absolute top-1.5 right-1.5 min-w-[20px] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-[#16172d]">
-                                    {unreadCount > 9 ? '9+' : unreadCount}
-                                </span>
+                        <div className="flex items-center gap-4">
+                            {isTaleplerActive && (
+                                <Link to="/app/talepler/create" className="bg-[#39ff14] text-[#0a0b1e] hover:bg-[#39ff14]/90 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-transform active:scale-95 shadow-[0_0_15px_rgba(57,255,20,0.3)]">
+                                    <Plus size={18} />
+                                    Talep Oluştur
+                                </Link>
                             )}
-                        </Link>
-                        <Link to="/app/profile" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 p-1 cursor-pointer hover:border-[#39ff14]/40 transition-all">
-                            <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#39ff14]/20 to-blue-500/20 flex items-center justify-center opacity-80">
-                                <User size={20} className="text-[#39ff14]" />
-                            </div>
-                        </Link>
-                    </div>
-                </header>
+                            <Link to="/app/notifications" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 hover:border-[#39ff14]/30 flex items-center justify-center text-slate-400 hover:text-[#39ff14] transition-all relative">
+                                <Bell size={20} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-1.5 right-1.5 min-w-[20px] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-[#16172d]">
+                                        {unreadCount > 9 ? '9+' : unreadCount}
+                                    </span>
+                                )}
+                            </Link>
+                            <Link to="/app/profile" className="w-12 h-12 rounded-full bg-[#16172d] border border-white/5 p-1 cursor-pointer hover:border-[#39ff14]/40 transition-all">
+                                <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#39ff14]/20 to-blue-500/20 flex items-center justify-center opacity-80">
+                                    <User size={20} className="text-[#39ff14]" />
+                                </div>
+                            </Link>
+                        </div>
+                    </header>
+                )}
 
-                <main className="flex-1 p-5 md:p-10 w-full max-w-[1400px] mx-auto pb-32 md:pb-10">
+                <main className={`flex-1 w-full mx-auto pb-32 md:pb-10 ${isMuhabbetActive ? 'p-0 max-w-none' : 'p-5 md:p-10 max-w-[1400px]'}`}>
                     <Outlet />
                 </main>
 
