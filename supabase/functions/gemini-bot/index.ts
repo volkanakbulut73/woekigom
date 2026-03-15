@@ -1,3 +1,9 @@
+// Deno runtime type declarations for IDE compatibility
+declare const Deno: {
+  serve: (handler: (req: Request) => Promise<Response> | Response) => void;
+  env: { get: (key: string) => string | undefined };
+};
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -6,7 +12,7 @@ const corsHeaders = {
 
 console.log("Gemini Bot edge function is running!")
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { status: 200, headers: corsHeaders })
@@ -41,9 +47,8 @@ Kullanıcı '${user_name || 'Bir kullanıcı'}' sana şu mesajı gönderdi:
 
 Türkçe olarak kısa, yardımcı ve biraz eğlenceli bir yanıt yaz. Yanıtın en fazla 2 paragraf olsun. Kendinden bahsederken her zaman "Workigom AI" ismini kullan.`
 
-    // Try v1 endpoint first, then v1beta as fallback
-    // gemini-1.5-flash: Free tier'da en stabil, en düşük gecikmeli model
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+    // gemini-2.5-flash: 2026 güncel model
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
     
     console.log("Calling Gemini API...")
 
